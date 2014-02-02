@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Show roleplay flag also in tooltip."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Replace player names in blizzard chat frame with names given by their flags."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Show toolbar for faster changing of different state variables."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Replaced nameplates by name from the RPG flags."
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
 L["L_HIDDENRPFLAG"] = "<no roleplay state set>"

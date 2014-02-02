@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Integrazione in GnomTEC Gnomcorder (richiede /reload o riavviare)."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Sostituire i nomi dei giocatori nella bufera di neve chiacchierata cornice con nomi dati dai loro bandiere."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Mostra barra degli strumenti per il cambio rapido delle diverse variabili di stato."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Targhette sostituito dal nome delle bandiere RPG."
 
 L["L_NORPFLAG"] = "<nessuna bandiera roleplay>"
 L["L_HIDDENRPFLAG"] = "<nessun insieme di stato roleplay>"

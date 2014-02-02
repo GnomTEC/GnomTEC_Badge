@@ -17,6 +17,7 @@
   <Include file="Libs\AceSerializer-3.0\AceSerializer-3.0.xml"/>
   <Include file="Libs\ChatThrottleLib\ChatThrottleLib.lua"/>
   <Include file="Libs\LibMSP\LibMSP.lua"/>
+  <Include file="Libs\LibNameplateRegistry-1.0\LibNameplateRegistry-1.0.xml"/>
 </Ui>
 
 

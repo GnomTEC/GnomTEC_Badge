@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.1.30
+-- Version: 5.4.1.32
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -42,6 +42,7 @@ GnomTEC_Badge_Options = {
 	["Tooltip"] = true,	
 	["ChatFrame"] = false,	
 	["Toolbar"] = true,	
+	["Nameplates"] = true,
 }
 
 -- ----------------------------------------------------------------------
@@ -477,6 +478,19 @@ local optionsView = {
 			width = 'full',
 			order = 10
 		},
+		badgeOptionNameplates = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_NAMEPLATES"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["Nameplates"] = val end,
+	   	get = function(info) return GnomTEC_Badge_Options["Nameplates"] end,
+			width = 'full',
+			order = 11
+		},
+
+
+
+
 	},
 }
 
@@ -493,7 +507,7 @@ local playerListPosition = 0
 -- Startup initialization
 -- ----------------------------------------------------------------------
 
-GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
+GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "LibNameplateRegistry-1.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
@@ -1831,6 +1845,93 @@ function GnomTEC_Badge:CHAT_MSG_YELL(eventName, message, sender)
 	end
 end
 
+function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
+	if (not GnomTEC_Badge_Options["Nameplates"]) then
+		return
+	end
+
+	local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
+				
+	if (nameFrame) then
+		if (nameFrame:GetObjectType() == "FontString") then
+ 			-- Hide all sub-frames 
+			local frames = { plateFrame:GetChildren() };
+			for _, frame in ipairs(frames) do
+  				frame.gnomtec_badge_hide = frame:GetAlpha()
+  				frame:SetAlpha(0)
+ 			end
+ 			-- add our frame
+ 			if (not plateFrame.gnomtec_badge) then
+ 				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
+ 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
+ 				plateFrame.gnomtec_badge:SetFontObject(nameFrame:GetFontObject())
+ 			else
+ 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
+ 				plateFrame.gnomtec_badge:Show()
+			end 			
+ 	
+			if ( "PLAYER" == plateData.type ) then
+   	 		local player = nameFrame:GetText()
+   	 		local playerName = player
+				local friend = nil;
+   	 		if (not string.match(player, "%([#%*]%)")) then
+   	 			-- no (*) or (#) in name then player is from our realm
+   				local realm = string.gsub(GetRealmName(), "%s+", "")
+					if GnomTEC_Badge_Flags[realm] then 
+						if GnomTEC_Badge_Flags[realm][player] then
+							playerName = GnomTEC_Badge_Flags[realm][player].NA or player
+							if (GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+								friend = GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")];
+							end							
+						end
+					end
+   	 		end	
+				if (friend == nil) then
+					plateFrame.gnomtec_badge:SetText("|cffC0C0C0"..playerName.."|r")
+				elseif (friend < 0) then
+					plateFrame.gnomtec_badge:SetText("|cffff0000"..playerName.."|r")
+				elseif (friend > 0) then
+					plateFrame.gnomtec_badge:SetText("|cff00ff00"..playerName.."|r")
+				else
+					plateFrame.gnomtec_badge:SetText("|cff8080ff"..playerName.."|r")
+				end
+			else
+				plateFrame.gnomtec_badge:SetText(nameFrame:GetText())
+			end
+			plateFrame.gnomtec_badge:SetWidth(plateFrame.gnomtec_badge:GetStringWidth())
+		end
+	end
+ end
+
+function GnomTEC_Badge:LNR_ON_RECYCLE_PLATE(eventname, plateFrame, plateData)
+ 	-- Show all sub-frames 
+	local frames = { plateFrame:GetChildren() };
+	for _, frame in ipairs(frames) do
+  		if (frame.gnomtec_badge_hide) then
+  			frame:SetAlpha(frame.gnomtec_badge_hide)
+  			frame.gnomtec_badge_hide = nil
+  		end
+ 	end
+ 	if (plateFrame.gnomtec_badge) then
+		plateFrame.gnomtec_badge:Hide()
+	end 			
+end
+
+function GnomTEC_Badge:LNR_ON_GUID_FOUND(eventname, frame, GUID, findmethod)
+ --   GnomTEC_Badge:Print("GUID found using", findmethod, "for", self:GetPlateName(frame), "'s nameplate:", GUID);
+end
+
+
+function GnomTEC_Badge:LNR_ERROR_FATAL_INCOMPATIBILITY(eventname, icompatibilityType)
+    -- Here you want to check if your add-on and LibNameplateRegistry are not
+    -- outdated (old TOC). if they're both up to date then it means that
+    -- another add-on author thinks his add-on is more important than yours. In
+    -- this later case you can register LNR_ERROR_SETPARENT_ALERT and
+    -- LNR_ERROR_SETSCRIPT_ALERT which will detect such behaviour and will give
+    -- you the name of the incompatible add-on so you can inform your users properly
+    -- about what's happening instead of just silently "not working".
+end
+
 -- ----------------------------------------------------------------------
 -- RawHook for GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 -- ----------------------------------------------------------------------
@@ -1938,6 +2039,11 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RawHook("GetColoredName", true)
 		
 	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
+	
+	GnomTEC_Badge:LNR_RegisterCallback("LNR_ON_NEW_PLATE");
+	GnomTEC_Badge:LNR_RegisterCallback("LNR_ON_RECYCLE_PLATE");
+	GnomTEC_Badge:LNR_RegisterCallback("LNR_ON_GUID_FOUND");
+	GnomTEC_Badge:LNR_RegisterCallback("LNR_ERROR_FATAL_INCOMPATIBILITY");
 
 	-- Restore saved versions
 	for field, ver in pairs( GnomTEC_Badge_Player.Versions ) do
@@ -2011,6 +2117,7 @@ function GnomTEC_Badge:OnDisable()
 	GnomTEC_Badge:UnhookAll() 
 	GnomTEC_Badge:UnregisterAllEvents();
 	table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
+	GnomTEC_Badge:LNR_UnregisterAllCallbacks();
 end
 
 -- ----------------------------------------------------------------------

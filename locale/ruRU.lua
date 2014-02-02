@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Интеграция в GnomTEC Gno
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Показать флаг ролевой игре также в подсказке."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Замените имена игроков в метель чата рамы с названия, данные их флагами."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Показать панель инструментов для более быстрого изменения различных переменных состояния."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Заменены таблички по названию от флагов RPG."
 
 L["L_NORPFLAG"] = "<нет ролевые игры флаг>"
 L["L_HIDDENRPFLAG"] = "<нет ролевые игры множество состояний>"

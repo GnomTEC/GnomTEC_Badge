@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "在GnomTEC Gnomcorder集成（需�
 L["L_OPTIONS_VIEW_TOOLTIP"] = "显示角色扮演标志也在提示。"
 L["L_OPTIONS_VIEW_CHATFRAME"] = "在暴风雪聊天框替换球员的名字与他们的标志给出的名字。"
 L["L_OPTIONS_VIEW_TOOLBAR"] = "工具栏显示为不同的状态变量的变化速度更快。"
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "更換銘牌的名字從RPG遊戲的標誌。"
 
 L["L_NORPFLAG"] = "<没有角色扮演标志>"
 L["L_HIDDENRPFLAG"] = "<没有角色扮演状态集>"

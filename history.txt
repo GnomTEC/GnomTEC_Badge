@@ -1,6 +1,11 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+5.4.2.32 (2013-12-28)
+============
+- Included LibNameplateRegistry-1.0 for manipulating name plates
+- Added Option to show player name from flag in name plates
+
 5.4.2.31 (2013-12-18)
 ============
 - Changed internal used realm names to use variant without spaces (as used mainly by Blizzard)

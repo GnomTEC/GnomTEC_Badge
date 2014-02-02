@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "GnomTEC Gnomcorder의 통합 (/ 다
 L["L_OPTIONS_VIEW_TOOLTIP"] = "툴팁도 역할극 플래그를 표시합니다."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "그들의 깃발에 의해 주어진 이름을 가진 블리자드 채팅 프레임에 선수 이름을 바꿉니다."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "다른 상태 변수의 빠른 변화를위한 도구 모음을 표시합니다."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "RPG 플래그의 이름으로 대체 명찰."
 
 L["L_NORPFLAG"] = "<더 역할극 플래그 없습니다>"
 L["L_HIDDENRPFLAG"] = "<더 역할극 상태 설정하지>"

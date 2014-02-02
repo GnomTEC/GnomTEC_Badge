@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Não mostrar ou atualizar bandeira 
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Mostrar bandeira roleplay também na dica de ferramenta."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Substitua os nomes dos jogadores no quadro de chat nevasca com nomes dados por suas bandeiras."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Mostrar barra de ferramentas para a troca mais rápida de variáveis ​​de estado diferentes."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Placas de identificação substituída pelo nome das bandeiras de RPG."
 
 L["L_NORPFLAG"] = "<nenhuma bandeira roleplay>"
 L["L_HIDDENRPFLAG"] = "<nenhum conjunto estado roleplay>"

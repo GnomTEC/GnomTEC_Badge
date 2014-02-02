@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integración en GnomTEC Gnomcorder 
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Mostrar la bandera de rol también en la descripción."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Reemplazar nombres de los jugadores en el marco de la charla ventisca con nombres dados por sus banderas."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Mostrar barra de herramientas para el rápido cambio de las diferentes variables de estado."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Placas reemplazadas por el nombre de las banderas de rol."
 
 L["L_NORPFLAG"] = "<ninguna bandera roleplay>"
 L["L_HIDDENRPFLAG"] = "<ningún conjunto estatal roleplay>"

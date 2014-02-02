@@ -47,6 +47,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Zeige Rollenspielflag auch im Tooltip an"
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Ersetzte Spielernamen im Blizzard Chatfenster mit deren Namen aus den Flags."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Zeige Toolbar zum schnelleren Umschalten diverser Statusvariablen."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Ersetzte Namensplaketten durch Namen aus den Rollenspielflags."
 
 L["L_NORPFLAG"] = "<kein Rollenspielflag vorhanden>"
 L["L_HIDDENRPFLAG"] = "<Kein Rollenspielstatus angegeben>"

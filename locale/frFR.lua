@@ -48,6 +48,7 @@ L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Intégration dans GnomTEC Gnomcorde
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Afficher roleplay drapeau aussi dans l'info-bulle."
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Remplacez les noms des joueurs dans blizzard fenêtre de discussion avec les noms donnés par leurs drapeaux."
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Afficher la barre d'outils pour un changement rapide des différentes variables d'état."
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Plaques remplacé par le nom des drapeaux RPG."
 
 L["L_NORPFLAG"] = "<pas de drapeau de roleplay>"
 L["L_HIDDENRPFLAG"] = "<pas de roleplay état ​​ensemble>"
