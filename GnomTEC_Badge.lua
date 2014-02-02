@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.10
+-- Version: 0.11
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
@@ -36,6 +36,7 @@ GnomTEC_Badge_Options = {
 	["AutoHide"] = true,	
 	["DisableInCombat"] = true,
 	["GnomcorderIntegration"] = false,
+	["Tooltip"] = true,	
 }
 
 -- ----------------------------------------------------------------------
@@ -212,7 +213,16 @@ local optionsView = {
 			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
 			width = 'full',
-			order = 4
+			order = 5
+		},
+		badgeOptionTooltip = {
+			type = "toggle",
+			name = "Zeige Rollenspielflag auch im Tooltip an",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["Tooltip"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
+			width = 'full',
+			order = 6
 		},
 	},
 }
@@ -256,7 +266,32 @@ _G.msp_RPAddOn = "GnomTEC_Badge"
 
 -- function which returns also nil for empty strings
 local function emptynil( x ) return x ~= "" and x or nil end
-local function cleanpipe( x ) return strtrim( ( string.gsub( x or "", "|", "*" ) ) ) end
+local function cleanpipe( x )
+	x = x or ""
+	
+	-- Filter coloring
+	x = string.gsub( x, "|c%x%x%x%x%x%x%x%x", "" )
+	x = string.gsub( x, "|r", "" )
+	
+	-- Filter links
+	x = string.gsub( x, "|H%.-|h", "" )
+	x = string.gsub( x, "|h", "" )
+	
+	-- Filter textures
+	x = string.gsub( x, "|T%.-|t", "" )
+
+	-- Filter battle.net friend's name
+	x = string.gsub( x, "|K%.-|k", "" )
+	x = string.gsub( x, "|k", "" )
+
+	-- Filter newline
+	x = string.gsub( x, "|n", "" )
+	
+	-- at last filter any left escape
+	x = string.gsub( x, "|", "/" )	
+	
+	return strtrim(x)
+end
 
 function GnomTEC_Badge:AddToVAString( addon )
 	if not select( 4, GetAddOnInfo( addon ) ) then return end
@@ -425,6 +460,89 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 
 end
 
+function GnomTEC_Badge:UpdateTooltip(realm, player)
+			
+	if (GnomTEC_Badge_Options["Tooltip"] and GnomTEC_Badge_Flags[realm][player]) then
+		local i, n
+
+		-- we need two line more then standard tooltip for role play status and titel
+		a = 2
+		for i=1, a , 1 do
+			GameTooltip:AddLine( "-", 1.0, 1.0, 1.0)
+		end
+
+		n = GameTooltip:NumLines()
+		for i=0, n-a-1 , 1 do
+			_G["GameTooltipTextLeft"..(n-i)]:SetText(_G["GameTooltipTextLeft"..(n-a-i)]:GetText())
+			_G["GameTooltipTextLeft"..(n-i)]:SetTextColor(_G["GameTooltipTextLeft"..(n-a-i)]:GetTextColor())
+			_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
+			_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
+		end
+		
+		local f = GnomTEC_Badge_Flags[realm][player].FRIEND
+		if (f == nil) then
+			GameTooltipTextLeft1:SetTextColor(0.75,0.75,0.75)
+		elseif (f < 0) then
+			GameTooltipTextLeft1:SetTextColor(1.0,0.0,0.0)
+		elseif (f > 0) then
+			GameTooltipTextLeft1:SetTextColor(0.0,1.0,0.0)
+		else
+			GameTooltipTextLeft1:SetTextColor(0.5,0.5,1.0)
+		end
+		GameTooltipTextLeft1:SetText(GnomTEC_Badge_Flags[realm][player].NA or player)	
+		GameTooltipTextRight1:SetText("")	
+		
+		GameTooltipTextLeft2:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
+		GameTooltipTextLeft2:SetTextColor(1.0,1.0,0.0)
+		GameTooltipTextRight2:SetText("")
+		
+		if (GnomTEC_Badge_Flags[realm][player].Guild) then
+			GameTooltipTextLeft3:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
+			GameTooltipTextLeft3:SetTextColor(1.0,1.0,1.0)
+			GameTooltipTextRight3:SetText("")
+			n = 4
+		else
+			n = 3
+		end
+		
+		_G["GameTooltipTextLeft"..n]:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
+		_G["GameTooltipTextLeft"..n]:SetTextColor(1.0,1.0,1.0)
+		_G["GameTooltipTextRight"..n]:SetText("")
+
+		local fr, fc, msp
+		
+		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
+			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
+		elseif type(GnomTEC_Badge_Flags[realm][player].FR) == "string" then
+			fr = GnomTEC_Badge_Flags[realm][player].FR
+		end
+		if type(GnomTEC_Badge_Flags[realm][player].FC) == "number" then
+			fc = str_fc[GnomTEC_Badge_Flags[realm][player].FC]
+		elseif type(GnomTEC_Badge_Flags[realm][player].FC) == "string" then
+			fc = GnomTEC_Badge_Flags[realm][player].FC
+		end
+		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
+			msp = "<kein Rollenspielflag vorhanden>"
+		elseif GnomTEC_Badge_Flags[realm][player].FlagMSP then
+			msp= ""
+		else
+			msp= "<RSP>"		
+		end
+			
+		if fr and fc then
+			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr.."><"..fc..">"..msp)
+		elseif fr then
+			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr..">"..msp)
+		elseif fc then
+			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fc..">"..msp)
+		else
+			_G["GameTooltipTextLeft"..(n+1)]:SetText(msp)
+		end
+		_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,1.0,0.5)
+		_G["GameTooltipTextRight"..(n+1)]:SetText("")			
+		GameTooltip:Show()
+	end
+end
 
 function GnomTEC_Badge:ClickedPlayerList(id)
 	if (playerListPosition + id <= #playerList) then
@@ -663,12 +781,12 @@ function GnomTEC_Badge:CURSOR_UPDATE(eventName)
 end
     
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
+	local player, realm = UnitName("mouseover")
+	realm = realm or GetRealmName()
+	
+	-- flag handling only out of combat
 	if (not playerisInCombat) then
-	    -- process the event
-   		local player, realm = UnitName("mouseover")
-	    realm = realm or GetRealmName()
-
-		if UnitIsPlayer("mouseover") and player and realm then
+ 		if UnitIsPlayer("mouseover") and player and realm then
 			if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 			if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 			GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("mouseover"))	
@@ -687,6 +805,12 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 			end
 		end
 	end
+
+	-- tooltip handling
+	if UnitIsPlayer("mouseover") and player and realm then
+		GnomTEC_Badge:UpdateTooltip(realm, player)
+	end
+
 end
 
 function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
@@ -879,6 +1003,9 @@ function GnomTEC_Badge:OnEnable()
 	-- Initialize options which are propably not valid because they are new added in new versions of addon
 	if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+	end
+	if (nil == GnomTEC_Badge_Options["Tooltip"]) then
+		GnomTEC_Badge_Options["Tooltip"] = true
 	end
 	
 	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")

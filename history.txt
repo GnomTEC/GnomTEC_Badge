@@ -1,6 +1,12 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+
+V0.11 (2012-10-21)
+============
+- Added tooltip functionality
+- Better filtering of UI escape sequences
+
 V0.10 (2012-08-29)
 ============
 - Updated interface version for WoW MoP
