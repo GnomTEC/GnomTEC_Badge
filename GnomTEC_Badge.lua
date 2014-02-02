@@ -19,11 +19,14 @@ GnomTEC_Badge_Options = {
 	["MouseOver"] = false,
 	["LockOnTarget"] = true,
 	["AutoHide"] = true,	
+	["DisableInCombat"] = true,
 }
  
 
 local str_fr = {"Rollenspieler","Gelegenheits-Rollenspieler","Vollzeit-Rollenspieler","Rollenspielneuling","Erwachsener Rollenspieler",}
 local str_fc = {"Außerhalb des Rollenspiels (OOC)", "Im Rollenspiel (IC)", "Suche Kontakt", "Erzähler (SL)",}
+
+local playerisInCombat = false;
 
 local options = {
 	name = "GnomTEC Badge " .. GetAddOnMetadata("GnomTEC_Badge", "Version"),
@@ -99,7 +102,7 @@ local options = {
 					args = {
 						badgeOptionMouseOver = {
 							type = "toggle",
-							name = "Zeige Rollenspielflag auch bei MouseOver",
+							name = "Zeige Rollenspielflag auch bei MouseOver.",
 							desc = "",
 							set = function(info,val) GnomTEC_Badge_Options["MouseOver"] = val end,
 	   		   				get = function(info) return GnomTEC_Badge_Options["MouseOver"] end,
@@ -108,7 +111,7 @@ local options = {
 						},
 						badgeOptionLockOnTarget = {
 							type = "toggle",
-							name = "Bevorzuge Target vor MouseOver bei der Anzeige",
+							name = "Bevorzuge Target vor MouseOver bei der Anzeige.",
 							desc = "",
 							set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
 	   		   				get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
@@ -117,12 +120,21 @@ local options = {
 						},
 						badgeOptionAutoHide = {
 							type = "toggle",
-							name = "Verstecke Rollenspielflag automatisch",
+							name = "Verstecke Rollenspielflag automatisch.",
 							desc = "",
 							set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
 	   		   				get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
 							width = 'full',
 							order = 3
+						},
+						badgeOptionDisableInCombat = {
+							type = "toggle",
+							name = "Während des Kampfes keine Flags anzeigen oder aktualisieren.",
+							desc = "",
+							set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
+	   		   				get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
+							width = 'full',
+							order = 4
 						},
 					},
 				},
@@ -172,6 +184,7 @@ local function emptynil( x ) return x ~= "" and x or nil end
 
 function GnomTEC_Badge:SaveFlag(realm, player)
 	-- for first experiments taken from FlagRSP2
+	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 	if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	local r = GnomTEC_Badge_Flags[realm][player]
 	
@@ -259,6 +272,8 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
+	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
+	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
 	
 	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
 
@@ -270,6 +285,7 @@ function GnomTEC_Badge:OnEnable()
 	
 	local player, realm = UnitName("player")
     realm = realm or GetRealmName()
+	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
     if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
 	GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
@@ -286,13 +302,29 @@ function GnomTEC_Badge:OnDisable()
     table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
 end
 
+function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
+	playerisInCombat = true;
+	GNOMTEC_BADGE_FRAME:Hide();
+end
+
+function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
+	playerisInCombat = false;
+end
+
 function GnomTEC_Badge:DisplayBadge(realm, player)
 
 	displayedPlayerRealm = realm;
 	displayedPlayerName = player;
 
-	if (GnomTEC_Badge_Flags[realm][player]) then		 
-		GNOMTEC_BADGE_FRAME_NA:SetText(GnomTEC_Badge_Flags[realm][player].NA or player)
+	if (GnomTEC_Badge_Flags[realm][player]) then	
+		local f = GnomTEC_Badge_Flags[realm][player].FRIEND or 0;
+		if (f < 0) then
+			GNOMTEC_BADGE_FRAME_NA:SetText("|cffff0000"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+		elseif (f > 0) then
+			GNOMTEC_BADGE_FRAME_NA:SetText("|cff00ff00"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+		else
+			GNOMTEC_BADGE_FRAME_NA:SetText("|cff8080ff"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+		end
 		GNOMTEC_BADGE_FRAME_NT:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText(GnomTEC_Badge_Flags[realm][player].EngineData or "")
@@ -329,7 +361,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		
 		GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
 	else
-		GNOMTEC_BADGE_FRAME_NA:SetText(player)
+		GNOMTEC_BADGE_FRAME_NA:SetText("|cff4040ff"..player.."|r")
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText("")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText("")
@@ -370,7 +402,14 @@ function GnomTEC_Badge:UpdatePlayerList()
 	else
 		GNOMTEC_BADGE_PLAYERLIST_LIST:SetMaxLines(count);
 		for id,value in ipairs(results) do
-			GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h")
+			local f = GnomTEC_Badge_Flags[GetRealmName()][value].FRIEND or 0;
+			if (f < 0) then
+				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cffff0000|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
+			elseif (f > 0) then
+				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cff00ff00|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
+			else
+				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cff8080ff|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
+			end
 		end
 	end
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,count);
@@ -379,21 +418,65 @@ function GnomTEC_Badge:UpdatePlayerList()
 
 end
 
+function GnomTEC_Badge:FriendFriend()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		GnomTEC_Badge_Flags[realm][player].FRIEND = 255;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendEnemy()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		GnomTEC_Badge_Flags[realm][player].FRIEND = -255;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendNeutral()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		GnomTEC_Badge_Flags[realm][player].FRIEND = 0;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
 function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
     -- process the event
-    local player, realm = UnitName("target")
-	realm = realm or GetRealmName()
+	if (not playerisInCombat) then
+	    local player, realm = UnitName("target")
+		realm = realm or GetRealmName()
 
-	if UnitIsPlayer("target") and player and realm then
-		GnomTEC_Badge:DisplayBadge(realm, player)
-		GNOMTEC_BADGE_FRAME:Show();
-		GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
-		GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
-		GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
-	else
-		if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
-			GNOMTEC_BADGE_FRAME:Hide();
-		end	
+		if UnitIsPlayer("target") and player and realm then
+			GnomTEC_Badge:DisplayBadge(realm, player)
+			GNOMTEC_BADGE_FRAME:Show();
+			GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
+			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
+			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+		else
+			if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
+				GNOMTEC_BADGE_FRAME:Hide();
+			end	
+		end
 	end
 end
     
@@ -405,34 +488,38 @@ function GnomTEC_Badge:CURSOR_UPDATE(eventName)
 end
     
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
-    -- process the event
-    local player, realm = UnitName("mouseover")
-    realm = realm or GetRealmName()
+	if (not playerisInCombat) then
+	    -- process the event
+   		local player, realm = UnitName("mouseover")
+	    realm = realm or GetRealmName()
 
-	if UnitIsPlayer("mouseover") and player and realm then
-		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
-		GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("mouseover"))	
-		GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("mouseover").." "..UnitRace("mouseover").." "..UnitClass("mouseover")	
+		if UnitIsPlayer("mouseover") and player and realm then
+			if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+			if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+			GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("mouseover"))	
+			GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("mouseover").." "..UnitRace("mouseover").." "..UnitClass("mouseover")		
 
-    	if not UnitIsUnit("mouseover", "player") then
-			msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE" } )
-		end
-		if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
-			GnomTEC_Badge:DisplayBadge(realm, player)
-			GNOMTEC_BADGE_FRAME:Show();
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+	    	if not UnitIsUnit("mouseover", "player") then
+				msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE" } )
+			end
+			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
+				GnomTEC_Badge:DisplayBadge(realm, player)
+				GNOMTEC_BADGE_FRAME:Show();
+				GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
+				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
+				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+			end
 		end
 	end
-
 end
 
 function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
+
 	-- process classic flag messages
-	if (string.lower(channelName) == "xtensionxtooltip2") then
+	if ((not playerisInCombat) and (string.lower(channelName) == "xtensionxtooltip2")) then
 		local realm = GetRealmName();
 		local player = sender;
+		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 		if not GnomTEC_Badge_Flags[realm][player].AN2 then GnomTEC_Badge_Flags[realm][player].AN2 = player end
 					

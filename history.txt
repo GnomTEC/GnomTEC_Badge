@@ -1,6 +1,14 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.3 (2011-12-04)
+============
+- Abfragen eingefügt ob es schon Flags von einem Realm gibt um Fehler in Instanzen und Schlachtfeldern zu vermeiden.
+- Erste Version einer Freund/Feind-Funktionalität eingefügt.
+- Farbe der Namensanzeige für Freund/Feind-Funktion angepasst.
+- Filterfunktion bei Flagliste
+- Flagfunktionalität im Kampf deaktivierbar.
+
 V0.2 (2011-12-02)
 ============
 - Setzen der Kamera bei Playermodell verbessert

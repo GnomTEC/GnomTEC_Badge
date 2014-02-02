@@ -26,14 +26,79 @@
 					</Anchor>
 				</Anchors>
 				<Size x="75" y="75" />
+				<Frames>
+					<Button name="$parent_FRIEND">
+						<Size>
+							<AbsDimension x="12" y="12"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="-24" y="0" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-friend"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-friend"/>
+						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+						<Scripts>
+							<OnClick>
+								GnomTEC_Badge:FriendFriend();		
+							</OnClick>
+						</Scripts>
+					</Button>				
+					<Button name="$parent_NEUTRAL">
+						<Size>
+							<AbsDimension x="12" y="12"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="-12" y="0" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-neutral"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-neutral"/>
+						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+						<Scripts>
+							<OnClick>
+								GnomTEC_Badge:FriendNeutral();		
+							</OnClick>
+						</Scripts>
+					</Button>				
+					<Button name="$parent_ENEMY">
+						<Size>
+							<AbsDimension x="12" y="12"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-enemy"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-enemy"/>
+						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+						<Scripts>
+							<OnClick>
+								GnomTEC_Badge:FriendEnemy();		
+							</OnClick>
+						</Scripts>
+					</Button>				
+				</Frames>
 			</PlayerModel>
+			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="-1" y="-1"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
 			<Button name="$parent_FLAGS">
 				<Size>
 					<AbsDimension x="32" y="32"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT">
-						<Offset x="-4" y="-9" />
+						<Offset x="-4" y="-30" />
 					</Anchor>
 				</Anchors>
 				<Layers>
@@ -210,7 +275,7 @@
 							<Offset x="90" y="-41"/>
 						</Anchor>
 						<Anchor point="RIGHT">
-							<Offset x="-9" y="0"/>
+							<Offset x="-29" y="0"/>
 						</Anchor>
 					</Anchors>
 					<Size x="300" y="14" />
@@ -222,7 +287,7 @@
 							<Offset x="90" y="-55"/>
 						</Anchor>
 						<Anchor point="RIGHT">
-							<Offset x="-9" y="0"/>
+							<Offset x="-29" y="0"/>
 						</Anchor>
 					</Anchors>
 					<Size x="300" y="14" />
@@ -234,7 +299,7 @@
 							<Offset x="90" y="-69"/>
 						</Anchor>
 						<Anchor point="RIGHT">
-							<Offset x="-9" y="0"/>
+							<Offset x="-29" y="0"/>
 						</Anchor>
 					</Anchors>
 					<Size x="300" y="14" />
@@ -250,6 +315,7 @@
 				end				
 			</OnMouseDown>
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+			<OnHide>GNOMTEC_BADGE_PLAYERLIST:Hide();</OnHide>
 		</Scripts>
 	</Frame>
 	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
