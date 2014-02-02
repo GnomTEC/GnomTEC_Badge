@@ -1,0 +1,12 @@
+## Interface: 40300
+## Title: GnomTEC_Badge
+## Notes: Badge für Mitarbeiter von GnomTEC (Flag Addon).
+## Author: Lugus Sprengfix
+## Version: 0.1
+## SavedVariables: GnomTEC_Badge_Flags
+## SavedVariablesPerCharacter: GnomTEC_Badge_Player, GnomTEC_Badge_Options
+
+embeds.xml
+
+GnomTEC_Badge.lua
+GnomTEC_Badge.xml

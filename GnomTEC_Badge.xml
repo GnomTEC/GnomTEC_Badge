@@ -1,0 +1,370 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
+		<Size x="400" y="170" />
+		<ResizeBounds>
+            <minResize>
+                <AbsDimension x="200" y="150"/>
+            </minResize>
+        </ResizeBounds>
+		<Anchors>
+			<Anchor point="CENTER" relativePoint="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize val="16"/>
+			<TileSize val="16"/>
+			<Color r="0.25" g="0.25" b="0.25"/>
+			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+		</Backdrop>
+		<Frames>
+			<PlayerModel name="$parent_PLAYERMODEL">
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
+					<Color r="0.1" g="0.1" b="0.1"/>
+				</Backdrop>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="10" y="-9" />
+					</Anchor>
+				</Anchors>
+				<Size x="75" y="75" />
+			</PlayerModel>
+			<Button name="$parent_FLAGS">
+				<Size>
+					<AbsDimension x="32" y="32"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset x="-4" y="-9" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="$parentCount" parentKey="child" inherits="GameFontHighlightSmall" text="0">
+							<Anchors>
+								<Anchor point="BOTTOM" relativeTo="$parent" relativePoint="BOTTOM" x="0" y="4"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						local child = self.child;
+						child:SetText(0);
+						child:SetShadowOffset(1, 1);
+					</OnLoad>
+				 	<OnClick>
+						if GNOMTEC_BADGE_PLAYERLIST:IsVisible() then
+							GNOMTEC_BADGE_PLAYERLIST:Hide();
+						else
+							GNOMTEC_BADGE_PLAYERLIST:Show();
+						end						
+					</OnClick>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-BattleBro-Up"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-BattleBro-Down"/>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+			</Button>
+			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="10" y="-89" />
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-10" y="10" />
+					</Anchor>
+				</Anchors>
+				<Size x="380" y="75" />
+				<Frames>
+					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true">
+						<Anchors>
+							<Anchor point="TOPRIGHT">
+								<Offset x="0" y="-16" />
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="0" y="16" />
+							</Anchor>
+						</Anchors>	
+						<Size>
+							<AbsDimension x="16" y="43"/>
+						</Size>
+						<Frames>
+							<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+								<Anchors>
+									<Anchor point="BOTTOM" relativePoint="TOP"/>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local parent = self:GetParent();
+										parent:SetValue(parent:GetValue() - (parent:GetHeight() / 2));
+										PlaySound("UChatScrollButton");
+									</OnClick>
+									<OnEnter>
+										local parent = self:GetParent();
+										parentOfParent = parent:GetParent();
+									  	parentOfParent:UpdateScrollChildRect();
+										parent:SetMinMaxValues(0, parentOfParent:GetVerticalScrollRange());
+										parent:SetValue(parentOfParent:GetVerticalScroll());   
+									</OnEnter>
+
+								</Scripts>
+							</Button>
+							<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+								<Anchors>
+									<Anchor point="TOP" relativePoint="BOTTOM"/>
+								</Anchors>	
+								<Scripts>
+									<OnClick>
+										local parent = self:GetParent();
+										parent:SetValue(parent:GetValue() + (parent:GetHeight() / 2));
+										PlaySound("UChatScrollButton");
+									</OnClick>
+									<OnEnter>
+										local parent = self:GetParent();
+										parentOfParent = parent:GetParent();
+									  	parentOfParent:UpdateScrollChildRect();
+										parent:SetMinMaxValues(0, parentOfParent:GetVerticalScrollRange());
+										parent:SetValue(parentOfParent:GetVerticalScroll());   
+									</OnEnter>
+								</Scripts>
+							</Button>
+						</Frames>
+						<Scripts>
+							<OnValueChanged>
+								self:GetParent():SetVerticalScroll(value);
+							</OnValueChanged>
+							<OnEnter>
+								local parent = self:GetParent();
+							  	parent:UpdateScrollChildRect();
+								self:SetMinMaxValues(0, parent:GetVerticalScrollRange());
+								self:SetValue(parent:GetVerticalScroll());   
+							</OnEnter>
+						</Scripts>
+						<ThumbTexture name="$parentThumbTexture" inherits="UIPanelScrollBarButton" file="Interface\Buttons\UI-ScrollBar-Knob">
+							<Size>
+								<AbsDimension x="16" y="16"/>
+							</Size>
+						</ThumbTexture>
+					</Slider>
+				</Frames>
+				<ScrollChild>
+					<SimpleHTML name="$parent_DE" parentKey="child" resizable="true" setAllPoints="true">
+						<FontString inherits="GameFontWhite"/>
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<Offset x="0" y="0" />
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="-16" y="0" />
+							</Anchor>
+						</Anchors>
+						<Size x="364" y="75" />
+						<Scripts>
+							<OnSizeChanged>
+								local parent = self:GetParent();
+								self:SetWidth(parent:GetWidth()-16);		
+								parent:UpdateScrollChildRect();
+							</OnSizeChanged>
+						</Scripts>
+					</SimpleHTML>
+				</ScrollChild>
+				<Scripts>
+					<OnSizeChanged>
+						local child = self.child;
+						child:SetWidth(self:GetWidth()-16);		
+						self:UpdateScrollChildRect();
+					</OnSizeChanged>
+				</Scripts>
+			</ScrollFrame>
+			
+
+		</Frames>			
+		<Layers>
+			<Layer level="Artwork">
+				<FontString name="$parent_NA" inherits="GameFontNormalLargeLeft" resizable="true" setAllPoints="true">
+					<Color r="0.1" g="1.0" b="0.1"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="90" y="-9"/>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-29" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Size x="280" y="18" />
+				</FontString>
+				<FontString name="$parent_NT" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+					<Color r="1.0" g="1.0" b="0.1"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="90" y="-27"/>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-29" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Size x="300" y="14" />
+				</FontString>
+				<FontString name="$parent_GUILD" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+					<Color r="1.0" g="1.0" b="1.0"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="90" y="-41"/>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-9" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Size x="300" y="14" />
+				</FontString>
+				<FontString name="$parent_ENGINEDATA" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+					<Color r="1.0" g="1.0" b="1.0"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="90" y="-55"/>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-9" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Size x="300" y="14" />
+				</FontString>
+				<FontString name="$parent_FR_FC" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+					<Color r="1.0" g="1.0" b="0.5"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="90" y="-69"/>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-9" y="0"/>
+						</Anchor>
+					</Anchors>
+					<Size x="300" y="14" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnMouseDown>
+				if button == "LeftButton" then
+					self:StartMoving();
+				else
+					self:StartSizing();
+				end				
+			</OnMouseDown>
+			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+		</Scripts>
+	</Frame>
+	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
+		<Size x="400" y="200" />
+		<ResizeBounds>
+            <minResize>
+                <AbsDimension x="200" y="200"/>
+            </minResize>
+        </ResizeBounds>
+		<Anchors>
+			<Anchor point="CENTER" relativePoint="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize val="16"/>
+			<TileSize val="16"/>
+			<Color r="0.25" g="0.25" b="0.25"/>
+			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+		</Backdrop>
+		<Frames>
+			<Editbox name="$parent_FILTER" inherits="InputBoxTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="10" y="-9" />
+					</Anchor>
+					<Anchor point="TOPRIGHT">
+						<Offset x="-9" y="-9" />
+					</Anchor>
+				</Anchors>
+				<Size x="180" y="20" />
+				<Scripts>
+					<OnTextChanged>
+						GnomTEC_Badge:UpdatePlayerList();
+					</OnTextChanged>
+				</Scripts>
+			</Editbox>			
+			<ScrollingMessageFrame name="$parent_LIST" resizable="true" setAllPoints="true">
+				<FontString inherits="GameFontNormalLeft"/>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="10" y="-29" />
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset x="-26" y="10" />
+					</Anchor>
+				</Anchors>
+				<Size x="164" y="160" />
+				<Frames>
+					<Slider name="$parent_SLIDER" parentKey="child" resizable="true" setAllPoints="true">
+						<Anchors>
+							<Anchor point="TOPRIGHT">
+								<Offset x="16" y="-16" />
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="16" y="16" />
+							</Anchor>
+						</Anchors>	
+						<Size>
+							<AbsDimension x="16" y="126"/>
+						</Size>
+						<Frames>
+							<Button name="$parentScrollUpButton" inherits="UIPanelScrollUpButtonTemplate">
+								<Anchors>
+									<Anchor point="BOTTOM" relativePoint="TOP"/>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local parent = self:GetParent();
+										local parentOfParent = parent:GetParent();
+										parentOfParent:PageUp();
+										parent:SetValue(select(2,parent:GetMinMaxValues()) - parentOfParent:GetCurrentScroll());
+										PlaySound("UChatScrollButton");
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
+								<Anchors>
+									<Anchor point="TOP" relativePoint="BOTTOM"/>
+								</Anchors>	
+								<Scripts>
+									<OnClick>
+										local parent = self:GetParent();
+										local parentOfParent = parent:GetParent();
+										parentOfParent:PageDown();
+										parent:SetValue(select(2,parent:GetMinMaxValues()) - parentOfParent:GetCurrentScroll());
+										PlaySound("UChatScrollButton");
+									</OnClick>
+								</Scripts>
+							</Button>
+						</Frames>
+						<Scripts>
+							<OnValueChanged>
+								local parent = self:GetParent();
+								parent:SetScrollOffset(select(2,self:GetMinMaxValues())-value);
+							</OnValueChanged>
+						</Scripts>
+						<ThumbTexture name="$parentThumbTexture" inherits="UIPanelScrollBarButton" file="Interface\Buttons\UI-ScrollBar-Knob">
+							<Size>
+								<AbsDimension x="16" y="16"/>
+							</Size>
+						</ThumbTexture>
+					</Slider>
+				</Frames>
+			</ScrollingMessageFrame>
+		</Frames>			
+		<Scripts>
+			<OnMouseDown>
+				if button == "LeftButton" then
+					self:StartMoving();
+				else
+					self:StartSizing();
+				end				
+			</OnMouseDown>
+			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+			<OnShow>GnomTEC_Badge:UpdatePlayerList();</OnShow>
+		</Scripts>
+	</Frame>
+
+</Ui>

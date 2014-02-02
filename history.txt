@@ -1,0 +1,7 @@
+﻿GnomTEC Badge Addon - Change History 
+==========================
+
+V0.1 (2011-12-01)
+============
+- Initiale Version
+- Known Bug: Anwählen von Einträgen in der Flagliste geht manchmal erst nachdem man gescrollt hat.
