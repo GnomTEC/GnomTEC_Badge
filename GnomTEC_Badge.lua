@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.20
+-- Version: 5.3.0.21
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -453,7 +453,7 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 	if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	local r = GnomTEC_Badge_Flags[realm][player]
-	
+
 	r.FlagMSP = true
 	r.timeStamp = time()
 	local p
@@ -509,10 +509,12 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 
 	-- Additional not character relevant informations
 	r.VA = emptynil( cleanpipe( p.field.VA ) )
+	
  end
 
 function GnomTEC_Badge:SetMSP(init)
 	local playername = UnitName("player")
+	local field, value
 
 	wipe( msp.my )
 	wipe( msp.char[ playername ].field )
@@ -563,6 +565,10 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	
 	displayedPlayerRealm = realm;
 	displayedPlayerName = player;
+	
+	GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableKeyboard(false);
+	GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableMouse(false);
+	GNOMTEC_BADGE_FRAME_SCROLL_TEXT:ClearFocus();
 	
 	if (GnomTEC_Badge_Flags[realm][player]) then	
 				
@@ -724,7 +730,9 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			text = text.."|cFF800000--- EOF ---|r"			
 		elseif  (3 ==	displayedTAB) then
 			-- Notes
-			text = text.."|cFFFFFF80>>> coming soon <<<|r|n"
+			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableKeyboard(true);
+			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableMouse(true);
+			text = GnomTEC_Badge_Flags[realm][player].NOTE or ""
 		else
 			-- Log
 			text = text.."|cFFFFFF80--- Addon used by ".. player.." ---|r|n"
@@ -757,7 +765,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			else
 				text = text.."|cFFFF0000<None>|r|n|n"
 			end
-
+			
 			text = text.."|cFF800000--- EOF ---|r"						
 		end
 		GNOMTEC_BADGE_FRAME_SCROLL_TEXT:SetText(text)
@@ -942,6 +950,7 @@ end
 function GnomTEC_Badge:UpdatePlayerList()
 
 	local key,value,rkey,rvalue,id,count,rcount, acount
+	local fcount, fcount_badge, fcount_trp2, fcount_mrp, fcount_rsp, fcount_other
 	local filter = string.lower(GNOMTEC_BADGE_PLAYERLIST_FILTER:GetText());
 	local showFriend = GNOMTEC_BADGE_PLAYERLIST_SHOWFRIEND:GetChecked();
 	local showNeutral = GNOMTEC_BADGE_PLAYERLIST_SHOWNEUTRAL:GetChecked();
@@ -956,8 +965,28 @@ function GnomTEC_Badge:UpdatePlayerList()
 	end
 
 	rcount = 0;
-	for rkey,rvalue in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
+	fcount = 0;
+	fcount_badge = 0;
+	fcount_trp2 = 0;
+	fcount_mrp = 0;
+	fcount_rsp = 0;
+	fcount_other = 0;
+	for key,value in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
 		rcount = rcount+1;
+		if (value.VA) then
+			fcount = fcount + 1
+			if (string.find(value.VA or "", "^GnomTEC")) then
+				fcount_badge = fcount_badge + 1;
+			elseif (string.find(value.VA or "", "^TotalRP2")) then
+				fcount_trp2 = fcount_trp2 + 1;
+			elseif (string.find(value.VA or "", "^MyRolePlay")) then
+				fcount_mrp = fcount_mrp + 1;
+			elseif (string.find(value.VA or "", "flagRSP")) then
+				fcount_rsp = fcount_rsp + 1;
+			else
+				fcount_other = fcount_other + 1
+			end
+		end
 	end
 
 	count = 0;
@@ -986,7 +1015,20 @@ function GnomTEC_Badge:UpdatePlayerList()
 	playerListPosition = 0;
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
 	GnomTEC_Badge:RedrawPlayerList();
-	GNOMTEC_BADGE_PLAYERLIST_FOOTER_TEXT:SetText("Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Gesamt: "..acount);
+	local text = ""
+	text = "Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Gesamt: "..acount
+	if (rcount) then
+		text = text.."\n|cFF808000Flag addons used on "..GetRealmName().." ("..string.format("%0.1f",fcount/rcount * 100).."% of seen chars have flags):"
+	
+		if (fcount > 0) then
+			text = text.."\nBadge: "..string.format("%0.1f",fcount_badge/fcount * 100).."%"
+			text = text.." / TRP2: "..string.format("%0.1f",fcount_trp2/fcount * 100).."%"
+			text = text.." / MRP: "..string.format("%0.1f",fcount_mrp/fcount * 100).."%"
+			text = text.." / RSP: "..string.format("%0.1f",fcount_rsp/fcount * 100).."%"
+			text = text.." / Other: "..string.format("%0.1f",fcount_other/fcount * 100).."%"
+		end
+	end
+	GNOMTEC_BADGE_PLAYERLIST_FOOTER_TEXT:SetText(text);
 end
 
 local function GnomTEC_Badge_MSPcallback(char)
@@ -1066,6 +1108,35 @@ function GnomTEC_Badge:OpenConfiguration()
 	-- sometimes first call lands not on desired panel
 	InterfaceOptionsFrame_OpenToCategory(panelConfiguration)
 end
+
+function GnomTEC_Badge:UpdateNote()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (3 == displayedTAB) then
+			GnomTEC_Badge_Flags[realm][player].NOTE = emptynil(GNOMTEC_BADGE_FRAME_SCROLL_TEXT:GetText() or "")
+		end
+	end
+end
+
+function GnomTEC_Badge:CleanupFlags()
+	local key,value,rkey,rvalue
+	
+	acount = 0;
+	for rkey,rvalue in pairs(GnomTEC_Badge_Flags) do
+		for key,value in pairs(rvalue) do	
+			if (not value.VA) then
+				-- no addon version so there is no actual MSP flag 
+				rvalue[key] = nil
+			end			
+		end
+	end
+
+	
+
+	GnomTEC_Badge:UpdatePlayerList()
+end
+
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
