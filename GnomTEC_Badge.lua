@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.0.27
+-- Version: 5.4.0.28
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -90,6 +90,53 @@ local playerStatesOOC = {
 		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Online:0|tSL"); GnomTEC_Badge_Player["Fields"]["FC"] = 4; GnomTEC_Badge:SetMSP();  end,	
 	},	
 }
+
+local playerStatesFriendA = {
+	["Friend"] = {
+		text = "A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-friend:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-friend:0|t"); GnomTEC_Badge:FriendAFriend(); end,	
+	},
+	["Neutral"] = {
+		text = "A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-neutral:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-neutral:0|t"); GnomTEC_Badge:FriendANeutral(); end,	
+	},	
+	["Enemy"] = {
+		text = "A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-enemy:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-enemy:0|t"); GnomTEC_Badge:FriendAEnemy(); end,	
+	},	
+	["Unknown"] = {
+		text = "A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-unknown:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("A: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-unknown:0|t"); GnomTEC_Badge:FriendAUnknown(); end,	
+	},	
+}
+
+local playerStatesFriendC = {
+	["Friend"] = {
+		text = "C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-friend:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-friend:0|t"); GnomTEC_Badge:FriendCFriend(); end,	
+	},
+	["Neutral"] = {
+		text = "C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-neutral:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-neutral:0|t"); GnomTEC_Badge:FriendCNeutral(); end,	
+	},	
+	["Enemy"] = {
+		text = "C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-enemy:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-enemy:0|t"); GnomTEC_Badge:FriendCEnemy(); end,	
+	},	
+	["Unknown"] = {
+		text = "C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-unknown:0|t",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-unknown:0|t"); GnomTEC_Badge:FriendCUnknown(); end,	
+	},	
+}
+
 -- ----------------------------------------------------------------------
 -- Addon global variables (local)
 -- ----------------------------------------------------------------------
@@ -653,6 +700,11 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	elseif (not GnomTEC_Badge_Flags[realm][player]) then
 		return;
 	end
+
+	local sliderValue = 0
+	if (displayedPlayerRealm == realm) and (displayedPlayerName == player) then
+		sliderValue = GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:GetValue()
+	end
 	
 	displayedPlayerRealm = realm;
 	displayedPlayerName = player;
@@ -662,22 +714,49 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	GNOMTEC_BADGE_FRAME_SCROLL_TEXT:ClearFocus();
 	
 	if (GnomTEC_Badge_Flags[realm][player]) then	
-				
-		local f = GnomTEC_Badge_Flags[realm][player].FRIEND;
+			
+		local f;
+			
+		if (GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			f = GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")];
+		else
+			f = nil;
+		end
 		if (f == nil) then
-			GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")		
+			color = GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_BUTTON:SetText(playerStatesFriendC["Unknown"].text)		
 		elseif (f < 0) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cffff0000"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_BUTTON:SetText(playerStatesFriendC["Enemy"].text)		
 		elseif (f > 0) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cff00ff00"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_BUTTON:SetText(playerStatesFriendC["Friend"].text)		
 		else
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cff8080ff"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_BUTTON:SetText(playerStatesFriendC["Neutral"].text)		
 		end
+				
 		GNOMTEC_BADGE_FRAME_NT:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
 
-		local fr, fc, msp
+		local fr, fc, msp, color
+
+		f = GnomTEC_Badge_Flags[realm][player].FRIEND;
+		if (f == nil) then
+			color = "|cffC0C0C0"
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText(playerStatesFriendA["Unknown"].text)		
+		elseif (f < 0) then
+			color = "|cffff0000"
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText(playerStatesFriendA["Enemy"].text)		
+		elseif (f > 0) then
+			color = "|cff00ff00"
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText(playerStatesFriendA["Friend"].text)		
+		else
+			color = "|cff8080ff"
+			GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText(playerStatesFriendA["Neutral"].text)		
+		end
+
 		
 		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
 			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
@@ -692,19 +771,23 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
 			msp = L["L_NORPFLAG"]
 		elseif GnomTEC_Badge_Flags[realm][player].FlagMSP then
-			msp= ""
+			if (fr or fc) then
+				msp= ""
+			else
+				msp = L["L_HIDDENRPFLAG"]
+			end
 		else
 			msp= "<RSP>"		
 		end
 			
 		if fr and fc then
-			GNOMTEC_BADGE_FRAME_FR_FC:SetText("<"..fr.."><"..fc..">"..msp)
+			GNOMTEC_BADGE_FRAME_FR_FC:SetText(color.."<"..fr.."><"..fc..">"..msp.."|r")
 		elseif fr then
-			GNOMTEC_BADGE_FRAME_FR_FC:SetText("<"..fr..">"..msp)
+			GNOMTEC_BADGE_FRAME_FR_FC:SetText(color.."<"..fr..">"..msp.."|r")
 		elseif fc then
-			GNOMTEC_BADGE_FRAME_FR_FC:SetText("<"..fc..">"..msp)
+			GNOMTEC_BADGE_FRAME_FR_FC:SetText(color.."<"..fc..">"..msp.."|r")
 		else
-			GNOMTEC_BADGE_FRAME_FR_FC:SetText(msp)
+			GNOMTEC_BADGE_FRAME_FR_FC:SetText(color..msp.."|r")
 		end
 
 		local text = ""
@@ -820,10 +903,19 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			end
 			text = text.."|cFF800000--- EOF ---|r"			
 		elseif  (3 ==	displayedTAB) then
-			-- Notes
+			-- Notes account wide visible
 			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableKeyboard(true);
 			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableMouse(true);
 			text = GnomTEC_Badge_Flags[realm][player].NOTE or ""
+		elseif  (4 ==	displayedTAB) then
+			-- Notes only with now played character visible
+			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableKeyboard(true);
+			GNOMTEC_BADGE_FRAME_SCROLL_TEXT:EnableMouse(true);
+			if (GnomTEC_Badge_Flags[realm][player].NOTE_C) then
+				text = GnomTEC_Badge_Flags[realm][player].NOTE_C[UnitName("player")] or ""
+			else
+				text = ""
+			end
 		else
 			-- Log
 			text = text.."|cFFFFFF80--- Addon used by ".. player.." ---|r|n"
@@ -865,6 +957,8 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 
 	else
 		GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..player.."|r")
+		GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText(playerStatesFriendA["Unknown"].text)		
+		GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_BUTTON:SetText(playerStatesFriendC["Unknown"].text)		
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText("")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText("")
@@ -873,7 +967,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	end
 	GNOMTEC_BADGE_FRAME_SCROLL:UpdateScrollChildRect()
 	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetMinMaxValues(0, GNOMTEC_BADGE_FRAME_SCROLL:GetVerticalScrollRange())
-	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetValue(0) 
+	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetValue(sliderValue) 
 end
 
 function GnomTEC_Badge:UpdateTooltip(realm, player)
@@ -894,7 +988,13 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 			_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
 		end
 	
-		local f = GnomTEC_Badge_Flags[realm][player].FRIEND
+		local f
+
+		if (GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			f = GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")];
+		else
+			f = nil;
+		end
 		if (f == nil) then
 			GameTooltipTextLeft1:SetTextColor(0.75,0.75,0.75)
 		elseif (f < 0) then
@@ -925,7 +1025,7 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		_G["GameTooltipTextRight"..n]:SetText("")
 
 		local fr, fc, msp
-	
+					
 		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
 			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FR) == "string" then
@@ -939,7 +1039,11 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
 			msp = L["L_NORPFLAG"]
 		elseif GnomTEC_Badge_Flags[realm][player].FlagMSP then
-			msp= ""
+			if (fr or fc) then
+				msp= ""
+			else
+				msp = L["L_HIDDENRPFLAG"]
+			end
 		else
 			msp= "<RSP>"		
 		end
@@ -953,7 +1057,18 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		else
 			_G["GameTooltipTextLeft"..(n+1)]:SetText(msp)
 		end
-		_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,1.0,0.5)
+
+		f = GnomTEC_Badge_Flags[realm][player].FRIEND;
+		if (f == nil) then
+			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.75,0.75,0.75)
+		elseif (f < 0) then
+			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,0.0,0.0)
+		elseif (f > 0) then
+			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.0,1.0,0.0)
+		else
+			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.5,0.5,1.0)
+		end
+
 		_G["GameTooltipTextRight"..(n+1)]:SetText("")			
 
 		_G["GameTooltipTextLeft"..(n+2)]:SetText(GnomTEC_Badge_Flags[realm][player].FactionData)
@@ -971,6 +1086,7 @@ function GnomTEC_Badge:ClickedTAB(id)
 		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_5:UnlockHighlight();
 		displayedTAB = 1
 	elseif (2 == id) then
 		-- Meta
@@ -978,21 +1094,32 @@ function GnomTEC_Badge:ClickedTAB(id)
 		GNOMTEC_BADGE_FRAME_TAB_2:LockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_5:UnlockHighlight();
 		displayedTAB = 2
 	elseif (3 == id) then
-		-- Notes
+		-- Notes (A)
 		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_3:LockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_5:UnlockHighlight();
 		displayedTAB = 3
+	elseif (4 == id) then
+		-- Notes (C)
+		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_4:LockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_5:UnlockHighlight();
+		displayedTAB = 4
 	else
 		-- Log
 		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
 		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
-		GNOMTEC_BADGE_FRAME_TAB_4:LockHighlight();
-		displayedTAB = 4
+		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_5:LockHighlight();
+		displayedTAB = 5
 	end	
 	GnomTEC_Badge:DisplayBadge(displayedPlayerRealm, displayedPlayerName)
 end
@@ -1010,7 +1137,6 @@ function GnomTEC_Badge:RedrawPlayerList()
 
 	playerListPosition = floor(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue())
 
-
 	for i=1, 8, 1 do
 		local button = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i);
 		local textNA = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i.."_TEXT_NA");
@@ -1020,18 +1146,28 @@ function GnomTEC_Badge:RedrawPlayerList()
 			button:Hide();
 		else
 			local player = GnomTEC_Badge_Flags[GetRealmName()][playerList[playerListPosition+i]];
-
-			if (player.FRIEND == nil) then
+			local playername = UnitName("player");
+			if (player.FRIEND_C == nil) then
 				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
-			elseif (player.FRIEND < 0) then
+			elseif (player.FRIEND_C[playername] == nil) then
+				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
+			elseif (player.FRIEND_C[playername] < 0) then
 				textNA:SetText("|cffff0000"..(player.NA or playerList[playerListPosition+i]).."|r")
-			elseif (player.FRIEND > 0) then
+			elseif (player.FRIEND_C[playername] > 0) then
 				textNA:SetText("|cff00ff00"..(player.NA or playerList[playerListPosition+i]).."|r")
 			else
 				textNA:SetText("|cff8080ff"..(player.NA or playerList[playerListPosition+i]).."|r")
 			end	
 			textNT:SetText(player.NT or "")
-			textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." ("..playerList[playerListPosition+i]..")")
+			if (player.FRIEND == nil) then
+				textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." (|cffC0C0C0"..playerList[playerListPosition+i].."|r)")
+			elseif (player.FRIEND < 0) then
+				textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." (|cffff0000"..playerList[playerListPosition+i].."|r)")
+			elseif (player.FRIEND > 0) then
+				textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." (|cff00ff00"..playerList[playerListPosition+i].."|r)")
+			else
+				textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." (|cff8080ff"..playerList[playerListPosition+i].."|r)")
+			end	
 			button:Show();
 		end
 	end
@@ -1097,12 +1233,12 @@ function GnomTEC_Badge:UpdatePlayerList()
 	
 	table.sort(playerList)
 	
+	playerListPosition = floor(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue());
 	if (count > 8) then
 		GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,count-8);
 	else
 		GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,0);		
 	end
-	playerListPosition = 0;
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
 	GnomTEC_Badge:RedrawPlayerList();
 	local text = ""
@@ -1137,7 +1273,7 @@ end
 -- Frame event handler and functions
 -- ----------------------------------------------------------------------
 
-function GnomTEC_Badge:FriendFriend()
+function GnomTEC_Badge:FriendAFriend()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
 
@@ -1151,7 +1287,7 @@ function GnomTEC_Badge:FriendFriend()
 	end
 end
 
-function GnomTEC_Badge:FriendEnemy()
+function GnomTEC_Badge:FriendAEnemy()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
 
@@ -1165,7 +1301,7 @@ function GnomTEC_Badge:FriendEnemy()
 	end
 end
 
-function GnomTEC_Badge:FriendNeutral()
+function GnomTEC_Badge:FriendANeutral()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
 
@@ -1179,12 +1315,79 @@ function GnomTEC_Badge:FriendNeutral()
 	end
 end
 
-function GnomTEC_Badge:FriendUnknown()
+function GnomTEC_Badge:FriendAUnknown()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
 
 	if (GnomTEC_Badge_Flags[realm][player]) then
 		GnomTEC_Badge_Flags[realm][player].FRIEND = nil;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendCFriend()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (not GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			GnomTEC_Badge_Flags[realm][player].FRIEND_C = {}
+		end
+		GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")] = 255;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendCEnemy()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (not GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			GnomTEC_Badge_Flags[realm][player].FRIEND_C = {}
+		end
+		GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")] = -255;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendCNeutral()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (not GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			GnomTEC_Badge_Flags[realm][player].FRIEND_C = {}
+		end
+		GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")] = 0;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendCUnknown()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (GnomTEC_Badge_Flags[realm][player].FRIEND_C) then
+			GnomTEC_Badge_Flags[realm][player].FRIEND_C[UnitName("player")] = nil;
+		end
 			
 		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
 			GnomTEC_Badge:UpdatePlayerList()
@@ -1202,10 +1405,16 @@ end
 function GnomTEC_Badge:UpdateNote()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
+
 	if (GnomTEC_Badge_Flags[realm][player]) then
 		if (3 == displayedTAB) then
 			GnomTEC_Badge_Flags[realm][player].NOTE = emptynil(GNOMTEC_BADGE_FRAME_SCROLL_TEXT:GetText() or "")
-		end
+		elseif (4 == displayedTAB) then
+			if (not GnomTEC_Badge_Flags[realm][player].NOTE_C) then
+				GnomTEC_Badge_Flags[realm][player].NOTE_C = {}
+			end
+			GnomTEC_Badge_Flags[realm][player].NOTE_C[UnitName("player")] = emptynil(GNOMTEC_BADGE_FRAME_SCROLL_TEXT:GetText() or "")
+		end		
 	end
 end
 
@@ -1217,7 +1426,10 @@ function GnomTEC_Badge:CleanupFlags()
 		for key,value in pairs(rvalue) do	
 			if (not value.VA) then
 				-- no addon version so there is no actual MSP flag 
-				rvalue[key] = nil
+				if (not value.NOTE) and (not value.NOTE_C) and (not value.FRIEND_C) and (not value.FRIEND) then
+					-- only cleanup when user had not entered data for this char
+					rvalue[key] = nil
+				end
 			end			
 		end
 	end
@@ -1258,6 +1470,42 @@ end
 -- select ooc drop down menu OnClick
 function GnomTEC_Badge:SelectOOC_Button_OnClick(self, button, down)
 	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_TOOLBAR_SELECTOOC_DROPDOWN, self:GetName(), 0, 0)
+end
+
+-- initialize drop down menu friend state A
+local function GnomTEC_Badge_SelectFriendA_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(playerStatesFriendA["Friend"])
+	UIDropDownMenu_AddButton(playerStatesFriendA["Neutral"])
+	UIDropDownMenu_AddButton(playerStatesFriendA["Enemy"])
+	UIDropDownMenu_AddButton(playerStatesFriendA["Unknown"])
+end
+
+-- select friend state A drop down menu OnLoad
+function GnomTEC_Badge:SelectFriendA_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Badge_SelectFriendA_InitializeDropDown, "MENU")
+end
+
+-- select friend state A drop down menu OnClick
+function GnomTEC_Badge:SelectFriendA_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_DROPDOWN, self:GetName(), 0, 0)
+end
+
+-- initialize drop down menu friend state C
+local function GnomTEC_Badge_SelectFriendC_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(playerStatesFriendC["Friend"])
+	UIDropDownMenu_AddButton(playerStatesFriendC["Neutral"])
+	UIDropDownMenu_AddButton(playerStatesFriendC["Enemy"])
+	UIDropDownMenu_AddButton(playerStatesFriendC["Unknown"])
+end
+
+-- select friend state C drop down menu OnLoad
+function GnomTEC_Badge:SelectFriendC_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Badge_SelectFriendC_InitializeDropDown, "MENU")
+end
+
+-- select friend state C drop down menu OnClick
+function GnomTEC_Badge:SelectFriendC_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDC_DROPDOWN, self:GetName(), 0, 0)
 end
 
 
@@ -1561,8 +1809,9 @@ function GnomTEC_Badge:OnEnable()
 	-- Initialize localized strings in GUI
 	GNOMTEC_BADGE_FRAME_TAB_1_TEXT:SetText(L["L_TAB_DESCR"])
 	GNOMTEC_BADGE_FRAME_TAB_2_TEXT:SetText(L["L_TAB_META"])
-	GNOMTEC_BADGE_FRAME_TAB_3_TEXT:SetText(L["L_TAB_NOTE"])
-	GNOMTEC_BADGE_FRAME_TAB_4_TEXT:SetText(L["L_TAB_LOG"])
+	GNOMTEC_BADGE_FRAME_TAB_3_TEXT:SetText(L["L_TAB_NOTE_A"])
+	GNOMTEC_BADGE_FRAME_TAB_4_TEXT:SetText(L["L_TAB_NOTE_C"])
+	GNOMTEC_BADGE_FRAME_TAB_5_TEXT:SetText(L["L_TAB_LOG"])
 	GnomTEC_Badge:ClickedTAB(1)
 	
 	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")

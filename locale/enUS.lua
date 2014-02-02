@@ -49,13 +49,15 @@ L["L_OPTIONS_VIEW_CHATFRAME"] = "Replace player names in blizzard chat frame wit
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Show toolbar for faster changing of different state variables."
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
+L["L_HIDDENRPFLAG"] = "<no roleplay state set>"
  
 L["L_ENGINEDATA_UNKNOWN"] = "Level -- Unknown Unknown"
 L["L_ENGINEDATA_LEVEL"] = "Level"
 
 L["L_TAB_DESCR"] = "Descr."
 L["L_TAB_META"] = "Meta"
-L["L_TAB_NOTE"] = "Notes"
+L["L_TAB_NOTE_A"] = "Notes (A)"
+L["L_TAB_NOTE_C"] = "Notes (C)"
 L["L_TAB_LOG"] = "Log"
 
 L["L_FIELD_VA"] = "Addon Version"	

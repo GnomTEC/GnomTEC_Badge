@@ -1,6 +1,14 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+5.4.0.28 (2013-11-01)
+============
+- Added notes which are only visible for actual played character additional to account wide notes.
+- Added additional friend/enemy state to flags for the actual played character additional to account wide friend/enemy state.
+- Changed colorize of name and role play state in flag display and tooltip depending on friend/enemy state.
+- Added mouse wheel support to player list and flag display
+- Some changes to avoid scrolling when new data is received in display elements
+
 5.4.0.27 (2013-10-27)
 ============
 - Fix issue for NPC units for which the API function UnitIsPlayer() don't return nil (such as Wrathion quest line and Proving Grounds)

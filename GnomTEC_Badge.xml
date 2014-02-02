@@ -1,11 +1,11 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 	<Button name="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" virtual="true">
 		<Size>
-			<AbsDimension x="50" y="13"/>
+			<AbsDimension x="60" y="13"/>
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString name="$parent_TEXT" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+				<FontString name="$parent_TEXT" inherits="GameFontHighlightSmall" justifyH="CENTER" resizable="true" setAllPoints="true">
 					<Color r="0.8" g="0.8" b="0.8"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -34,7 +34,7 @@
 		<Size x="400" y="200" />
 		<ResizeBounds>
             <minResize>
-                <AbsDimension x="250" y="150"/>
+                <AbsDimension x="330" y="150"/>
             </minResize>
         </ResizeBounds>
 		<Anchors>
@@ -59,78 +59,46 @@
 				<Size x="75" y="75" />
 				<Frames>
 					<PlayerModel name="$parent_PLAYERMODEL" setAllPoints="true" frameLevel="2"/>
-					<Button name="$parent_FRIEND" frameLevel="3">
-						<Size>
-							<AbsDimension x="12" y="12"/>
-						</Size>
+					<Button name="$parent_SELECTFRIENDA_BUTTON" inherits="GameMenuButtonTemplate" text="" frameLevel="3">
+						<Size x="40" y="16" />
 						<Anchors>
-							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-36" y="0" />
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent">
+								<Offset x="-5" y="-2" />
 							</Anchor>
 						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-friend"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-friend"/>
-						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 						<Scripts>
 							<OnClick>
-								GnomTEC_Badge:FriendFriend();		
+								GnomTEC_Badge:SelectFriendA_Button_OnClick(self, button, down)
 							</OnClick>
 						</Scripts>
-					</Button>				
-					<Button name="$parent_NEUTRAL" frameLevel="3">
-						<Size>
-							<AbsDimension x="12" y="12"/>
-						</Size>
+					</Button>
+					<Frame name="$parent_SELECTFRIENDA_DROPDOWN" inherits="UIDropDownMenuTemplate" id="1">
+						<Scripts>
+							<OnLoad>
+								GnomTEC_Badge:SelectFriendA_DropDown_OnLoad(self)
+							</OnLoad>
+						</Scripts>
+					</Frame>
+					<Button name="$parent_SELECTFRIENDC_BUTTON" inherits="GameMenuButtonTemplate" text="" frameLevel="3">
+						<Size x="40" y="16" />
 						<Anchors>
-							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-24" y="0" />
+							<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" relativeTo="$parent">
+								<Offset x="0" y="-2" />
 							</Anchor>
 						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-neutral"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-neutral"/>
-						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 						<Scripts>
 							<OnClick>
-								GnomTEC_Badge:FriendNeutral();		
+								GnomTEC_Badge:SelectFriendC_Button_OnClick(self, button, down)
 							</OnClick>
 						</Scripts>
-					</Button>				
-					<Button name="$parent_ENEMY" frameLevel="3">
-						<Size>
-							<AbsDimension x="12" y="12"/>
-						</Size>
-						<Anchors>
-							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-12" y="0" />
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-enemy"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-enemy"/>
-						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+					</Button>
+					<Frame name="$parent_SELECTFRIENDC_DROPDOWN" inherits="UIDropDownMenuTemplate" id="1">
 						<Scripts>
-							<OnClick>
-								GnomTEC_Badge:FriendEnemy();		
-							</OnClick>
+							<OnLoad>
+								GnomTEC_Badge:SelectFriendC_DropDown_OnLoad(self)
+							</OnLoad>
 						</Scripts>
-					</Button>				
-					<Button name="$parent_UNKNOWN" frameLevel="3">
-						<Size>
-							<AbsDimension x="12" y="12"/>
-						</Size>
-						<Anchors>
-							<Anchor point="BOTTOMRIGHT">
-								<Offset x="0" y="0" />
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-unknown"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-unknown"/>
-						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
-						<Scripts>
-							<OnClick>
-								GnomTEC_Badge:FriendUnknown();		
-							</OnClick>
-						</Scripts>
-					</Button>				
+					</Frame>
 				</Frames>
 			</Frame>
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
@@ -239,6 +207,15 @@
 					</Anchor>
 				</Anchors>
 			</Button>	
+			<Button name="$parent_TAB_5" inherits="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" id="5">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent_TAB_4">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>	
 			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -249,7 +226,7 @@
 					</Anchor>
 				</Anchors>
 				<Frames>
-					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true">
+					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true" parentKey="slider">
 						<Anchors>
 							<Anchor point="TOPRIGHT">
 								<Offset x="0" y="-16" />
@@ -305,6 +282,9 @@
 							<OnValueChanged>
 								self:GetParent():SetVerticalScroll(value);
 							</OnValueChanged>
+							<OnMouseWheel>
+								self:SetValue(self:GetValue() - delta);
+							</OnMouseWheel>
 							<OnEnter>
 								local parent = self:GetParent();
 								parent:UpdateScrollChildRect();
@@ -334,6 +314,11 @@
 							<OnTextChanged>
 								GnomTEC_Badge:UpdateNote();
 							</OnTextChanged>
+							<OnMouseWheel>
+								local parent = self:GetParent();
+								local slider = parent.slider;
+								slider:SetValue(slider:GetValue() - delta);
+							</OnMouseWheel>
 						</Scripts>
 					</EditBox>
 				</ScrollChild>
@@ -496,6 +481,7 @@
 		<HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
 		<Scripts>
 			<OnClick>GnomTEC_Badge:ClickedPlayerList(self:GetID());</OnClick>
+			<OnMouseWheel>GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue() - delta);</OnMouseWheel>
 		</Scripts>
 	</Button>
 	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true">
@@ -540,7 +526,7 @@
 				</Anchors>
 				<Scripts>
                 	<OnLoad>
-                   	 	getglobal(self:GetName().."Text"):SetText("Freunde")
+                   	 	getglobal(self:GetName().."Text"):SetText("Freunde (A)")
                 	</OnLoad>
                 	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
 	            </Scripts>
@@ -553,7 +539,7 @@
 				</Anchors>
 				<Scripts>
                 	<OnLoad>
-                   	 	getglobal(self:GetName().."Text"):SetText("Neutrale")
+                   	 	getglobal(self:GetName().."Text"):SetText("Neutrale (A)")
                 	</OnLoad>
                 	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
 	            </Scripts>
@@ -566,7 +552,7 @@
 				</Anchors>
 				<Scripts>
                 	<OnLoad>
-                   	 	getglobal(self:GetName().."Text"):SetText("Feinde")
+                   	 	getglobal(self:GetName().."Text"):SetText("Feinde (A)")
                 	</OnLoad>
                 	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
 	            </Scripts>
@@ -579,7 +565,7 @@
 				</Anchors>
 				<Scripts>
                 	<OnLoad>
-                   	 	getglobal(self:GetName().."Text"):SetText("Unbekannte")
+                   	 	getglobal(self:GetName().."Text"):SetText("Unbekannte (A)")
                 	</OnLoad>
                 	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
 	            </Scripts>
@@ -673,6 +659,9 @@
 							<OnValueChanged>
 								GnomTEC_Badge:RedrawPlayerList();
 							</OnValueChanged>
+							<OnMouseWheel>
+								self:SetValue(self:GetValue() - delta);
+							</OnMouseWheel>
 						</Scripts>
 						<ThumbTexture name="$parentThumbTexture" inherits="UIPanelScrollBarButton" file="Interface\Buttons\UI-ScrollBar-Knob">
 							<Size>

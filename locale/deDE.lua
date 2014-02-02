@@ -47,13 +47,15 @@ L["L_OPTIONS_VIEW_CHATFRAME"] = "Ersetzte Spielernamen im Blizzard Chatfenster m
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Zeige Toolbar zum schnelleren Umschalten diverser Statusvariablen."
 
 L["L_NORPFLAG"] = "<kein Rollenspielflag vorhanden>"
+L["L_HIDDENRPFLAG"] = "<Kein Rollenspielstatus angegeben>"
  
 L["L_ENGINEDATA_UNKNOWN"] = "Stufe -- Unbekannt Unbekannt"
 L["L_ENGINEDATA_LEVEL"] = "Stufe"
  
 L["L_TAB_DESCR"] = "Beschr."
 L["L_TAB_META"] = "Meta"
-L["L_TAB_NOTE"] = "Notiz"
+L["L_TAB_NOTE_A"] = "Notiz (A)"
+L["L_TAB_NOTE_C"] = "Notiz (C)"
 L["L_TAB_LOG"] = "Log"
 	
 L["L_FIELD_VA"] = "Addon Version"	
