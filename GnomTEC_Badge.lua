@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.12
+-- Version: 0.13
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
@@ -43,11 +43,8 @@ GnomTEC_Badge_Options = {
 -- Addon global Constants (local)
 -- ----------------------------------------------------------------------
 
-local str_fr = {"Rollenspieler","Gelegenheits-Rollenspieler","Vollzeit-Rollenspieler","Rollenspielneuling","Erwachsener Rollenspieler",}
-local str_fc = {"Außerhalb des Rollenspiels (OOC)", "Im Rollenspiel (IC)", "Suche Kontakt", "Erzähler (SL)",}
-
-
-
+local str_fr = {L["L_STR_FR0"], L["L_STR_FR1"], L["L_STR_FR2"], L["L_STR_FR3"], L["L_STR_FR4"],}
+local str_fc = {L["L_STR_FC0"], L["L_STR_FC1"], L["L_STR_FC2"], L["L_STR_FC3"],}
 
 -- ----------------------------------------------------------------------
 -- Addon global variables (local)
@@ -63,7 +60,7 @@ local optionsMain = {
 		descriptionTitle = {
 			order = 1,
 			type = "description",
-			name = "Addon zur Anzeige und Verwaltung von Rollenspiel-Charakterbeschreibungen mit Support von Channel- und 'Marry Sue Protocol'-basierten Flagprotokollen.\n\n",
+			name = L["L_OPTIONS_TITLE"],
 		},
 		descriptionAbout = {
 			name = "About",
@@ -111,12 +108,12 @@ local optionsMain = {
 }
 			
 local optionsProfile = {
-	name = "Charakterbeschreibung",
+	name = L["L_OPTIONS_PROFILE"],
 	type = 'group',
 	args = {
 		badgePlayerNA = {
 			type = "input",
-			name = "Name",
+			name = L["L_OPTIONS_PROFILE_NA"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NA"] = val; GnomTEC_Badge:SetMSP() end,
 	   		get = function(info) return GnomTEC_Badge_Player["Fields"]["NA"] end,
@@ -126,7 +123,7 @@ local optionsProfile = {
 		},
 		badgePlayerNT = {
 			type = "input",
-			name = "Titel",
+			name = L["L_OPTIONS_PROFILE_NT"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NT"] = val; GnomTEC_Badge:SetMSP() end,
     		get = function(info) return GnomTEC_Badge_Player["Fields"]["NT"] end,
@@ -136,7 +133,7 @@ local optionsProfile = {
 		},
 		badgePlayerDE = {
 			type = "input",
-			name = "Beschreibung",
+			name = L["L_OPTIONS_PROFILE_DE"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["DE"] = val; GnomTEC_Badge:SetMSP() end,
     		get = function(info) return GnomTEC_Badge_Player["Fields"]["DE"] end,
@@ -146,7 +143,7 @@ local optionsProfile = {
 		},
 		badgePlayerFR = {
 			type = "select",
-			name = "Rollenspielerfahrung",
+			name = L["L_OPTIONS_PROFILE_FR"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FR"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge_Player["Fields"]["FR"] end,
@@ -155,7 +152,7 @@ local optionsProfile = {
 		},
 		badgePlayerFC = {
 			type = "select",
-			name = "Rollenspielstatus",
+			name = L["L_OPTIONS_PROFILE_FC"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FC"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge_Player["Fields"]["FC"] end,
@@ -166,12 +163,12 @@ local optionsProfile = {
 }
 
 local optionsView = {
-	name = "Anzeigeoptionen",
+	name = L["L_OPTIONS_VIEW"],
 	type = 'group',
 	args = {
 		badgeOptionMouseOver = {
 			type = "toggle",
-			name = "Zeige Rollenspielflag auch bei MouseOver.",
+			name = L["L_OPTIONS_VIEW_MOUSEOVER"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["MouseOver"] = val end,
 			get = function(info) return GnomTEC_Badge_Options["MouseOver"] end,
@@ -180,7 +177,7 @@ local optionsView = {
 		},
 		badgeOptionLockOnTarget = {
 			type = "toggle",
-			name = "Bevorzuge Target vor MouseOver bei der Anzeige.",
+			name = L["L_OPTIONS_VIEW_LOCKONTARGET"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
@@ -189,7 +186,7 @@ local optionsView = {
 		},
 		badgeOptionAutoHide = {
 			type = "toggle",
-			name = "Verstecke Rollenspielflag automatisch.",
+			name = L["L_OPTIONS_VIEW_AUTOHIDE"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
@@ -198,7 +195,7 @@ local optionsView = {
 		},
 		badgeOptionDisableInCombat = {
 			type = "toggle",
-			name = "Während des Kampfes keine Flags anzeigen oder aktualisieren.",
+			name = L["L_OPTIONS_VIEW_DISABLEINCOMBAT"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
@@ -207,7 +204,7 @@ local optionsView = {
 		},
 		badgeOptionGnomcorderIntegration = {
 			type = "toggle",
-			name = "Integration in GnomTEC Gnomcorder (benötigt /reload oder Neustart)",
+			name = L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"],
 			desc = "",
 			disabled = function(info) return not GnomTEC_Gnomcorder end,
 			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
@@ -217,7 +214,7 @@ local optionsView = {
 		},
 		badgeOptionTooltip = {
 			type = "toggle",
-			name = "Zeige Rollenspielflag auch im Tooltip an",
+			name = L["L_OPTIONS_VIEW_TOOLTIP"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["Tooltip"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
@@ -243,8 +240,8 @@ LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View", optionsView)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", "Charakterbeschreibung", "GnomTEC Badge");
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", "Anzeigeoptionen", "GnomTEC Badge");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", L["L_OPTIONS_VIEW"], "GnomTEC Badge");
 
 -- Detect any other MSP AddOn and bail out in case of conflict
 if _G.msp_RPAddOn or _G.mrp then
@@ -309,8 +306,13 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	
 	r.FlagMSP = true
 	r.timeStamp = time()
-	r.faction = faction
-	local p = msp.char[ player ]
+	local p
+	if (realm and (realm ~= GetRealmName())) then
+		p = msp.char[ player.."-"..realm ]
+	else
+		p = msp.char[ player ]	
+	end
+
 	r.NA = emptynil( cleanpipe( p.field.NA ) )
 	if ( tonumber( p.field.FC ) or -1 ) > 0 then
 		r.FC = tonumber( p.field.FC )
@@ -423,7 +425,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			fc = GnomTEC_Badge_Flags[realm][player].FC
 		end
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
-			msp = "<kein Rollenspielflag vorhanden>"
+			msp = L["L_NORPFLAG"]
 		elseif GnomTEC_Badge_Flags[realm][player].FlagMSP then
 			msp= ""
 		else
@@ -451,7 +453,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText("")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText("")
-		GNOMTEC_BADGE_FRAME_FR_FC:SetText("<kein Rollenspielflag vorhanden>")
+		GNOMTEC_BADGE_FRAME_FR_FC:SetText( L["L_NORPFLAG"])
 		GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText("")
 	end
 	GNOMTEC_BADGE_FRAME_SCROLL:UpdateScrollChildRect()
@@ -540,6 +542,10 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		end
 		_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,1.0,0.5)
 		_G["GameTooltipTextRight"..(n+1)]:SetText("")			
+
+		_G["GameTooltipTextLeft"..(n+2)]:SetText(GnomTEC_Badge_Flags[realm][player].FactionData)
+		_G["GameTooltipTextLeft"..(n+2)]:SetTextColor(1.0,1.0,1.0)
+		_G["GameTooltipTextRight"..(n+2)]:SetText("")			
 		GameTooltip:Show()
 	end
 end
@@ -581,7 +587,7 @@ function GnomTEC_Badge:RedrawPlayerList()
 			-- cleanup UI Escape Sequences which ar not yet filtered
 			player.NT = emptynil(cleanpipe(player.NT))
 			textNT:SetText(player.NT or "")
-			textENGINEDATA:SetText((player.EngineData or "Stufe -- Unbekannt Unbekannt").." ("..playerList[playerListPosition+i]..")")
+			textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." ("..playerList[playerListPosition+i]..")")
 			button:Show();
 		end
 	end
@@ -783,14 +789,30 @@ end
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	local player, realm = UnitName("mouseover")
 	realm = realm or GetRealmName()
+
+ 	if UnitIsPlayer("mouseover") and player and realm then
+		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+
+		-- Update date from engine
+		GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("mouseover"))
+		local unitLevel = UnitLevel("mouseover")
+		if (unitLevel < 0) then
+			unitLevel = "??"
+		end
+		GnomTEC_Badge_Flags[realm][player].EngineData =  L["L_ENGINEDATA_LEVEL"].." "..unitLevel.." "..UnitRace("mouseover").." "..UnitClass("mouseover")	
+		local factionE, factionL = UnitFactionGroup("mouseover")
+		if (factionE == "Alliance") then		
+			GnomTEC_Badge_Flags[realm][player].FactionData = "|TInterface\\PvPRankBadges\\PvPRankAlliance:0|t"..factionL
+		else
+			GnomTEC_Badge_Flags[realm][player].FactionData = "|TInterface\\PvPRankBadges\\PvPRankHorde:0|t"..factionL
+		end
+		if (realm ~= GetRealmName()) then
+			GnomTEC_Badge_Flags[realm][player].FactionData = GnomTEC_Badge_Flags[realm][player].FactionData.." - "..realm
+		end			
 	
-	-- flag handling only out of combat
-	if (not playerisInCombat) then
- 		if UnitIsPlayer("mouseover") and player and realm then
-			if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
-			if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
-			GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("mouseover"))	
-			GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("mouseover").." "..UnitRace("mouseover").." "..UnitClass("mouseover")		
+		-- msp request and badge display only out of combat
+		if (not playerisInCombat) then
 
 	    	if not UnitIsUnit("mouseover", "player") then
 				msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE" } )
@@ -804,15 +826,10 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 			end
 		end
-	end
 
-	-- tooltip handling
-	if UnitIsPlayer("mouseover") and player and realm then
-		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
-		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+		-- tooltip handling
 		GnomTEC_Badge:UpdateTooltip(realm, player)
 	end
-
 end
 
 function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
@@ -1044,7 +1061,7 @@ function GnomTEC_Badge:OnEnable()
 	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
     if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
-	GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
+	GnomTEC_Badge_Flags[realm][player].EngineData = L["L_ENGINEDATA_LEVEL"].." "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
 	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("player")
 	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 	GnomTEC_Badge:DisplayBadge(realm, player)

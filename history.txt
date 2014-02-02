@@ -1,6 +1,12 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.13 (2012-10-26)
+============
+- Better cross realm handling of flags
+- Added faction icons and realm information to tooltip
+- Added localization enUS additional to deDE
+
 V0.12 (2012-10-21)
 ============
 - Even Better filtering of UI escape sequences (correct filtering of textures and item links)
