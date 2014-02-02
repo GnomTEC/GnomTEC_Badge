@@ -1,4 +1,19 @@
-﻿GnomTEC_Badge_Player = {
+﻿-- **********************************************************************
+-- GnomTEC Badge
+-- Version: 0.8
+-- Author: Lugus Sprengfix
+-- Copyright 2011-2012 by GnomTEC
+-- http://www.gnomtec.de/
+-- **********************************************************************
+-- load localization first.
+local L = LibStub("AceLocale-3.0"):GetLocale("GnomTEC_Badge")
+
+-- ----------------------------------------------------------------------
+-- Legacy global variables and constants (will be deleted in future)
+-- ----------------------------------------------------------------------
+
+-- Old saved variables
+GnomTEC_Badge_Player = {
 	["Versions"] = {},
 	["Fields"] = {
 		["NA"] = UnitName("player"),
@@ -22,13 +37,24 @@ GnomTEC_Badge_Options = {
 	["DisableInCombat"] = true,
 	["GnomcorderIntegration"] = false,
 }
- 
+
+-- ----------------------------------------------------------------------
+-- Addon global Constants (local)
+-- ----------------------------------------------------------------------
 
 local str_fr = {"Rollenspieler","Gelegenheits-Rollenspieler","Vollzeit-Rollenspieler","Rollenspielneuling","Erwachsener Rollenspieler",}
 local str_fc = {"Außerhalb des Rollenspiels (OOC)", "Im Rollenspiel (IC)", "Suche Kontakt", "Erzähler (SL)",}
 
+
+
+
+-- ----------------------------------------------------------------------
+-- Addon global variables (local)
+-- ----------------------------------------------------------------------
+
 local playerisInCombat = false;
 
+-- Main options menue with general addon information
 local optionsMain = {
 	name = "GnomTEC Badge",
 	type = "group",
@@ -67,7 +93,7 @@ local optionsMain = {
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2012 by GnomTEC",
 				},
 			}
 		},
@@ -195,6 +221,12 @@ local displayedPlayerName = ""
 local displayedPlayerRealm = ""
 local displayedPlayerNote = false;
 
+local playerList = {}
+local playerListPosition = 0
+
+-- ----------------------------------------------------------------------
+-- Startup initialization
+-- ----------------------------------------------------------------------
 
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
@@ -218,12 +250,12 @@ end
 _G.msp_RPAddOn = "GnomTEC_Badge"
 
 
-function GnomTEC_Badge:OnInitialize()
- 	-- Code that you want to run when the addon is first loaded goes here.
-  
-  	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
+-- ----------------------------------------------------------------------
+-- Local functions
+-- ----------------------------------------------------------------------
 
-end
+-- function which returns also nil for empty strings
+local function emptynil( x ) return x ~= "" and x or nil end
 
 function GnomTEC_Badge:AddToVAString( addon )
 	if not select( 4, GetAddOnInfo( addon ) ) then return end
@@ -233,10 +265,8 @@ function GnomTEC_Badge:AddToVAString( addon )
 			(GetAddOnMetadata( addon, "X-Test" )=="Beta" and "b") or "" ) ), "; " )
 end
 
-local function emptynil( x ) return x ~= "" and x or nil end
 
 function GnomTEC_Badge:SaveFlag(realm, player)
-	-- for first experiments taken from FlagRSP2
 	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 	if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	local r = GnomTEC_Badge_Flags[realm][player]
@@ -280,11 +310,8 @@ function GnomTEC_Badge:SetMSP(init)
 	-- Fields not set by the user
 	msp.my['VP'] = tostring( msp.protocolversion )
 	msp.my['VA'] = ""
-	GnomTEC_Badge:AddToVAString( "MyRolePlay" )
-	GnomTEC_Badge:AddToVAString( "flagRSP2" )
 	GnomTEC_Badge:AddToVAString( "GHI" )
 	GnomTEC_Badge:AddToVAString( "Lore" )
-	GnomTEC_Badge:AddToVAString( "Tongues" )
 
 	msp.my['GU'] = UnitGUID("player")
 	msp.my['GS'] = tostring( UnitSex("player") )
@@ -316,74 +343,6 @@ function GnomTEC_Badge:FlagRSP_DPULL(realm, player)
 		id = GetChannelName("xtensionxtooltip2");
 	end
 	SendChatMessage("<DPULL>" .. player, "CHANNEL", nil, id);
-end
-
-
-function GnomTEC_Badge:OnEnable()
-    -- Called when the addon is enabled
-
-	-- Initialize options which are propably not valid because they are new added in new versions of addon
-	if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
-	end
-	
-	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
-	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
-	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
-	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
-	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
-	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
-	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
-	
-	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
-
-	-- Restore saved versions
-	for field, ver in pairs( GnomTEC_Badge_Player.Versions ) do
-		msp.myver[ field ] = ver
-	end
-	GnomTEC_Badge:SetMSP(true)
-	
-	-- GnomTEC Gnomcorder support
-	if (GnomTEC_Gnomcorder) and GnomTEC_Badge_Options["GnomcorderIntegration"] then
-		GNOMTEC_BADGE_FRAME:SetWidth(400);
-		GNOMTEC_BADGE_FRAME:SetHeight(300);
-		GNOMTEC_BADGE_FRAME:SetMovable(false);
-		GNOMTEC_BADGE_FRAME:SetResizable(false);
-		GNOMTEC_BADGE_FRAME:SetBackdrop(nil);
-		GNOMTEC_BADGE_FRAME_CloseButton:Hide();
-		GnomTEC_Gnomcorder:AddButton("GnomTEC_Badge", "Badge", "Badge anzeigen", GNOMTEC_BADGE_FRAME, "Interface\\ICONS\\INV_Misc_GroupLooking", "Interface\\ICONS\\INV_Misc_GroupLooking", false, nil)
-	else
-		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
-	end
-	
-	local player, realm = UnitName("player")
-    realm = realm or GetRealmName()
-	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
-    if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
-	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
-	GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
-	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("player")
-	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
-	GnomTEC_Badge:DisplayBadge(realm, player)
-	
-end
-
-function GnomTEC_Badge:OnDisable()
-    -- Called when the addon is disabled
-    
-    GnomTEC_Badge:UnregisterAllEvents();
-    table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
-end
-
-function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
-	playerisInCombat = true;
-	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		GNOMTEC_BADGE_FRAME:Hide();
-	end
-end
-
-function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
-	playerisInCombat = false;
 end
 
 function GnomTEC_Badge:DisplayBadge(realm, player)
@@ -454,8 +413,6 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 
 end
 
-local playerList = {}
-local playerListPosition = 0
 
 function GnomTEC_Badge:ClickedPlayerList(id)
 	if (playerListPosition + id <= #playerList) then
@@ -566,6 +523,22 @@ function GnomTEC_Badge:UpdateNote()
 	end
 end
 
+local function GnomTEC_Badge_MSPcallback(char)
+	-- process new flag from char 
+	local player, realm = strsplit( "-", char, 2 )
+	realm = realm or GetRealmName()
+	GnomTEC_Badge:SaveFlag(realm, player)
+	GnomTEC_Badge:UpdatePlayerList()
+	
+	if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+	
+end
+-- ----------------------------------------------------------------------
+-- Frame event handler and functions
+-- ----------------------------------------------------------------------
+
 function GnomTEC_Badge:FriendFriend()
 	local realm = displayedPlayerRealm;
 	local player = displayedPlayerName;
@@ -620,6 +593,24 @@ function GnomTEC_Badge:FriendUnknown()
 		end
 		GnomTEC_Badge:DisplayBadge(realm, player)
 	end
+end
+
+-- ----------------------------------------------------------------------
+-- Hook functions
+-- ----------------------------------------------------------------------
+
+-- ----------------------------------------------------------------------
+-- Event handler
+-- ----------------------------------------------------------------------
+function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
+	playerisInCombat = true;
+	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		GNOMTEC_BADGE_FRAME:Hide();
+	end
+end
+
+function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
+	playerisInCombat = false;
 end
 
 function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
@@ -853,15 +844,82 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 	end
 end
 
-function GnomTEC_Badge_MSPcallback(char)
-	-- process new flag from char 
-	local player, realm = strsplit( "-", char, 2 )
-	realm = realm or GetRealmName()
-	GnomTEC_Badge:SaveFlag(realm, player)
-	GnomTEC_Badge:UpdatePlayerList()
-	
-	if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
-		GnomTEC_Badge:DisplayBadge(realm, player)
+-- ----------------------------------------------------------------------
+-- Addon OnInitialize, OnEnable and OnDisable
+-- ----------------------------------------------------------------------
+function GnomTEC_Badge:OnInitialize()
+ 	-- Code that you want to run when the addon is first loaded goes here.
+	self.db = LibStub("AceDB-3.0"):New("GnomTEC_BadgeDB")
+
+  
+  	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
+
+end
+
+function GnomTEC_Badge:OnEnable()
+    -- Called when the addon is enabled
+
+	-- Initialize options which are propably not valid because they are new added in new versions of addon
+	if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
 	end
 	
+	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
+	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
+	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
+	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
+	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
+	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
+	
+	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
+
+	-- Restore saved versions
+	for field, ver in pairs( GnomTEC_Badge_Player.Versions ) do
+		msp.myver[ field ] = ver
+	end
+	GnomTEC_Badge:SetMSP(true)
+	
+	-- GnomTEC Gnomcorder support
+	if (GnomTEC_Gnomcorder) and GnomTEC_Badge_Options["GnomcorderIntegration"] then
+		GNOMTEC_BADGE_FRAME:SetWidth(400);
+		GNOMTEC_BADGE_FRAME:SetHeight(300);
+		GNOMTEC_BADGE_FRAME:SetMovable(false);
+		GNOMTEC_BADGE_FRAME:SetResizable(false);
+		GNOMTEC_BADGE_FRAME:SetBackdrop(nil);
+		GNOMTEC_BADGE_FRAME_CloseButton:Hide();
+		GnomTEC_Gnomcorder:AddButton("GnomTEC_Badge", "Badge", "Badge anzeigen", GNOMTEC_BADGE_FRAME, "Interface\\ICONS\\INV_Misc_GroupLooking", "Interface\\ICONS\\INV_Misc_GroupLooking", false, nil)
+	else
+		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+	end
+	
+	local player, realm = UnitName("player")
+    realm = realm or GetRealmName()
+	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+    if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
+	GnomTEC_Badge_Flags[realm][player].EngineData = "Stufe "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
+	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("player")
+	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+	GnomTEC_Badge:DisplayBadge(realm, player)
+	
 end
+
+function GnomTEC_Badge:OnDisable()
+    -- Called when the addon is disabled
+    
+    GnomTEC_Badge:UnregisterAllEvents();
+    table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
+end
+
+-- ----------------------------------------------------------------------
+-- External API
+-- ----------------------------------------------------------------------
+
+
+
+
+
+
+
+

@@ -1,5 +1,9 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
+V0.8 (2012-01-27)
+============
+- Refactoring (Struktur und Vorbereitung Änderung an SavedVariables)
+- Vorbereitung für Lokalisierung
 
 V0.7 (2011-12-26)
 ============
