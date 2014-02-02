@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.9
+-- Version: 0.10
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
