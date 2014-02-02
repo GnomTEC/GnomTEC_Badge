@@ -11,7 +11,7 @@ L["L_STR_FR4"] = "Mature roleplayer"
 
 L["L_STR_FC0"] = "Out Of Character (OOC)"
 L["L_STR_FC1"] = "In Character (IC)"
-L["L_STR_FC2"] = "Looking For Contact"
+L["L_STR_FC2"] = "Looking For Contact (LFC)"
 L["L_STR_FC3"] = "Storyteller (SL)"
 
 
@@ -42,9 +42,11 @@ L["L_OPTIONS_VIEW_MOUSEOVER"] = "Show roleplay flag also on mouseover."
 L["L_OPTIONS_VIEW_LOCKONTARGET"] = "Prefer target over mouseover for display."
 L["L_OPTIONS_VIEW_AUTOHIDE"] = "Hide roleplay flag automatically."
 L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Don't show or update roleplay flag while in combat."
+L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "Don't show or update roleplay flag while in group, raid, battlefield or arena instances."
 L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (requires /reload oder restart)"
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Show roleplay flag also in tooltip"
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Replace player names in blizzard chat frame with names given by their flags."
+L["L_OPTIONS_VIEW_TOOLBAR"] = "Show toolbar for faster changing of different state variables."
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
  

@@ -10,7 +10,7 @@ L["L_STR_FR4"] = "Erwachsener Rollenspieler"
 
 L["L_STR_FC0"] = "Außerhalb des Rollenspiels (OOC)"
 L["L_STR_FC1"] = "Im Rollenspiel (IC)"
-L["L_STR_FC2"] = "Suche Kontakt"
+L["L_STR_FC2"] = "Suche Kontakt (LFC)"
 L["L_STR_FC3"] = "Erzähler (SL)"
 
 
@@ -40,9 +40,11 @@ L["L_OPTIONS_VIEW_MOUSEOVER"] = "Zeige Rollenspielflag auch bei MouseOver."
 L["L_OPTIONS_VIEW_LOCKONTARGET"] = "Bevorzuge Target vor MouseOver bei der Anzeige."
 L["L_OPTIONS_VIEW_AUTOHIDE"] = "Verstecke Rollenspielflag automatisch."
 L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Während des Kampfes keine Flags anzeigen oder aktualisieren."
+L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "In Gruppen-, Raid-, Schlachtfeld- oder Arenainstanzen keine Flags anzeigen oder aktualisieren."
 L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (benötigt /reload oder Neustart)"
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Zeige Rollenspielflag auch im Tooltip an"
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Ersetzte Spielernamen im Blizzard Chatfenster mit deren Namen aus den Flags."
+L["L_OPTIONS_VIEW_TOOLBAR"] = "Zeige Toolbar zum schnelleren Umschalten diverser Statusvariablen."
 
 L["L_NORPFLAG"] = "<kein Rollenspielflag vorhanden>"
  

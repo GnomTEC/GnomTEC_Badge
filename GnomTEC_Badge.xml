@@ -794,4 +794,98 @@
 			<OnShow>GnomTEC_Badge:UpdatePlayerList();</OnShow>
 		</Scripts>
 	</Frame>
+
+	<Frame name="GNOMTEC_BADGE_TOOLBAR" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true">
+		<Size x="185" y="26" />
+		<Anchors>
+			<Anchor point="CENTER" relativePoint="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize val="16"/>
+			<TileSize val="16"/>
+			<Color r="0.25" g="0.25" b="0.25"/>
+			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+		</Backdrop>
+		<Frames>
+			<Button name="$parent_SELECTAFK_BUTTON" inherits="GameMenuButtonTemplate" text="">
+				<Size x="70" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="5" y="-5" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GnomTEC_Badge:SelectAFK_Button_OnClick(self, button, down)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Frame name="$parent_SELECTAFK_DROPDOWN" inherits="UIDropDownMenuTemplate" id="1">
+				<Scripts>
+					<OnLoad>
+						GnomTEC_Badge:SelectAFK_DropDown_OnLoad(self)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Button name="$parent_SELECTOOC_BUTTON" inherits="GameMenuButtonTemplate" text="">
+				<Size x="70" y="16" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_SELECTAFK_BUTTON">
+						<Offset x="0" y="0" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						GnomTEC_Badge:SelectOOC_Button_OnClick(self, button, down)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Frame name="$parent_SELECTOOC_DROPDOWN" inherits="UIDropDownMenuTemplate" id="1">
+				<Scripts>
+					<OnLoad>
+						GnomTEC_Badge:SelectOOC_DropDown_OnLoad(self)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<CheckButton name="$parent_SHOWHELM">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_SELECTOOC_BUTTON">
+						<Offset x="2" y="0" />
+					</Anchor>
+				</Anchors>
+				<NormalTexture file="Interface\ICONS\INV_HELMET_30" />
+				<CheckedTexture file="Interface\ICONS\INV_HELMET_28" />
+				<HighlightTexture file="Interface\ICONS\INV_HELMET_28" alphaMode="ADD"/>
+				<Scripts>
+					<OnClick>
+						ShowHelm(self:GetChecked());
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SHOWCLOAK">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parent_SHOWHELM">
+						<Offset x="2" y="0" />
+					</Anchor>
+				</Anchors>
+				<NormalTexture file="Interface\ICONS\INV_Misc_Cape_20" />
+				<CheckedTexture file="Interface\ICONS\INV_Misc_Cape_18" />
+				<HighlightTexture file="Interface\ICONS\INV_Misc_Cape_18" alphaMode="ADD"/>
+				<Scripts>
+					<OnClick>
+						ShowCloak(self:GetChecked());
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnMouseDown>
+				self:StartMoving();
+			</OnMouseDown>
+			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
+		</Scripts>
+	</Frame>
+
 </Ui>

@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.22
+-- Version: 5.3.0.23
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -35,9 +35,11 @@ GnomTEC_Badge_Options = {
 	["LockOnTarget"] = true,
 	["AutoHide"] = true,	
 	["DisableInCombat"] = true,
+	["DisableInInstance"] = true,
 	["GnomcorderIntegration"] = false,
 	["Tooltip"] = true,	
 	["ChatFrame"] = false,	
+	["Toolbar"] = false,	
 }
 
 -- ----------------------------------------------------------------------
@@ -47,11 +49,54 @@ GnomTEC_Badge_Options = {
 local str_fr = {L["L_STR_FR0"], L["L_STR_FR1"], L["L_STR_FR2"], L["L_STR_FR3"], L["L_STR_FR4"],}
 local str_fc = {L["L_STR_FC0"], L["L_STR_FC1"], L["L_STR_FC2"], L["L_STR_FC3"],}
 
+-- player states
+local playerStatesAFK = {
+	["Online"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Online:0|tOnline",
+		notCheckable = 1,
+		func = function () if (UnitIsAFK("player")) then SendChatMessage("","AFK"); end; if (UnitIsDND("player")) then SendChatMessage("","DND"); end; GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Online:0|tOnline"); end,	
+	},	
+	["AFK"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Away:0|tAFK",
+		notCheckable = 1,
+		func = function () if (not UnitIsAFK("player")) then SendChatMessage("","AFK"); end; GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Away:0|tAFK")end,	
+	},
+	["DND"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-DND:0|tDND",
+		notCheckable = 1,
+		func = function () if (not UnitIsDND("player")) then SendChatMessage("","DND"); end; GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-DND:0|tDND")end,	
+	},
+}
+
+local playerStatesOOC = {
+	["OOC"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-DND:0|tOOC",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-DND:0|tOOC"); GnomTEC_Badge_Player["Fields"]["FC"] = 1; GnomTEC_Badge:SetMSP(); end,	
+	},
+	["IC"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Online:0|tIC",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Online:0|tIC"); GnomTEC_Badge_Player["Fields"]["FC"] = 2; GnomTEC_Badge:SetMSP();  end,	
+	},	
+	["LFC"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Online:0|tLFC",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Online:0|tLFC"); GnomTEC_Badge_Player["Fields"]["FC"] = 3; GnomTEC_Badge:SetMSP();  end,	
+	},	
+	["SL"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Online:0|tSL",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Online:0|tSL"); GnomTEC_Badge_Player["Fields"]["FC"] = 4; GnomTEC_Badge:SetMSP();  end,	
+	},	
+}
 -- ----------------------------------------------------------------------
 -- Addon global variables (local)
 -- ----------------------------------------------------------------------
 
-local playerisInCombat = false;
+local playerIsInCombat = false;
+local playerIsInInstance = false;
+local disabledFlagDisplay = false;
 
 -- Main options menue with general addon information
 local optionsMain = {
@@ -287,7 +332,7 @@ local optionsView = {
 			name = L["L_OPTIONS_VIEW_LOCKONTARGET"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
 			width = 'full',
 			order = 2
 		},
@@ -296,7 +341,7 @@ local optionsView = {
 			name = L["L_OPTIONS_VIEW_AUTOHIDE"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
 			width = 'full',
 			order = 3
 		},
@@ -305,7 +350,16 @@ local optionsView = {
 			name = L["L_OPTIONS_VIEW_DISABLEINCOMBAT"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
+			width = 'full',
+			order = 5
+		},
+		badgeOptionDisableInInstance = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_DISABLEININSTANCE"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["DisableInInstance"] = val end,
+	   	get = function(info) return GnomTEC_Badge_Options["DisableInInstance"] end,
 			width = 'full',
 			order = 5
 		},
@@ -315,27 +369,36 @@ local optionsView = {
 			desc = "",
 			disabled = function(info) return not GnomTEC_Gnomcorder end,
 			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
 			width = 'full',
-			order = 6
+			order = 7
 		},
 		badgeOptionTooltip = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_TOOLTIP"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["Tooltip"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
 			width = 'full',
-			order = 7
+			order = 8
 		},
 		badgeOptionChatFrame = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_CHATFRAME"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Options["ChatFrame"] = val end,
-	   		get = function(info) return GnomTEC_Badge_Options["ChatFrame"] end,
+	   	get = function(info) return GnomTEC_Badge_Options["ChatFrame"] end,
 			width = 'full',
-			order = 8
+			order = 9
+		},
+		badgeOptionToolbar = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_TOOLBAR"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["Toolbar"] = val; if (GnomTEC_Badge_Options["Toolbar"]) then GNOMTEC_BADGE_TOOLBAR:Show(); else GNOMTEC_BADGE_TOOLBAR:Hide(); end; end,
+	   	get = function(info) return GnomTEC_Badge_Options["Toolbar"] end,
+			width = 'full',
+			order = 10
 		},
 	},
 }
@@ -549,6 +612,18 @@ function GnomTEC_Badge:SetMSP(init)
 	msp.char[ playername ].supported = true
 	
 	GnomTEC_Badge:SaveFlag(GetRealmName(), playername)
+	
+	if ( 1 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
+	elseif  ( 2 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["IC"].text) 
+	elseif  ( 3 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["LFC"].text) 
+	elseif  ( 4 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
+	else
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("???") 	
+	end	
 
 end
 
@@ -786,8 +861,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 end
 
 function GnomTEC_Badge:UpdateTooltip(realm, player)
-			
-	if (GnomTEC_Badge_Options["Tooltip"] and GnomTEC_Badge_Flags[realm][player]) then
+	if ((not disabledFlagDisplay) and GnomTEC_Badge_Options["Tooltip"] and GnomTEC_Badge_Flags[realm][player]) then
 		local i, n
 
 		-- we need two line more then standard tooltip for role play status and titel
@@ -803,7 +877,7 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 			_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
 			_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
 		end
-		
+	
 		local f = GnomTEC_Badge_Flags[realm][player].FRIEND
 		if (f == nil) then
 			GameTooltipTextLeft1:SetTextColor(0.75,0.75,0.75)
@@ -816,11 +890,11 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		end
 		GameTooltipTextLeft1:SetText(GnomTEC_Badge_Flags[realm][player].NA or player)	
 		GameTooltipTextRight1:SetText("")	
-		
+	
 		GameTooltipTextLeft2:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GameTooltipTextLeft2:SetTextColor(1.0,1.0,0.0)
 		GameTooltipTextRight2:SetText("")
-		
+	
 		if (GnomTEC_Badge_Flags[realm][player].Guild) then
 			GameTooltipTextLeft3:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
 			GameTooltipTextLeft3:SetTextColor(1.0,1.0,1.0)
@@ -829,13 +903,13 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		else
 			n = 3
 		end
-		
+	
 		_G["GameTooltipTextLeft"..n]:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
 		_G["GameTooltipTextLeft"..n]:SetTextColor(1.0,1.0,1.0)
 		_G["GameTooltipTextRight"..n]:SetText("")
 
 		local fr, fc, msp
-		
+	
 		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
 			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FR) == "string" then
@@ -853,7 +927,7 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		else
 			msp= "<RSP>"		
 		end
-			
+		
 		if fr and fc then
 			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr.."><"..fc..">"..msp)
 		elseif fr then
@@ -1132,10 +1206,44 @@ function GnomTEC_Badge:CleanupFlags()
 		end
 	end
 
-	
-
 	GnomTEC_Badge:UpdatePlayerList()
 end
+
+-- initialize drop down menu afk state
+local function GnomTEC_Badge_SelectAFK_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(playerStatesAFK["Online"])
+	UIDropDownMenu_AddButton(playerStatesAFK["AFK"])
+	UIDropDownMenu_AddButton(playerStatesAFK["DND"])
+end
+
+-- select afk drop down menu OnLoad
+function GnomTEC_Badge:SelectAFK_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Badge_SelectAFK_InitializeDropDown, "MENU")
+end
+
+-- select afk drop down menu OnClick
+function GnomTEC_Badge:SelectAFK_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_TOOLBAR_SELECTAFK_DROPDOWN, self:GetName(), 0, 0)
+end
+
+-- initialize drop down menu ooc state
+local function GnomTEC_Badge_SelectOOC_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(playerStatesOOC["OOC"])
+	UIDropDownMenu_AddButton(playerStatesOOC["IC"])
+	UIDropDownMenu_AddButton(playerStatesOOC["LFC"])
+	UIDropDownMenu_AddButton(playerStatesOOC["SL"])
+end
+
+-- select ooc drop down menu OnLoad
+function GnomTEC_Badge:SelectOOC_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Badge_SelectOOC_InitializeDropDown, "MENU")
+end
+
+-- select ooc drop down menu OnClick
+function GnomTEC_Badge:SelectOOC_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_TOOLBAR_SELECTOOC_DROPDOWN, self:GetName(), 0, 0)
+end
+
 
 -- ----------------------------------------------------------------------
 -- Hook functions
@@ -1145,20 +1253,62 @@ end
 -- Event handler
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
-	playerisInCombat = true;
+	playerIsInCombat = true;
+	if (GnomTEC_Badge_Options["DisableInCombat"]) then
+		disabledFlagDisplay = true;
+	end
 	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		GNOMTEC_BADGE_FRAME:Hide();
+		if (disabledFlagDisplay) then
+			GNOMTEC_BADGE_FRAME:Hide();
+		end
 	end
 end
 
 function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
-	playerisInCombat = false;
+	playerIsInCombat = false;	
+	if (GnomTEC_Badge_Options["DisableInInstance"]) then
+		disabledFlagDisplay = playerIsInInstance;
+	else 
+		disabledFlagDisplay = false;
+	end
 end
+
+function GnomTEC_Badge:PLAYER_ENTERING_WORLD(event)
+	playerIsInInstance = (nil ~= IsInInstance())
+	if (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"]) then
+		disabledFlagDisplay = true;
+	elseif (GnomTEC_Badge_Options["DisableInCombat"]) then
+		disabledFlagDisplay = playerIsInCombat
+	else 
+		disabledFlagDisplay = false;
+	end
+	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		if (disabledFlagDisplay) then
+			GNOMTEC_BADGE_FRAME:Hide();
+		end
+	end
+end
+
+function GnomTEC_Badge:PLAYER_FLAGS_CHANGED(event)
+	if (UnitIsAFK("player")) then 
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["AFK"].text) 
+	elseif (UnitIsDND("player")) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["DND"].text) 
+	else
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["Online"].text) 
+	end
+end
+
+function GnomTEC_Badge:PLAYER_EQUIPMENT_CHANGED(slot, hasItem)
+	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
+	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
+end
+
 
 function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
     -- process the event
-	if (not playerisInCombat) then
-	    local player, realm = UnitName("target")
+	if (not disabledFlagDisplay) then
+		local player, realm = UnitName("target")
 		realm = realm or GetRealmName()
 
 		if UnitIsPlayer("target") and player and realm then
@@ -1218,8 +1368,8 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 			GnomTEC_Badge_Flags[realm][player].FactionData = GnomTEC_Badge_Flags[realm][player].FactionData.." - "..realm
 		end			
 	
-		-- msp request and badge display only out of combat
-		if (not playerisInCombat) then
+		-- msp request and badge display only out of combat and instances when options enabled
+		if (not disabledFlagDisplay) then
 
 	    	if not UnitIsUnit("mouseover", "player") then
 				GnomTEC_Badge:RequestMSP(table.concat( { UnitName("mouseover") }, "-" ))
@@ -1242,84 +1392,84 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 end
 
 function GnomTEC_Badge:CHAT_MSG_BATTLEGROUND(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_CHANNEL_JOIN(eventName, arg1, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_EMOTE(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_GUILD(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_OFFICER(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_PARTY(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_RAID(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_SAY(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_TEXT_EMOTE(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_WHISPER(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
 function GnomTEC_Badge:CHAT_MSG_YELL(eventName, message, sender)	
-	if (not playerisInCombat) then
+	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
 		GnomTEC_Badge:RequestMSP(sender)
 	end
@@ -1371,6 +1521,12 @@ function GnomTEC_Badge:OnEnable()
 	if (nil == GnomTEC_Badge_Options["ChatFrame"]) then
 		GnomTEC_Badge_Options["ChatFrame"] = false
 	end
+	if (nil == GnomTEC_Badge_Options["DisableInInstance"]) then
+		GnomTEC_Badge_Options["DisableInInstance"] = true
+	end
+	if (nil == GnomTEC_Badge_Options["Toolbar"]) then
+		GnomTEC_Badge_Options["Toolbar"] = false
+	end
 
 	
 	-- Initialize localized strings in GUI
@@ -1386,6 +1542,9 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
+	GnomTEC_Badge:RegisterEvent("PLAYER_ENTERING_WORLD");
+	GnomTEC_Badge:RegisterEvent("PLAYER_FLAGS_CHANGED");
+	GnomTEC_Badge:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_BATTLEGROUND");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
@@ -1400,9 +1559,8 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_WHISPER");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_YELL");
 
-
 	GnomTEC_Badge:RawHook("GetColoredName", true)
-	
+		
 	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
 
 	-- Restore saved versions
@@ -1434,6 +1592,32 @@ function GnomTEC_Badge:OnEnable()
 	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 	GnomTEC_Badge:DisplayBadge(realm, player)
 	
+	if (UnitIsAFK("player")) then 
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["AFK"].text) 
+	elseif (UnitIsDND("player")) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["DND"].text) 
+	else
+		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["Online"].text) 
+	end
+	
+	if ( 1 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
+	elseif  ( 2 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["IC"].text) 
+	elseif  ( 3 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["LFC"].text) 
+	elseif  ( 4 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
+	else
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("???") 	
+	end	
+	
+	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
+	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
+	
+	if (GnomTEC_Badge_Options["Toolbar"]) then
+		GNOMTEC_BADGE_TOOLBAR:Show()
+	end
 end
 
 function GnomTEC_Badge:OnDisable()
