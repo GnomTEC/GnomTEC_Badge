@@ -131,14 +131,63 @@
 			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="10" y="-89" />
+						<Offset x="26" y="-89" />
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
 						<Offset x="-10" y="10" />
 					</Anchor>
 				</Anchors>
-				<Size x="380" y="75" />
+				<Size x="364" y="75" />
 				<Frames>
+					<Button name="$parent_SELECT_DE" parentKey="select_de">
+						<Size>
+							<AbsDimension x="16" y="16"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativePoint="TOPLEFT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user-arrow"/>
+						<HighlightTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user-arrow"/>
+						<Scripts>
+							<OnLoad>
+								self:LockHighlight();
+							</OnLoad>
+							<OnClick>
+								local parent = self:GetParent();
+								self:LockHighlight();
+								parent.select_note:UnlockHighlight();
+								parent.child:EnableKeyboard(false);
+								parent.child:EnableMouse(false);	
+								GnomTEC_Badge:DisplayNote(false);
+							</OnClick>
+						</Scripts>
+					</Button>						
+					<Button name="$parent_SELECT_NOTE" parentKey="select_note">
+						<Size>
+							<AbsDimension x="16" y="16"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativeTo="$parent_SELECT_DE" relativePoint="BOTTOMRIGHT">
+								<Offset x="0" y="-2" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report-arrow"/>
+						<HighlightTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report-arrow"/>
+						<Scripts>
+							<OnClick>
+								local parent = self:GetParent();
+								self:LockHighlight();
+								parent.select_de:UnlockHighlight();
+								parent.child:EnableKeyboard(true);
+								parent.child:EnableMouse(true);								
+								GnomTEC_Badge:DisplayNote(true);
+							</OnClick>
+						</Scripts>
+					</Button>						
 					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true">
 						<Anchors>
 							<Anchor point="TOPRIGHT">
@@ -211,7 +260,7 @@
 					</Slider>
 				</Frames>
 				<ScrollChild>
-					<SimpleHTML name="$parent_DE" parentKey="child" resizable="true" setAllPoints="true">
+					<EditBox name="$parent_DE" parentKey="child" resizable="true" setAllPoints="true" multiline="true" autofocus="false">
 						<FontString inherits="GameFontWhite"/>
 						<Anchors>
 							<Anchor point="TOPLEFT">
@@ -221,15 +270,22 @@
 								<Offset x="-16" y="0" />
 							</Anchor>
 						</Anchors>
-						<Size x="364" y="75" />
+						<Size x="348" y="75" />
 						<Scripts>
+							<OnLoad>
+								self:EnableKeyboard(false);
+								self:EnableMouse(false);	
+							</OnLoad>
 							<OnSizeChanged>
 								local parent = self:GetParent();
-								self:SetWidth(parent:GetWidth()-16);		
+--								self:SetWidth(parent:GetWidth()-16);		
 								parent:UpdateScrollChildRect();
 							</OnSizeChanged>
+							<OnTextChanged>
+								GnomTEC_Badge:UpdateNote();
+							</OnTextChanged>
 						</Scripts>
-					</SimpleHTML>
+					</EditBox>
 				</ScrollChild>
 				<Scripts>
 					<OnSizeChanged>

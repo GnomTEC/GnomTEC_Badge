@@ -1,6 +1,13 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.4 (2011-12-06)
+============
+- PlayerModel wird nicht mehr versteckt bei Auswahl aus Liste sondern geleert damit Freund/Feind-Buttons weiter gehen.
+- Anzeige Umschaltbar zwischen Beschreibung und Notizen zu einem Char.
+- Eingabemöglichkeit für Notizen zu einem Char (Prototyp: Bei leerem Feld muss auf erste Zeile geklickt werden; Scrolling nicht per tastatur möglich).
+
+
 V0.3 (2011-12-04)
 ============
 - Abfragen eingefügt ob es schon Flags von einem Realm gibt um Fehler in Instanzen und Schlachtfeldern zu vermeiden.

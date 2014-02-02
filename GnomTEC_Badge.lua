@@ -145,6 +145,7 @@ local options = {
 
 local displayedPlayerName = ""
 local displayedPlayerRealm = ""
+local displayedPlayerNote = false;
 
 
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0")
@@ -315,7 +316,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 
 	displayedPlayerRealm = realm;
 	displayedPlayerName = player;
-
+	
 	if (GnomTEC_Badge_Flags[realm][player]) then	
 		local f = GnomTEC_Badge_Flags[realm][player].FRIEND or 0;
 		if (f < 0) then
@@ -358,8 +359,11 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		else
 			GNOMTEC_BADGE_FRAME_FR_FC:SetText(msp)
 		end
-		
-		GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
+		if (displayedPlayerNote) then
+			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].NOTE or "")
+		else
+			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
+		end
 	else
 		GNOMTEC_BADGE_FRAME_NA:SetText("|cff4040ff"..player.."|r")
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
@@ -393,7 +397,7 @@ function GnomTEC_Badge:UpdatePlayerList()
 	GNOMTEC_BADGE_PLAYERLIST_LIST:SetFading(false);
 	GNOMTEC_BADGE_PLAYERLIST_LIST:EnableMouse(true);
 	GNOMTEC_BADGE_PLAYERLIST_LIST:SetHyperlinksEnabled(true) 
-	GNOMTEC_BADGE_PLAYERLIST_LIST:SetScript("OnHyperlinkClick", function(self, linkData, link, button) GNOMTEC_BADGE_FRAME_PLAYERMODEL:Hide();GnomTEC_Badge:DisplayBadge(GetRealmName(), select(2,strsplit(":", linkData))) end)
+	GNOMTEC_BADGE_PLAYERLIST_LIST:SetScript("OnHyperlinkClick", function(self, linkData, link, button) GNOMTEC_BADGE_FRAME_PLAYERMODEL:ClearModel();GnomTEC_Badge:DisplayBadge(GetRealmName(), select(2,strsplit(":", linkData))) end)
 	GNOMTEC_BADGE_PLAYERLIST_LIST:Clear();		
 	if (count == 0) then
 		count = 1;
@@ -416,6 +420,27 @@ function GnomTEC_Badge:UpdatePlayerList()
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(count);
 	GNOMTEC_BADGE_PLAYERLIST_LIST:ScrollToBottom();
 
+end
+
+function GnomTEC_Badge:DisplayNote(display)
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		displayedPlayerNote = display
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:UpdateNote()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		if (displayedPlayerNote) then
+			GnomTEC_Badge_Flags[realm][player].NOTE = emptynil(GNOMTEC_BADGE_FRAME_SCROLL_DE:GetText() or "")
+		end
+	end
 end
 
 function GnomTEC_Badge:FriendFriend()
@@ -469,7 +494,6 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 		if UnitIsPlayer("target") and player and realm then
 			GnomTEC_Badge:DisplayBadge(realm, player)
 			GNOMTEC_BADGE_FRAME:Show();
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 		else
@@ -505,7 +529,6 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
 				GNOMTEC_BADGE_FRAME:Show();
-				GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
 				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
 				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 			end
