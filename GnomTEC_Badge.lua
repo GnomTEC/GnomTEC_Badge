@@ -371,7 +371,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		end
 		GNOMTEC_BADGE_FRAME_NT:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
-		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText(GnomTEC_Badge_Flags[realm][player].EngineData or "")
+		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
 
 		local fr, fc, msp
 		
@@ -421,50 +421,95 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 
 end
 
-function GnomTEC_Badge:UpdatePlayerList()
-	local key,value,id,count
-	local results = {}	
-	local filter = string.lower(GNOMTEC_BADGE_PLAYERLIST_FILTER:GetText());
-	
+local playerList = {}
+local playerListPosition = 0
 
-	count = 0;
-	for key,value in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
-	 	if (filter == "") or (string.match(string.lower(key),filter) ~= nil) or (string.match(string.lower(value.NA or ""),filter) ~= nil ) then
-			count = count + 1;
-			results[count] = key;
+function GnomTEC_Badge:ClickedPlayerList(id)
+	if (playerListPosition + id <= #playerList) then
+		GNOMTEC_BADGE_FRAME_PLAYERMODEL:ClearModel();
+		GnomTEC_Badge:DisplayBadge(GetRealmName(),playerList[playerListPosition+id]);
+	end
+end
+
+function GnomTEC_Badge:RedrawPlayerList()
+	local i
+
+	playerListPosition = floor(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue())
+
+
+	for i=1, 8, 1 do
+		local button = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i);
+		local textNA = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i.."_TEXT_NA");
+		local textNT = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i.."_TEXT_NT");
+		local textENGINEDATA = getglobal("GNOMTEC_BADGE_PLAYERLIST_LIST_PLAYER"..i.."_TEXT_ENGINEDATA");
+		if (playerListPosition + i > #playerList) then
+			button:Hide();
+		else
+			local player = GnomTEC_Badge_Flags[GetRealmName()][playerList[playerListPosition+i]];
+			if (player.FRIEND == nil) then
+				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
+			elseif (player.FRIEND < 0) then
+				textNA:SetText("|cffff0000"..(player.NA or playerList[playerListPosition+i]).."|r")
+			elseif (player.FRIEND > 0) then
+				textNA:SetText("|cff00ff00"..(player.NA or playerList[playerListPosition+i]).."|r")
+			else
+				textNA:SetText("|cff8080ff"..(player.NA or playerList[playerListPosition+i]).."|r")
+			end	
+			textNT:SetText(player.NT or "")
+			textENGINEDATA:SetText((player.EngineData or "Stufe -- Unbekannt Unbekannt").." ("..playerList[playerListPosition+i]..")")
+			button:Show();
 		end
 	end
-	
-	table.sort(results)
+end
 
-	GNOMTEC_BADGE_PLAYERLIST_LIST:SetFading(false);
-	GNOMTEC_BADGE_PLAYERLIST_LIST:EnableMouse(true);
-	GNOMTEC_BADGE_PLAYERLIST_LIST:SetHyperlinksEnabled(true) 
-	GNOMTEC_BADGE_PLAYERLIST_LIST:SetScript("OnHyperlinkClick", function(self, linkData, link, button) GNOMTEC_BADGE_FRAME_PLAYERMODEL:ClearModel();GnomTEC_Badge:DisplayBadge(GetRealmName(), select(2,strsplit(":", linkData))) end)
-	GNOMTEC_BADGE_PLAYERLIST_LIST:Clear();		
-	if (count == 0) then
-		count = 1;
-		GNOMTEC_BADGE_PLAYERLIST_LIST:SetMaxLines(count);
-		GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("<Keine Eintrag>");
-	else
-		GNOMTEC_BADGE_PLAYERLIST_LIST:SetMaxLines(count);
-		for id,value in ipairs(results) do
-			local f = GnomTEC_Badge_Flags[GetRealmName()][value].FRIEND;
-			if (f == nil) then
-				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cffC0C0C0|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")		
-			elseif (f < 0) then
-				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cffff0000|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
-			elseif (f > 0) then
-				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cff00ff00|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
-			else
-				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cff8080ff|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
+function GnomTEC_Badge:UpdatePlayerList()
+
+	local key,value,rkey,rvalue,id,count,rcount, acount
+	local filter = string.lower(GNOMTEC_BADGE_PLAYERLIST_FILTER:GetText());
+	local showFriend = GNOMTEC_BADGE_PLAYERLIST_SHOWFRIEND:GetChecked();
+	local showNeutral = GNOMTEC_BADGE_PLAYERLIST_SHOWNEUTRAL:GetChecked();
+	local showEnemy = GNOMTEC_BADGE_PLAYERLIST_SHOWENEMY:GetChecked();
+	local showUnknown = GNOMTEC_BADGE_PLAYERLIST_SHOWUNKNOWN:GetChecked();
+	
+	acount = 0;
+	for rkey,rvalue in pairs(GnomTEC_Badge_Flags) do
+		for key,value in pairs(rvalue) do	
+			acount = acount+1;
+		end
+	end
+
+	rcount = 0;
+	for rkey,rvalue in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
+		rcount = rcount+1;
+	end
+
+	count = 0;
+	playerList = {}
+	for key,value in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
+	 	if (filter == "") or (string.match(string.lower(key),filter) ~= nil) or (string.match(string.lower(value.NA or ""),filter) ~= nil ) then
+			if (value.FRIEND == nil) then
+				if showUnknown then
+					count = count + 1;
+					playerList[count] = key;				
+				end
+			elseif ((value.FRIEND < 0) and showEnemy) or ((value.FRIEND > 0) and showFriend) or ((value.FRIEND == 0) and showNeutral) then
+				count = count + 1;
+				playerList[count] = key;
 			end
 		end
 	end
-	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,count);
-	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(count);
-	GNOMTEC_BADGE_PLAYERLIST_LIST:ScrollToBottom();
-
+	
+	table.sort(playerList)
+	
+	if (count > 8) then
+		GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,count-8);
+	else
+		GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetMinMaxValues(0,0);		
+	end
+	playerListPosition = 0;
+	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
+	GnomTEC_Badge:RedrawPlayerList();
+	GNOMTEC_BADGE_PLAYERLIST_FOOTER_TEXT:SetText("Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Gesamt: "..acount);
 end
 
 function GnomTEC_Badge:DisplayNote(display)

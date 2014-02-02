@@ -392,13 +392,63 @@
 			<OnHide>GNOMTEC_BADGE_PLAYERLIST:Hide();</OnHide>
 		</Scripts>
 	</Frame>
-	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
-		<Size x="400" y="200" />
-		<ResizeBounds>
-            <minResize>
-                <AbsDimension x="200" y="200"/>
-            </minResize>
-        </ResizeBounds>
+	<Button name="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" hidden="true" virtual="true">
+		<Size>
+			<AbsDimension x="364" y="40"/>
+		</Size>
+		<Frames>
+			<Frame name="$parent_TEXT" setAllPoints="true">
+				<Layers>
+					<Layer level="BORDER">
+						<FontString name="$parent_NA" inherits="GameFontNormal" justifyH="LEFT" resizable="true" setAllPoints="true">
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="3" y="-3"/>
+									</Offset>
+								</Anchor>
+								<Anchor point="RIGHT">
+									<Offset x="-3" y="0"/>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_NT" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+							<Color r="1.0" g="1.0" b="0.1"/>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeTo="$parent_NA" relativePoint="BOTTOMLEFT">
+									<Offset>
+										<AbsDimension x="0" y="0"/>
+									</Offset>
+								</Anchor>
+								<Anchor point="RIGHT">
+									<Offset x="0" y="0"/>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<FontString name="$parent_ENGINEDATA" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+							<Color r="1.0" g="1.0" b="1.0"/>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeTo="$parent_NT" relativePoint="BOTTOMLEFT">
+									<Offset>
+										<AbsDimension x="0" y="0"/>
+									</Offset>
+								</Anchor>
+								<Anchor point="RIGHT">
+									<Offset x="0" y="0"/>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
+		<Scripts>
+			<OnClick>GnomTEC_Badge:ClickedPlayerList(self:GetID());</OnClick>
+		</Scripts>
+	</Button>
+	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true">
+		<Size x="400" y="400" />
 		<Anchors>
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
@@ -409,33 +459,115 @@
 			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 		</Backdrop>
 		<Frames>
-			<Editbox name="$parent_FILTER" inherits="InputBoxTemplate">
+			<Editbox name="$parent_FILTER" inherits="InputBoxTemplate" autofocus="false">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="10" y="-9" />
-					</Anchor>
-					<Anchor point="TOPRIGHT">
-						<Offset x="-9" y="-9" />
+						<Offset x="15" y="-9" />
 					</Anchor>
 				</Anchors>
-				<Size x="180" y="20" />
+				<Size x="375" y="20" />
 				<Scripts>
 					<OnTextChanged>
 						GnomTEC_Badge:UpdatePlayerList();
 					</OnTextChanged>
 				</Scripts>
-			</Editbox>			
-			<ScrollingMessageFrame name="$parent_LIST" resizable="true" setAllPoints="true">
-				<FontString inherits="GameFontNormalLeft"/>
+			</Editbox>
+			<CheckButton name="$parent_SHOWFRIEND" inherits="UICheckButtonTemplate" checked="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="10" y="-29" />
 					</Anchor>
-					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-26" y="10" />
+				</Anchors>
+				<Scripts>
+                	<OnLoad>
+                   	 	getglobal(self:GetName().."Text"):SetText("Freunde")
+                	</OnLoad>
+                	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
+	            </Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SHOWNEUTRAL" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="100" y="-29" />
 					</Anchor>
 				</Anchors>
-				<Size x="164" y="160" />
+				<Scripts>
+                	<OnLoad>
+                   	 	getglobal(self:GetName().."Text"):SetText("Neutrale")
+                	</OnLoad>
+                	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
+	            </Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SHOWENEMY" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="190" y="-29" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+                	<OnLoad>
+                   	 	getglobal(self:GetName().."Text"):SetText("Feinde")
+                	</OnLoad>
+                	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
+	            </Scripts>
+			</CheckButton>
+			<CheckButton name="$parent_SHOWUNKNOWN" inherits="UICheckButtonTemplate" checked="true">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset x="280" y="-29" />
+					</Anchor>
+				</Anchors>
+				<Scripts>
+                	<OnLoad>
+                   	 	getglobal(self:GetName().."Text"):SetText("Unbekannte")
+                	</OnLoad>
+                	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
+	            </Scripts>
+			</CheckButton>
+			<Frame name="$parent_FOOTER">
+				<Size x="400" y="20" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
+						<Offset x="0" y="0" />
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize val="16"/>
+					<TileSize val="16"/>
+					<Color r="0.25" g="0.25" b="0.25"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>
+				<Layers>
+					<Layer level="Artwork">
+						<FontString name="$parent_TEXT" inherits="GameFontNormalSmall" resizable="true" setAllPoints="true" justifyH="LEFT">
+							<Color r="1.0" g="1.0" b="0.1"/>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset x="10" y="-1"/>
+								</Anchor>
+								<Anchor point="RIGHT">
+									<Offset x="-10" y="1"/>
+								</Anchor>
+							</Anchors>
+							<Size x="360" y="18" />
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame name="$parent_LIST" resizable="false">
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize val="16"/>
+					<TileSize val="16"/>
+					<Color r="0.25" g="0.25" b="0.25"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>
+				<FontString inherits="GameFontNormalLeft"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="$parent_FOOTER">
+						<Offset x="10" y="0" />
+					</Anchor>
+				</Anchors>
+				<Size x="364" y="320" />
 				<Frames>
 					<Slider name="$parent_SLIDER" parentKey="child" resizable="true" setAllPoints="true">
 						<Anchors>
@@ -457,9 +589,8 @@
 								<Scripts>
 									<OnClick>
 										local parent = self:GetParent();
-										local parentOfParent = parent:GetParent();
-										parentOfParent:PageUp();
-										parent:SetValue(select(2,parent:GetMinMaxValues()) - parentOfParent:GetCurrentScroll());
+										local pos = parent:GetValue();
+										parent:SetValue(pos-8);
 										PlaySound("UChatScrollButton");
 									</OnClick>
 								</Scripts>
@@ -471,9 +602,9 @@
 								<Scripts>
 									<OnClick>
 										local parent = self:GetParent();
-										local parentOfParent = parent:GetParent();
-										parentOfParent:PageDown();
-										parent:SetValue(select(2,parent:GetMinMaxValues()) - parentOfParent:GetCurrentScroll());
+										local pos = parent:GetValue();
+										local max = select(2,parent:GetMinMaxValues());
+										parent:SetValue(pos+8);
 										PlaySound("UChatScrollButton");
 									</OnClick>
 								</Scripts>
@@ -481,8 +612,7 @@
 						</Frames>
 						<Scripts>
 							<OnValueChanged>
-								local parent = self:GetParent();
-								parent:SetScrollOffset(select(2,self:GetMinMaxValues())-value);
+								GnomTEC_Badge:RedrawPlayerList();
 							</OnValueChanged>
 						</Scripts>
 						<ThumbTexture name="$parentThumbTexture" inherits="UIPanelScrollBarButton" file="Interface\Buttons\UI-ScrollBar-Knob">
@@ -491,20 +621,87 @@
 							</Size>
 						</ThumbTexture>
 					</Slider>
+					<Button name="$parent_PLAYER1" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER2" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="2">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER1" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER3" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="3">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER2" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER4" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER3" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER5" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="5">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER4" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER6" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="6">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER5" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER7" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="7">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER6" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
+					<Button name="$parent_PLAYER8" inherits="GNOMTEC_BADGE_PLAYERLIST_BUTTONTEMPLATE" id="8">
+						<Anchors>
+							<Anchor point="TOP" relativeTo="$parent_PLAYER7" relativePoint="BOTTOM">
+								<Offset>
+									<AbsDimension x="0" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+					</Button>
 				</Frames>
-			</ScrollingMessageFrame>
+			</Frame>
 		</Frames>			
 		<Scripts>
 			<OnMouseDown>
-				if button == "LeftButton" then
-					self:StartMoving();
-				else
-					self:StartSizing();
-				end				
+				self:StartMoving();
 			</OnMouseDown>
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 			<OnShow>GnomTEC_Badge:UpdatePlayerList();</OnShow>
 		</Scripts>
 	</Frame>
-
 </Ui>

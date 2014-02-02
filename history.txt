@@ -1,6 +1,10 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.6 (2011-12-17)
+============
+- Überarbeitung / Neustrukturierung Flagliste
+
 V0.5 (2011-12-11)
 ============
 - Überarbeitung/Neustrukturierung Konfigurationsmenue.
