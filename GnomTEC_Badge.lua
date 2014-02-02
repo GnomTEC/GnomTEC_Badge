@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.18
+-- Version: 5.3.0.19
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -307,7 +307,7 @@ local optionsView = {
 			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
 			width = 'full',
-			order = 4
+			order = 5
 		},
 		badgeOptionGnomcorderIntegration = {
 			type = "toggle",
@@ -317,7 +317,7 @@ local optionsView = {
 			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
 			width = 'full',
-			order = 5
+			order = 6
 		},
 		badgeOptionTooltip = {
 			type = "toggle",
@@ -326,7 +326,7 @@ local optionsView = {
 			set = function(info,val) GnomTEC_Badge_Options["Tooltip"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
 			width = 'full',
-			order = 6
+			order = 7
 		},
 		badgeOptionChatFrame = {
 			type = "toggle",
@@ -335,7 +335,7 @@ local optionsView = {
 			set = function(info,val) GnomTEC_Badge_Options["ChatFrame"] = val end,
 	   		get = function(info) return GnomTEC_Badge_Options["ChatFrame"] end,
 			width = 'full',
-			order = 7
+			order = 8
 		},
 	},
 }
@@ -1116,6 +1116,10 @@ function GnomTEC_Badge:CURSOR_UPDATE(eventName)
 	end	
 end
     
+function GnomTEC_Badge:RequestMSP(unitName)
+	msp:Request(unitName, { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+end
+
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	local player, realm = UnitName("mouseover")
 	realm = realm or GetRealmName()
@@ -1145,7 +1149,7 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 		if (not playerisInCombat) then
 
 	    	if not UnitIsUnit("mouseover", "player") then
-				msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+				GnomTEC_Badge:RequestMSP(table.concat( { UnitName("mouseover") }, "-" ))
 			end
 			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
@@ -1159,29 +1163,94 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 
 		-- tooltip handling
 		GnomTEC_Badge:UpdateTooltip(realm, player)
+
+	end	
+
+end
+
+function GnomTEC_Badge:CHAT_MSG_BATTLEGROUND(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
 	end
 end
 
--- function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
---
---	-- process messages in xtensionxtooltip2 from other addons
---	if ((not playerisInCombat) and (string.lower(channelName) == "xtensionxtooltip2")) then
---		local realm = GetRealmName();
---		local player = sender;
---		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
---		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
---		if not GnomTEC_Badge_Flags[realm][player].AN2 then GnomTEC_Badge_Flags[realm][player].AN2 = player end
---		
---		--
---		-- here could be some code if we sometimes support special things from others
---		--	
---						
---		-- Refresh Badge if it shows player data
---		if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
---			GnomTEC_Badge:DisplayBadge(realm, player)
---		end
---	end
--- end
+function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_CHANNEL_JOIN(eventName, arg1, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_EMOTE(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_GUILD(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_OFFICER(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_PARTY(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_RAID(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_SAY(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_TEXT_EMOTE(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_WHISPER(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
+
+function GnomTEC_Badge:CHAT_MSG_YELL(eventName, message, sender)	
+	if (not playerisInCombat) then
+		-- Trigger the flag request for sender
+		GnomTEC_Badge:RequestMSP(sender)
+	end
+end
 
 -- ----------------------------------------------------------------------
 -- RawHook for GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
@@ -1242,9 +1311,22 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
---	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
+
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_BATTLEGROUND");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL_JOIN");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_EMOTE");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_GUILD");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_OFFICER");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_PARTY");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_RAID");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_SAY");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_TEXT_EMOTE");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_WHISPER");
+	GnomTEC_Badge:RegisterEvent("CHAT_MSG_YELL");
+
 
 	GnomTEC_Badge:RawHook("GetColoredName", true)
 	
