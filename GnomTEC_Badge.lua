@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.23
+-- Version: 5.3.0.24
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -349,7 +349,7 @@ local optionsView = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_DISABLEINCOMBAT"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
+			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
 	   	get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
 			width = 'full',
 			order = 5
@@ -358,7 +358,7 @@ local optionsView = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_DISABLEININSTANCE"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["DisableInInstance"] = val end,
+			set = function(info,val) GnomTEC_Badge_Options["DisableInInstance"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
 	   	get = function(info) return GnomTEC_Badge_Options["DisableInInstance"] end,
 			width = 'full',
 			order = 5
@@ -984,7 +984,7 @@ end
 
 function GnomTEC_Badge:ClickedPlayerList(id)
 	if (playerListPosition + id <= #playerList) then
-		GNOMTEC_BADGE_FRAME_PLAYERMODEL:ClearModel();
+		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:ClearModel();
 		GnomTEC_Badge:DisplayBadge(GetRealmName(),playerList[playerListPosition+id]);
 	end
 end
@@ -1245,6 +1245,11 @@ function GnomTEC_Badge:SelectOOC_Button_OnClick(self, button, down)
 end
 
 
+function GnomTEC_Badge:DisableFlagDisplay(bool)
+	disabledFlagDisplay = bool
+	GNOMTEC_BADGE_TOOLBAR_DISABLEFLAGDISPLAY:SetChecked(disabledFlagDisplay)
+end
+
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
@@ -1255,7 +1260,7 @@ end
 function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
 	playerIsInCombat = true;
 	if (GnomTEC_Badge_Options["DisableInCombat"]) then
-		disabledFlagDisplay = true;
+		GnomTEC_Badge:DisableFlagDisplay(true)
 	end
 	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 		if (disabledFlagDisplay) then
@@ -1267,20 +1272,20 @@ end
 function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
 	playerIsInCombat = false;	
 	if (GnomTEC_Badge_Options["DisableInInstance"]) then
-		disabledFlagDisplay = playerIsInInstance;
+		GnomTEC_Badge:DisableFlagDisplay(playerIsInInstance);
 	else 
-		disabledFlagDisplay = false;
+		GnomTEC_Badge:DisableFlagDisplay(false)
 	end
 end
 
 function GnomTEC_Badge:PLAYER_ENTERING_WORLD(event)
 	playerIsInInstance = (nil ~= IsInInstance())
 	if (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"]) then
-		disabledFlagDisplay = true;
+		GnomTEC_Badge:DisableFlagDisplay(true)
 	elseif (GnomTEC_Badge_Options["DisableInCombat"]) then
-		disabledFlagDisplay = playerIsInCombat
+		GnomTEC_Badge:DisableFlagDisplay(playerIsInCombat)
 	else 
-		disabledFlagDisplay = false;
+		GnomTEC_Badge:DisableFlagDisplay(false)
 	end
 	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 		if (disabledFlagDisplay) then
@@ -1316,8 +1321,8 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 			if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 				GNOMTEC_BADGE_FRAME:Show();
 			end
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
-			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+			GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("target")
+			GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
 		else
 			if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
 				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
@@ -1379,8 +1384,8 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 					GNOMTEC_BADGE_FRAME:Show();
 				end
-				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
-				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+				GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("mouseover")
+				GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
 			end
 		end
 
@@ -1588,8 +1593,8 @@ function GnomTEC_Badge:OnEnable()
     if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
 	GnomTEC_Badge_Flags[realm][player].EngineData = L["L_ENGINEDATA_LEVEL"].." "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
-	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("player")
-	GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
+	GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("player")
+	GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
 	GnomTEC_Badge:DisplayBadge(realm, player)
 	
 	if (UnitIsAFK("player")) then 
@@ -1615,6 +1620,7 @@ function GnomTEC_Badge:OnEnable()
 	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
 	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
 	
+	GnomTEC_Badge:DisableFlagDisplay(disabledFlagDisplay)
 	if (GnomTEC_Badge_Options["Toolbar"]) then
 		GNOMTEC_BADGE_TOOLBAR:Show()
 	end

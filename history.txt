@@ -1,6 +1,13 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+V5.3.0.24 (2013-08-18)
+============
+- Changed used font in edit boxes to ChatFontNormal to support unicode chars
+- Changed XML for frame structure at player model
+- Added toolbar button to activate/deactivate gui popus for flag display 
+- Addapted option to prevent any gui popups while in instances (party, raid, pvp and arena) 
+
 V5.3.0.23 (2013-06-23)
 ============
 - Added option to prevent any gui popups while in instances (party, raid, pvp and arena) 
