@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.1.29
+-- Version: 5.4.1.30
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -34,6 +34,8 @@ GnomTEC_Badge_Options = {
 	["MouseOver"] = false,
 	["LockOnTarget"] = true,
 	["AutoHide"] = true,	
+	["DisabledFlagDisplay"] = false;
+	["DisableAutomatic"] = true,	
 	["DisableInCombat"] = true,
 	["DisableInInstance"] = true,
 	["GnomcorderIntegration"] = false,
@@ -135,6 +137,24 @@ local playerStatesFriendC = {
 		notCheckable = 1,
 		func = function () GNOMTEC_BADGE_FRAME_PLAYER_SELECTFRIENDA_BUTTON:SetText("C: |TInterface\\AddOns\\GnomTEC_Badge\\Icons\\dummy-unknown:0|t"); GnomTEC_Badge:FriendCUnknown(); end,	
 	},	
+}
+
+local flagDisplayStates = {
+	["On"] = {
+		text = "|TInterface\\LFGFrame\\BattlenetWorking0:0|t On",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking0");GnomTEC_Badge_Options["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(false); end,	
+	},
+	["Auto"] = {
+		text = "|TInterface\\LFGFrame\\BattlenetWorking2:0|t Auto",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking2");GnomTEC_Badge_Options["DisableAutomatic"] = true; GnomTEC_Badge:DisableFlagDisplay(GnomTEC_Badge:GetAutomaticState()); end,	
+	},
+	["Off"] = {
+		text = "|TInterface\\LFGFrame\\BattlenetWorking4:0|t Off",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking4");GnomTEC_Badge_Options["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(true); end,	
+	},
 }
 
 -- ----------------------------------------------------------------------
@@ -251,6 +271,16 @@ local optionsProfile = {
 			multiline = 2,
 			width = 'full',
 			order = 4
+		},
+		badgePlayerRA = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_RA"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["RA"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["RA"] end,
+			multiline = false,
+			width = 'half',
+			order = 5
 		},
 		badgePlayerAG = {
 			type = "input",
@@ -835,6 +865,15 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 				end
 				text = text..L["L_FIELD_AW"]	
 			end
+			if (GnomTEC_Badge_Flags[realm][player].RA) then
+				if (not first) then
+					text = text.." / "
+				else
+					text = text.."|cFFFFFF80--- "
+					first = false	
+				end
+				text = text..L["L_FIELD_RA"]	
+			end
 			if (not first) then
 				text = text.." ---|r|n"
 			end
@@ -871,6 +910,14 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 					first = false	
 				end
 				text = text..GnomTEC_Badge_Flags[realm][player].AW	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].RA) then
+				if (not first) then
+					text = text.." / "
+				else
+					first = false	
+				end
+				text = text..GnomTEC_Badge_Flags[realm][player].RA	
 			end
 			if (not first) then
 				text = text.."|n|n"
@@ -1509,10 +1556,32 @@ function GnomTEC_Badge:SelectFriendC_Button_OnClick(self, button, down)
 end
 
 
+-- initialize drop down menu flag display state
+local function GnomTEC_Badge_SelectFlagDisplay_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(flagDisplayStates["On"])
+	UIDropDownMenu_AddButton(flagDisplayStates["Auto"])
+	UIDropDownMenu_AddButton(flagDisplayStates["Off"])
+end
+
+-- select flag display drop down menu OnLoad
+function GnomTEC_Badge:SelectFlagDisplay_DropDown_OnLoad(self)
+	UIDropDownMenu_Initialize(self, GnomTEC_Badge_SelectFlagDisplay_InitializeDropDown, "MENU")
+end
+
+-- select flag display drop down menu OnClick
+function GnomTEC_Badge:SelectFlagDisplay_Button_OnClick(self, button, down)
+	ToggleDropDownMenu(1, nil, GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_DROPDOWN, self:GetName(), 0, 0)
+end
+
 function GnomTEC_Badge:DisableFlagDisplay(bool)
 	disabledFlagDisplay = bool
-	GNOMTEC_BADGE_TOOLBAR_DISABLEFLAGDISPLAY:SetChecked(disabledFlagDisplay)
+   GnomTEC_Badge_Options["DisabledFlagDisplay"] = disabledFlagDisplay
 end
+
+function GnomTEC_Badge:GetAutomaticState()
+	return (playerIsInCombat and GnomTEC_Badge_Options["DisableInCombat"]) or (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"])
+end
+
 
 function GnomTEC_Badge:SetPlayerModelToUnit(unit)
 	if (UnitIsVisible(unit)) then
@@ -1533,37 +1602,44 @@ end
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
 	playerIsInCombat = true;
-	if (GnomTEC_Badge_Options["DisableInCombat"]) then
-		GnomTEC_Badge:DisableFlagDisplay(true)
-	end
-	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		if (disabledFlagDisplay) then
-			GNOMTEC_BADGE_FRAME:Hide();
+	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
+		if (GnomTEC_Badge_Options["DisableInCombat"]) then
+			GnomTEC_Badge:DisableFlagDisplay(true)
+		end
+		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+			if (disabledFlagDisplay) then
+				GNOMTEC_BADGE_FRAME:Hide();
+			end
 		end
 	end
 end
 
 function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
 	playerIsInCombat = false;	
-	if (GnomTEC_Badge_Options["DisableInInstance"]) then
-		GnomTEC_Badge:DisableFlagDisplay(playerIsInInstance);
-	else 
-		GnomTEC_Badge:DisableFlagDisplay(false)
+	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
+		if (GnomTEC_Badge_Options["DisableInInstance"]) then
+			GnomTEC_Badge:DisableFlagDisplay(playerIsInInstance);
+		else 
+			GnomTEC_Badge:DisableFlagDisplay(false)
+		end
 	end
 end
 
 function GnomTEC_Badge:PLAYER_ENTERING_WORLD(event)
 	playerIsInInstance = (nil ~= IsInInstance())
-	if (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"]) then
-		GnomTEC_Badge:DisableFlagDisplay(true)
-	elseif (GnomTEC_Badge_Options["DisableInCombat"]) then
-		GnomTEC_Badge:DisableFlagDisplay(playerIsInCombat)
-	else 
-		GnomTEC_Badge:DisableFlagDisplay(false)
-	end
-	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		if (disabledFlagDisplay) then
-			GNOMTEC_BADGE_FRAME:Hide();
+	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
+		if (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"]) then
+			GnomTEC_Badge:DisableFlagDisplay(true)
+		elseif (GnomTEC_Badge_Options["DisableInCombat"]) then
+			GnomTEC_Badge:DisableFlagDisplay(playerIsInCombat)
+		else 
+			GnomTEC_Badge:DisableFlagDisplay(false)
+		end
+
+		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+			if (disabledFlagDisplay) then
+				GNOMTEC_BADGE_FRAME:Hide();
+			end
 		end
 	end
 end
@@ -1617,7 +1693,7 @@ end
 
 function GnomTEC_Badge:RequestMSP(unitName)
 	if (nil ~= emptynil(unitName)) then
-		msp:Request(unitName, { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+		msp:Request(unitName, { "TT", "DE", "RA", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
 	end
 end
 
@@ -1806,6 +1882,12 @@ function GnomTEC_Badge:OnEnable()
 	if (nil == GnomTEC_Badge_Options["Toolbar"]) then
 		GnomTEC_Badge_Options["Toolbar"] = true
 	end
+	if (nil == GnomTEC_Badge_Options["DisableAutomatic"]) then
+		GnomTEC_Badge_Options["DisableAutomatic"] = true
+	end
+	if (nil == GnomTEC_Badge_Options["DisabledFlagDisplay"]) then
+		GnomTEC_Badge_Options["DisabledFlagDisplay"] = false
+	end
 
 	
 	-- Initialize localized strings in GUI
@@ -1877,6 +1959,15 @@ function GnomTEC_Badge:OnEnable()
 		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["DND"].text) 
 	else
 		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["Online"].text) 
+	end
+	
+	disabledFlagDisplay = GnomTEC_Badge_Options["DisabledFlagDisplay"];
+	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking2") 
+	elseif (GnomTEC_Badge_Options["DisabledFlagDisplay"]) then
+		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking4") 
+	else
+		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking0") 
 	end
 	
 	if ( 1 == GnomTEC_Badge_Player["Fields"]["FC"] ) then

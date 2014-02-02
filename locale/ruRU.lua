@@ -24,6 +24,7 @@ L["L_OPTIONS_PROFILE_DE"] = "словесный портрет подозрев�
 L["L_OPTIONS_PROFILE_FR"] = "Ролевые стиль"
 L["L_OPTIONS_PROFILE_FC"] = "статус Ролевые"
 L["L_OPTIONS_PROFILE_CU"] = "в настоящее время"
+L["L_OPTIONS_PROFILE_RA"] = "род"
 L["L_OPTIONS_PROFILE_AG"] = "возраст"
 L["L_OPTIONS_PROFILE_AE"] = "цвет глаз"
 L["L_OPTIONS_PROFILE_AH"] = "высота"

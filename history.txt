@@ -1,5 +1,9 @@
 GnomTEC Badge Addon - Change History 
 ==========================
+5.4.1.30 (2013-12-02)
+============
+- Added support for MSP attribute RA (race)
+- Changed button to activate/deactivate gui popus for flag display to support (on/auto/off)
 
 5.4.1.29 (2013-11-30)
 ============
@@ -9,7 +13,7 @@ GnomTEC Badge Addon - Change History
 - Supported languages by author: enUS, deDE
 - With google translated languages: esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 - Support translations: http://wow.curseforge.com/addons/gnomtec_badge/localization/
-- Solved issue with players which have no sometimes no faction.
+- Solved issue with players which have sometimes no faction.
 - Scrolling with mousewheel in notes is now faster.
 - Pressing ESC in notes fields will clear focus from this field.
 
