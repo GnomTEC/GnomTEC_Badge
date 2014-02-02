@@ -1,8 +1,8 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.13
--- Author: Lugus Sprengfix
--- Copyright 2011-2012 by GnomTEC
+-- Version: 5.3.0.14
+-- Author: GnomTEC
+-- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -76,7 +76,7 @@ local optionsMain = {
 				descriptionAuthor = {
 					order = 2,
 					type = "description",
-					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."Lugus Sprengfix",
+					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."GnomTEC",
 				},
 				descriptionEmail = {
 					order = 3,
@@ -91,7 +91,7 @@ local optionsMain = {
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2012 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2013 by GnomTEC",
 				},
 			}
 		},
@@ -348,8 +348,7 @@ function GnomTEC_Badge:SetMSP(init)
 	-- Fields not set by the user
 	msp.my['VP'] = tostring( msp.protocolversion )
 	msp.my['VA'] = ""
-	GnomTEC_Badge:AddToVAString( "GHI" )
-	GnomTEC_Badge:AddToVAString( "Lore" )
+	GnomTEC_Badge:AddToVAString( "GnomTEC_Badge" )	
 
 	msp.my['GU'] = UnitGUID("player")
 	msp.my['GS'] = tostring( UnitSex("player") )
@@ -385,6 +384,14 @@ end
 
 function GnomTEC_Badge:DisplayBadge(realm, player)
 
+	if ((not realm) or (not player)) then 
+		return;
+	elseif (not GnomTEC_Badge_Flags[realm]) then
+		return;
+	elseif (not GnomTEC_Badge_Flags[realm][player]) then
+		return;
+	end
+	
 	displayedPlayerRealm = realm;
 	displayedPlayerName = player;
 	
@@ -832,177 +839,26 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	end
 end
 
-function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
-
-	-- process classic flag messages
-	if ((not playerisInCombat) and (string.lower(channelName) == "xtensionxtooltip2")) then
-		local realm = GetRealmName();
-		local player = sender;
-		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
-		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
-		if not GnomTEC_Badge_Flags[realm][player].AN2 then GnomTEC_Badge_Flags[realm][player].AN2 = player end
-					
-		if (not GnomTEC_Badge_Flags[realm][player].FlagMSP) then
-			GnomTEC_Badge_Flags[realm][player].FlagMSP = false;
-			for index,value in ipairs({strsplit("<", message)}) do
-				attributeName,attributeValue = strsplit(">", value)
-				-- substitute encoded brackets.
-				if attributeValue then
-					attributeValue = string.gsub(attributeValue, "\\%(", "<");
-					attributeValue = string.gsub(attributeValue, "\\%)", ">");
-				end
-			
-				if attributeName == "" then
-					-- leeres Element -> ignorieren
-				elseif string.sub(attributeName,1,2) == "RP" and string.sub(attributeName,3,3) ~= "T"  then
-					local RPStyle = string.sub(attributeName,3,3);
-					if RPStyle == "4" then
-						GnomTEC_Badge_Flags[realm][player].FR = 4;	
-					elseif RPStyle == "3" then
-						GnomTEC_Badge_Flags[realm][player].FR = 3;
-					elseif RPStyle == "2" then
-						GnomTEC_Badge_Flags[realm][player].FR = 2;
-					elseif RPStyle == "0" then
-						GnomTEC_Badge_Flags[realm][player].FR = nil;
-					else
-						GnomTEC_Badge_Flags[realm][player].FR = 1;
-					end
-				elseif (attributeName == "CSTATUS") then
-					GnomTEC_Badge_Flags[realm][player].FC = emptynil(cleanpipe(attributeValue))
-				elseif string.sub(attributeName,1,2) == "CS" then		
-					local cStatus = string.sub(attributeName,3,3);
-	
-					if cStatus == "0" then
-						GnomTEC_Badge_Flags[realm][player].FC = nil
-					elseif cStatus == "1" then
-						GnomTEC_Badge_Flags[realm][player].FC = 1;
-					elseif cStatus == "2" then
-						GnomTEC_Badge_Flags[realm][player].FC = 2;
-					elseif cStatus == "3" then
-						GnomTEC_Badge_Flags[realm][player].FC = 3
-					elseif cStatus == "4" then
-						GnomTEC_Badge_Flags[realm][player].FC = 4 
-					else
-						GnomTEC_Badge_Flags[realm][player].FC = nil
-					end
-				elseif (attributeName == "TITEL") then
-				GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(attributeValue))
-				elseif (attributeName == "T") then
-					GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(attributeValue))
-				elseif (attributeName == "NAME") then
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
-					if not GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = Player
-					else
-						GnomTEC_Badge_Flags[realm][player].NA = Player..GnomTEC_Badge_Flags[realm][player].AN3
-					end
-				elseif (attributeName == "N") then				
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
-					if not GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = Player
-					else
-						GnomTEC_Badge_Flags[realm][player].NA = Player..GnomTEC_Badge_Flags[realm][player].AN3
-					end
-				elseif (attributeName == "AN1") then
-					GnomTEC_Badge_Flags[realm][player].AN1 = emptynil(cleanpipe(attributeValue))
-					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN3
-					else
-						GnomTEC_Badge_Flags[realm][player].NA = nil
-					end
-				elseif (attributeName == "AN2") then
-					GnomTEC_Badge_Flags[realm][player].AN2 = emptynil(cleanpipe(attributeValue))
-					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN3
-					else
-						GnomTEC_Badge_Flags[realm][player].NA = nil
-					end
-				elseif (attributeName == "AN3") then
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
-					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
-					elseif GnomTEC_Badge_Flags[realm][player].AN1 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1
-					elseif GnomTEC_Badge_Flags[realm][player].AN2 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN2
-					elseif GnomTEC_Badge_Flags[realm][player].AN3 then
-						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN3
-					else
-						GnomTEC_Badge_Flags[realm][player].NA = nil
-					end
-				elseif (attributeName == "DREV") then
-					-- we ignore revisions because we are only listening
-				elseif (attributeName == "DV") then
-					-- we ignore revisions because we are only listening
-				elseif (attributeName == "DPULL") then
-					-- we ignore description requests because we are only listening
-				elseif (attributeName == "DP") then
-					-- we ignore description requests because we are only listening
-				elseif (attributeName == "DVER") then
-					-- we ignore version requests because we are only listening
-				elseif (attributeName == "V") then
-					-- we ignore version requests because we are only listening
-				elseif (string.sub(attributeName,1,1) == "D") or (string.sub(attributeName,1,1) == "P") then
-				
-					if not GnomTEC_Badge_Flags[realm][player].FlagRSPDesc then GnomTEC_Badge_Flags[realm][player].FlagRSPDesc = {} end
-					GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[tonumber(string.sub(attributeName,2,3))] = emptynil(cleanpipe(attributeValue))
-					
-					local i = 1;
-					local lastPart;
-					GnomTEC_Badge_Flags[realm][player].DE = ""
-					while GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i] ~= nil do
-						lastPart = string.sub(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i], string.len(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i])-3);
-						if lastPart == "\\eod" then
-							GnomTEC_Badge_Flags[realm][player].DE = GnomTEC_Badge_Flags[realm][player].DE..string.sub(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i], 1, string.len(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i])-4)
-							i = -2;
-						else
-							GnomTEC_Badge_Flags[realm][player].DE = GnomTEC_Badge_Flags[realm][player].DE..GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i]   
-						end
-						i = i + 1;
-					end
-					GnomTEC_Badge_Flags[realm][player].DE = string.gsub(GnomTEC_Badge_Flags[realm][player].DE, "\\l", "\n");
-				else
-					-- GnomTEC_Badge:Print(sender.." <"..(attributeName or "")..">"..(attributeValue or ""))
-				end
-			end
-								
-			-- Refresh Badge if it shows player data
-			if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
-				GnomTEC_Badge:DisplayBadge(realm, player)
-			end
-		end
-	end
-end
+-- function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, channelString, target, flags, worldChannelNumber, channelNumber, channelName)	
+--
+--	-- process messages in xtensionxtooltip2 from other addons
+--	if ((not playerisInCombat) and (string.lower(channelName) == "xtensionxtooltip2")) then
+--		local realm = GetRealmName();
+--		local player = sender;
+--		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+--		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+--		if not GnomTEC_Badge_Flags[realm][player].AN2 then GnomTEC_Badge_Flags[realm][player].AN2 = player end
+--		
+--		--
+--		-- here could be some code if we sometimes support special things from others
+--		--	
+--						
+--		-- Refresh Badge if it shows player data
+--		if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
+--			GnomTEC_Badge:DisplayBadge(realm, player)
+--		end
+--	end
+-- end
 
 -- ----------------------------------------------------------------------
 -- Addon OnInitialize, OnEnable and OnDisable
@@ -1031,7 +887,7 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
-	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
+--	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
 	
