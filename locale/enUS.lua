@@ -70,7 +70,9 @@ L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"] = "Hide all other namplate parts exc
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Display - Chatframe"
 L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"] = "Replace player names in blizzard chat frame with names given by their flags."
 
-L["L_OPTIONS_PROFILES"] = "Profiles"
+L["L_OPTIONS_PROFILES_CONFIGURATION"] = "Profiles - Configuration"
+
+L["L_OPTIONS_PROFILES_SELECT"] = "Profiles - Select"
 
 
 L["L_NORPFLAG"] = "<no roleplay flag>"

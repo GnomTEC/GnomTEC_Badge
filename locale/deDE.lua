@@ -67,7 +67,9 @@ L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"] = "Verstecke alle Teile der Namenspl
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Anzeige - Chatframe"
 L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"] = "Ersetzte Spielernamen im Blizzard Chatfenster mit deren Namen aus den Flags."
 
-L["L_OPTIONS_PROFILES"] = "Profile"
+L["L_OPTIONS_PROFILES_CONFIGURATION"] = "Profile - Konfiguration"
+
+L["L_OPTIONS_PROFILES_SELECT"] = "Profile - Auswahl"
 
 L["L_NORPFLAG"] = "<kein Rollenspielflag vorhanden>"
 L["L_HIDDENRPFLAG"] = "<Kein Rollenspielstatus angegeben>"
