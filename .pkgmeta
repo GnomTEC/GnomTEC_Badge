@@ -1,0 +1,11 @@
+package-as: GnomTEC_Badge
+
+optional-dependencies:
+    - GnomTEC_Gnomcorder
+    - Prat-3.0
+
+manual-changelog:
+    filename: history.txt
+    markup-type: creole
+
+enable-nolib-creation: no

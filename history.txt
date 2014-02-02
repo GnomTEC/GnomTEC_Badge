@@ -1,204 +1,168 @@
-GnomTEC Badge Addon - Change History 
-==========================
+== GnomTEC Badge Addon - Change History 
 
-5.4.2.35 (2014-02-02)
-============
-- Added options per char for configuration where to use char/global/profile data (yet not configurable by user).
-- Moved character flag data from legacy global variable to char part of database.
-- Added Russian translations done by CorruptGnosis
-- Fixed some small issue with rTooltip (now Badge use AddDoubleLine to insert additional lines)
+=== 5.4.2.35 (2014-02-02)
+* Added options per char for configuration where to use char/global/profile data (yet not configurable by user).
+* Moved character flag data from legacy global variable to char part of database.
+* Added Russian translations done by CorruptGnosis
+* Fixed some small issue with rTooltip (now Badge use AddDoubleLine to insert additional lines)
 
-5.4.2.34 (2014-01-03)
-============
-- Fixed some issues with nameplates
+=== 5.4.2.34 (2014-01-03)
+* Fixed some issues with nameplates
 
-5.4.2.33 (2014-01-03)
-============
-- Rearranged configuration options
-- Added options to lock windows moving and resizing for flag window and toolbar.
-- Added color options for flag window (yet in progress).
-- Added option to show flag window only for targets which uses a MSP compatible flag addon.
-- Added option to allow replacement of only the name in nameplates and leave other parts visible.
-- Added profile support for all options except the characters flag data.
+=== 5.4.2.33 (2014-01-03)
+* Rearranged configuration options
+* Added options to lock windows moving and resizing for flag window and toolbar.
+* Added color options for flag window (yet in progress).
+* Added option to show flag window only for targets which uses a MSP compatible flag addon.
+* Added option to allow replacement of only the name in nameplates and leave other parts visible.
+* Added profile support for all options except the characters flag data.
 
-5.4.2.32 (2013-12-28)
-============
-- Included LibNameplateRegistry-1.0 for manipulating name plates
-- Added Option to show player name from flag in name plates
+=== 5.4.2.32 (2013-12-28)
+* Included LibNameplateRegistry-1.0 for manipulating name plates
+* Added Option to show player name from flag in name plates
 
-5.4.2.31 (2013-12-18)
-============
-- Changed internal used realm names to use variant without spaces (as used mainly by Blizzard)
-- Changed several code for player name/realm handling to better support of cross realm and connected realm feature
-- Open issues: Prat-3.0 seems to not handle realm names (other then yours) with spaces correctly. In this case in chat it is not possible to replace name with flag information
-- Open issue: libMSP could yet not communicate with players of cross realm or connected realms (Blizzard issue). This means that flag information will only be updated for actual played realm.
-- Changed mouseover and target functions to query only friendly players
+=== 5.4.2.31 (2013-12-18)
+* Changed internal used realm names to use variant without spaces (as used mainly by Blizzard)
+* Changed several code for player name/realm handling to better support of cross realm and connected realm feature
+* Open issues: Prat-3.0 seems to not handle realm names (other then yours) with spaces correctly. In this case in chat it is not possible to replace name with flag information
+* Open issue: libMSP could yet not communicate with players of cross realm or connected realms (Blizzard issue). This means that flag information will only be updated for actual played realm.
+* Changed mouseover and target functions to query only friendly players
 
-5.4.1.30 (2013-12-02)
-============
-- Added support for MSP attribute RA (race)
-- Changed button to activate/deactivate gui popus for flag display to support (on/auto/off)
+=== 5.4.1.30 (2013-12-02)
+* Added support for MSP attribute RA (race)
+* Changed button to activate/deactivate gui popus for flag display to support (on/auto/off)
 
-5.4.1.29 (2013-11-30)
-============
-- Updated Ace3 libraries to version r1104
-- Updated ChatThrottleLib to version v23
-- Added additional locale files for translations to implement all supported languages of WoW
-- Supported languages by author: enUS, deDE
-- With google translated languages: esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
-- Support translations: http://wow.curseforge.com/addons/gnomtec_badge/localization/
-- Solved issue with players which have sometimes no faction.
-- Scrolling with mousewheel in notes is now faster.
-- Pressing ESC in notes fields will clear focus from this field.
+=== 5.4.1.29 (2013-11-30)
+* Updated Ace3 libraries to version r1104
+* Updated ChatThrottleLib to version v23
+* Added additional locale files for translations to implement all supported languages of WoW
+* Supported languages by author: enUS, deDE
+* With google translated languages: esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
+* Support translations: http://wow.curseforge.com/addons/gnomtec_badge/localization/
+* Solved issue with players which have sometimes no faction.
+* Scrolling with mousewheel in notes is now faster.
+* Pressing ESC in notes fields will clear focus from this field.
 
-5.4.0.28 (2013-11-01)
-============
-- Added notes which are only visible for actual played character additional to account wide notes.
-- Added additional friend/enemy state to flags for the actual played character additional to account wide friend/enemy state.
-- Changed colorize of name and role play state in flag display and tooltip depending on friend/enemy state.
-- Added mouse wheel support to player list and flag display
-- Some changes to avoid scrolling when new data is received in display elements
+=== 5.4.0.28 (2013-11-01)
+* Added notes which are only visible for actual played character additional to account wide notes.
+* Added additional friend/enemy state to flags for the actual played character additional to account wide friend/enemy state.
+* Changed colorize of name and role play state in flag display and tooltip depending on friend/enemy state.
+* Added mouse wheel support to player list and flag display
+* Some changes to avoid scrolling when new data is received in display elements
 
-5.4.0.27 (2013-10-27)
-============
-- Fix issue for NPC units for which the API function UnitIsPlayer() don't return nil (such as Wrathion quest line and Proving Grounds)
+=== 5.4.0.27 (2013-10-27)
+* Fix issue for NPC units for which the API function UnitIsPlayer() don't return nil (such as Wrathion quest line and Proving Grounds)
 
-5.4.0.26 (2013-09-14)
-============
-- Updated interface version for WoW update 5.4.0
+=== 5.4.0.26 (2013-09-14)
+* Updated interface version for WoW update 5.4.0
 
-V5.3.0.25 (2013-08-22)
-============
-- Changed code for player model display to fix issue that worgen are displayed as "miniature"
+=== V5.3.0.25 (2013-08-22)
+* Changed code for player model display to fix issue that worgen are displayed as "miniature"
 
-V5.3.0.24 (2013-08-18)
-============
-- Changed used font in edit boxes to ChatFontNormal to support unicode chars
-- Changed XML for frame structure at player model
-- Added toolbar button to activate/deactivate gui popus for flag display 
-- Addapted option to prevent any gui popups while in instances (party, raid, pvp and arena) 
+=== V5.3.0.24 (2013-08-18)
+* Changed used font in edit boxes to ChatFontNormal to support unicode chars
+* Changed XML for frame structure at player model
+* Added toolbar button to activate/deactivate gui popus for flag display 
+* Addapted option to prevent any gui popups while in instances (party, raid, pvp and arena) 
 
-V5.3.0.23 (2013-06-23)
-============
-- Added option to prevent any gui popups while in instances (party, raid, pvp and arena) 
-- Added first version of a toolbar for player states changing and helmet/cloak switch
+=== V5.3.0.23 (2013-06-23)
+* Added option to prevent any gui popups while in instances (party, raid, pvp and arena) 
+* Added first version of a toolbar for player states changing and helmet/cloak switch
 
-V5.3.0.22 (2013-06-16)
-============
-- fixed issue with empty sender name in chat events from WoW API
+=== V5.3.0.22 (2013-06-16)
+* fixed issue with empty sender name in chat events from WoW API
 
-V5.3.0.21 (2013-06-15)
-============
-- Readded player notes feature
-- Added some flag addon statistics
-- Added cleanup function for flag database
-- Added close button to player list
+=== V5.3.0.21 (2013-06-15)
+* Readded player notes feature
+* Added some flag addon statistics
+* Added cleanup function for flag database
+* Added close button to player list
 
-V5.3.0.20 (2013-06-08)
-============
-- Updated Ace3 libraries to version r1086
-- Changed an internal used variable to local to remove interference to other GnomTEC addons
+=== V5.3.0.20 (2013-06-08)
+* Updated Ace3 libraries to version r1086
+* Changed an internal used variable to local to remove interference to other GnomTEC addons
 
-V5.3.0.19 (2013-05-26)
-============
-- Added actualization of flags when players are seen in some chat channels
+=== V5.3.0.19 (2013-05-26)
+* Added actualization of flags when players are seen in some chat channels
 
-V5.3.0.18 (2013-05-26)
-============
-- Prat 3.0 support for replacing player names in chat frame with names given by their flags.
+=== V5.3.0.18 (2013-05-26)
+* Prat 3.0 support for replacing player names in chat frame with names given by their flags.
 
-V5.3.0.17 (2013-05-26)
-============
-- Option for replacing player names in blizzard chat frame with names given by their flags.
+=== V5.3.0.17 (2013-05-26)
+* Option for replacing player names in blizzard chat frame with names given by their flags.
 
-V5.3.0.16 (2013-05-25)
-============
-- Better Resize/Move functionality of flag window with dedicated resize area on bottomright edge (normal use with left mouse instead previous right mouse)
-- Minor GUI tweaks
-- Removing of ui escape sequences in own flag before sending to others.
-- Configuration can be opened directly from flag window.
-- Showing some log information in "Log"-Tab
+=== V5.3.0.16 (2013-05-25)
+* Better Resize/Move functionality of flag window with dedicated resize area on bottomright edge (normal use with left mouse instead previous right mouse)
+* Minor GUI tweaks
+* Removing of ui escape sequences in own flag before sending to others.
+* Configuration can be opened directly from flag window.
+* Showing some log information in "Log"-Tab
 
-V5.3.0.15 (2013-05-24)
-============
-- Added  support of additional flag informations (all known specified MSP fields).
-- Player notes feature temporarly removed from interface.
-- New layout of flag display to show additional informations.
-- Extended configuration interface for all new fields. 
+=== V5.3.0.15 (2013-05-24)
+* Added  support of additional flag informations (all known specified MSP fields).
+* Player notes feature temporarly removed from interface.
+* New layout of flag display to show additional informations.
+* Extended configuration interface for all new fields. 
 
-V5.3.0.14 (2013-05-23)
-============
-- Changed version number schema to <wow-version>.<build-number>
-- Updated interface version for WoW update 5.3.0
-- removed legacy RSP support
+=== V5.3.0.14 (2013-05-23)
+* Changed version number schema to <wow-version>.<build-number>
+* Updated interface version for WoW update 5.3.0
+* removed legacy RSP support
 
-V0.13 (2012-10-26)
-============
-- Better cross realm handling of flags
-- Added faction icons and realm information to tooltip
-- Added localization enUS additional to deDE
+=== V0.13 (2012-10-26)
+* Better cross realm handling of flags
+* Added faction icons and realm information to tooltip
+* Added localization enUS additional to deDE
 
-V0.12 (2012-10-21)
-============
-- Even Better filtering of UI escape sequences (correct filtering of textures and item links)
-- Fix possible issue with not valid player information for tooltip in combat
+=== V0.12 (2012-10-21)
+* Even Better filtering of UI escape sequences (correct filtering of textures and item links)
+* Fix possible issue with not valid player information for tooltip in combat
 
-V0.11 (2012-10-21)
-============
-- Added tooltip functionality
-- Better filtering of UI escape sequences
+=== V0.11 (2012-10-21)
+* Added tooltip functionality
+* Better filtering of UI escape sequences
 
-V0.10 (2012-08-29)
-============
-- Updated interface version for WoW MoP
-- Updated Ace3 libraries to fix configuration issues
+=== V0.10 (2012-08-29)
+* Updated interface version for WoW MoP
+* Updated Ace3 libraries to fix configuration issues
 
-V0.9 (2012-03-18)
-============
-- Filter for UI escape sequences inserted (yet easy one which exchanges "|" with "*" and so leaving text artefacts)
+=== V0.9 (2012-03-18)
+* Filter for UI escape sequences inserted (yet easy one which exchanges "|" with "*" and so leaving text artefacts)
 
-V0.8 (2012-01-27)
-============
-- Refactoring (Struktur und Vorbereitung Änderung an SavedVariables)
-- Vorbereitung für Lokalisierung
+=== V0.8 (2012-01-27)
+* Refactoring (Struktur und Vorbereitung Änderung an SavedVariables)
+* Vorbereitung für Lokalisierung
 
-V0.7 (2011-12-26)
-============
-- Gespeicherte Version des Flags wird nicht mehr bei jedem Start automatisch erhöht
-- Support für GnomTEC Gnomcorder Integration
+=== V0.7 (2011-12-26)
+* Gespeicherte Version des Flags wird nicht mehr bei jedem Start automatisch erhöht
+* Support für GnomTEC Gnomcorder Integration
 
-V0.6 (2011-12-17)
-============
-- Überarbeitung / Neustrukturierung Flagliste
+=== V0.6 (2011-12-17)
+* Überarbeitung / Neustrukturierung Flagliste
 
-V0.5 (2011-12-11)
-============
-- Überarbeitung/Neustrukturierung Konfigurationsmenue.
-- Flagbeschreibungen aus klassischem Channel sollten jetzt korrekt zusammengefügt werden (und nicht nur die erste Zeile)
-- Neuer "unbekannt"-Status bei Freund/Feind-Funktion hinzugefügt.
+=== V0.5 (2011-12-11)
+* Überarbeitung/Neustrukturierung Konfigurationsmenue.
+* Flagbeschreibungen aus klassischem Channel sollten jetzt korrekt zusammengefügt werden (und nicht nur die erste Zeile)
+* Neuer "unbekannt"-Status bei Freund/Feind-Funktion hinzugefügt.
 
-V0.4 (2011-12-06)
-============
-- PlayerModel wird nicht mehr versteckt bei Auswahl aus Liste sondern geleert damit Freund/Feind-Buttons weiter gehen.
-- Anzeige Umschaltbar zwischen Beschreibung und Notizen zu einem Char.
-- Eingabemöglichkeit für Notizen zu einem Char (Prototyp: Bei leerem Feld muss auf erste Zeile geklickt werden; Scrolling nicht per tastatur möglich).
+=== V0.4 (2011-12-06)
+* PlayerModel wird nicht mehr versteckt bei Auswahl aus Liste sondern geleert damit Freund/Feind-Buttons weiter gehen.
+* Anzeige Umschaltbar zwischen Beschreibung und Notizen zu einem Char.
+* Eingabemöglichkeit für Notizen zu einem Char (Prototyp: Bei leerem Feld muss auf erste Zeile geklickt werden; Scrolling nicht per tastatur möglich).
 
 
-V0.3 (2011-12-04)
-============
-- Abfragen eingefügt ob es schon Flags von einem Realm gibt um Fehler in Instanzen und Schlachtfeldern zu vermeiden.
-- Erste Version einer Freund/Feind-Funktionalität eingefügt.
-- Farbe der Namensanzeige für Freund/Feind-Funktion angepasst.
-- Filterfunktion bei Flagliste
-- Flagfunktionalität im Kampf deaktivierbar.
+=== V0.3 (2011-12-04)
+* Abfragen eingefügt ob es schon Flags von einem Realm gibt um Fehler in Instanzen und Schlachtfeldern zu vermeiden.
+* Erste Version einer Freund/Feind-Funktionalität eingefügt.
+* Farbe der Namensanzeige für Freund/Feind-Funktion angepasst.
+* Filterfunktion bei Flagliste
+* Flagfunktionalität im Kampf deaktivierbar.
 
-V0.2 (2011-12-02)
-============
-- Setzen der Kamera bei Playermodell verbessert
-- Alle ACE3 Bibliotheken hinzugefügt damit es auch geht wenn man das einzige Addon ist.
-- Known Bug: Anwählen von Einträgen in der Flagliste geht manchmal erst nachdem man gescrollt hat.
+=== V0.2 (2011-12-02)
+* Setzen der Kamera bei Playermodell verbessert
+* Alle ACE3 Bibliotheken hinzugefügt damit es auch geht wenn man das einzige Addon ist.
+* Known Bug: Anwählen von Einträgen in der Flagliste geht manchmal erst nachdem man gescrollt hat.
 
-V0.1 (2011-12-01)
-============
-- Initiale Version
-- Known Bug: Anwählen von Einträgen in der Flagliste geht manchmal erst nachdem man gescrollt hat.
+=== V0.1 (2011-12-01)
+* Initiale Version
+* Known Bug: Anwählen von Einträgen in der Flagliste geht manchmal erst nachdem man gescrollt hat.
