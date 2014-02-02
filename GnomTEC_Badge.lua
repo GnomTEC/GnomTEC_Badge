@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.17
+-- Version: 5.3.0.18
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -1199,7 +1199,6 @@ function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6,
 
 	-- let the original function or who ever colorize the name
 	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	
 	if (GnomTEC_Badge_Options["ChatFrame"]) then
 		return string.gsub(colordName,arg2,playerName)
 	else
@@ -1214,9 +1213,7 @@ function GnomTEC_Badge:OnInitialize()
  	-- Code that you want to run when the addon is first loaded goes here.
 	self.db = LibStub("AceDB-3.0"):New("GnomTEC_BadgeDB")
 
-  
   	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
-
 end
 
 function GnomTEC_Badge:OnEnable()

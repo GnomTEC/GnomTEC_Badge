@@ -1,6 +1,10 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+V5.3.0.18 (2013-05-26)
+============
+- Prat 3.0 support for replacing player names in chat frame with names given by their flags.
+
 V5.3.0.17 (2013-05-26)
 ============
 - Option for replacing player names in blizzard chat frame with names given by their flags.
