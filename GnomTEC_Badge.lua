@@ -1,6 +1,6 @@
-﻿-- **********************************************************************
+-- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.15
+-- Version: 5.3.0.16
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -330,6 +330,8 @@ local optionsView = {
 	},
 }
 
+panelConfiguration = nil
+
 local displayedPlayerName = ""
 local displayedPlayerRealm = ""
 local displayedTAB = 1
@@ -347,7 +349,7 @@ LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsPr
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View", optionsView)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
+panelConfiguration = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Meta", L["L_OPTIONS_META"], "GnomTEC Badge");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", L["L_OPTIONS_VIEW"], "GnomTEC Badge");
 
@@ -470,8 +472,6 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	end
 	r.NT = emptynil( cleanpipe( p.field.NT ) )
 	r.DE = emptynil( cleanpipe( p.field.DE ) )	
-
-	-- newly supported flag parts with v5.3.0.15 which will not displayed yet
 	
 	-- Additional visible character infos 
 	r.CU = emptynil( cleanpipe( p.field.CU ) )
@@ -508,6 +508,8 @@ function GnomTEC_Badge:SetMSP(init)
 	wipe( msp.char[ playername ].field )
 
 	for field, value in pairs( GnomTEC_Badge_Player.Fields ) do
+		-- we also don't want to send ui escape sequences to others
+		value = cleanpipe(value)
 		msp.my[ field ] = value
 	end
 
@@ -555,8 +557,6 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	if (GnomTEC_Badge_Flags[realm][player]) then	
 				
 		local f = GnomTEC_Badge_Flags[realm][player].FRIEND;
-		-- cleanup UI Escape Sequences which ar not yet filtered
-		GnomTEC_Badge_Flags[realm][player].NA = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].NA))
 		if (f == nil) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")		
 		elseif (f < 0) then
@@ -566,8 +566,6 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		else
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cff8080ff"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
 		end
-		-- cleanup UI Escape Sequences which ar not yet filtered
-		GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].NT))
 		GNOMTEC_BADGE_FRAME_NT:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
@@ -577,15 +575,11 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
 			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FR) == "string" then
-			-- cleanup UI Escape Sequences which ar not yet filtered
-			GnomTEC_Badge_Flags[realm][player].FR = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].FR))
 			fr = GnomTEC_Badge_Flags[realm][player].FR
 		end
 		if type(GnomTEC_Badge_Flags[realm][player].FC) == "number" then
 			fc = str_fc[GnomTEC_Badge_Flags[realm][player].FC]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FC) == "string" then
-			-- cleanup UI Escape Sequences which ar not yet filtered
-			GnomTEC_Badge_Flags[realm][player].FC = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].FC))
 			fc = GnomTEC_Badge_Flags[realm][player].FC
 		end
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
@@ -605,10 +599,6 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		else
 			GNOMTEC_BADGE_FRAME_FR_FC:SetText(msp)
 		end
-
-		-- cleanup UI Escape Sequences which ar not yet filtered
-		-- remove when cleanup implemented
-		GnomTEC_Badge_Flags[realm][player].DE = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].DE))
 
 		local text = ""
 		
@@ -727,7 +717,38 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			text = text.."|cFFFFFF80>>> coming soon <<<|r|n"
 		else
 			-- Log
-			text = text.."|cFFFFFF80>>> coming soon <<<|r|n"
+			text = text.."|cFFFFFF80--- Addon used by ".. player.." ---|r|n"
+			if (GnomTEC_Badge_Flags[realm][player].VA) then
+				text = text..GnomTEC_Badge_Flags[realm][player].VA.."|n|n"
+			else
+				text = text.."|cFFFF0000<Unknown>|r|n|n"
+			end
+			text = text.."|cFFFFFF80--- Timestamp of last flag update from ".. player.." ---|r|n"
+			if (GnomTEC_Badge_Flags[realm][player].timeStamp) then
+				text = text..date("%d.%m.%y %H:%M:%S",GnomTEC_Badge_Flags[realm][player].timeStamp).."|n|n"
+			else
+				text = text.."|cFFFF0000<Unknown>|r|n|n"
+			end			
+			text = text.."|cFFFFFF80--- Received MSP chunks from ".. player.." ---|r|n"
+			local first = true;
+			for field, value in pairs( GnomTEC_Badge_Flags[realm][player] ) do
+				if (2 == #field) then
+					-- all longer field names are internal and not from MSP
+					if (not first) then
+						text = text..", "
+					else
+						first = false	
+					end
+					text = text..field.." ("..L["L_FIELD_"..field]..")"	
+				end
+			end
+			if (not first) then
+				text = text.."|n|n"
+			else
+				text = text.."|cFFFF0000<None>|r|n|n"
+			end
+
+			text = text.."|cFF800000--- EOF ---|r"						
 		end
 		GNOMTEC_BADGE_FRAME_SCROLL_TEXT:SetText(text)
 
@@ -891,8 +912,6 @@ function GnomTEC_Badge:RedrawPlayerList()
 			button:Hide();
 		else
 			local player = GnomTEC_Badge_Flags[GetRealmName()][playerList[playerListPosition+i]];
-			-- cleanup UI Escape Sequences which ar not yet filtered
-			player.NA = emptynil(cleanpipe(player.NA))
 
 			if (player.FRIEND == nil) then
 				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
@@ -903,8 +922,6 @@ function GnomTEC_Badge:RedrawPlayerList()
 			else
 				textNA:SetText("|cff8080ff"..(player.NA or playerList[playerListPosition+i]).."|r")
 			end	
-			-- cleanup UI Escape Sequences which ar not yet filtered
-			player.NT = emptynil(cleanpipe(player.NT))
 			textNT:SetText(player.NT or "")
 			textENGINEDATA:SetText((player.EngineData or  L["L_ENGINEDATA_UNKNOWN"]).." ("..playerList[playerListPosition+i]..")")
 			button:Show();
@@ -1034,6 +1051,11 @@ function GnomTEC_Badge:FriendUnknown()
 	end
 end
 
+function GnomTEC_Badge:OpenConfiguration()
+	InterfaceOptionsFrame_OpenToCategory(panelConfiguration)
+	-- sometimes first call lands not on desired panel
+	InterfaceOptionsFrame_OpenToCategory(panelConfiguration)
+end
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------

@@ -141,20 +141,42 @@
 					</Anchor>
 				</Anchors>
 			</Button>
-			<Button name="$parent_FLAGS">
+			<Button name="$parent_CONFIGURATION">
 				<Size>
-					<AbsDimension x="32" y="32"/>
+					<AbsDimension x="24" y="30"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPRIGHT">
-						<Offset x="-4" y="-30" />
+						<Offset x="-5" y="-28" />
+					</Anchor>
+				</Anchors>
+				<NormalTexture file="Interface\Buttons\UI-MicroButton-Spellbook-Up">
+						<TexCoords left="0" right="1" top="0.375" bottom="1"/>
+				</NormalTexture>
+				<PushedTexture file="Interface\Buttons\UI-MicroButton-Spellbook-Down">
+						<TexCoords left="0" right="1" top="0.375" bottom="1"/>
+				</PushedTexture>
+				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+				<Scripts>
+					<OnClick>
+						GnomTEC_Badge:OpenConfiguration();		
+					</OnClick>
+				</Scripts>
+			</Button>				
+			<Button name="$parent_FLAGS">
+				<Size>
+					<AbsDimension x="24" y="24"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOPRIGHT">
+						<Offset x="-5" y="-58" />
 					</Anchor>
 				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString name="$parentCount" parentKey="child" inherits="GameFontHighlightSmall" text="0">
+						<FontString name="$parentCount" parentKey="child" inherits="GameFontHighlightSmall">
 							<Anchors>
-								<Anchor point="BOTTOM" relativeTo="$parent" relativePoint="BOTTOM" x="0" y="4"/>
+								<Anchor point="BOTTOM" relativeTo="$parent" relativePoint="BOTTOM" x="0" y="0"/>
 							</Anchors>
 						</FontString>
 					</Layer>
@@ -182,7 +204,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="5" y="-88"/>
+							<AbsDimension x="5" y="-90"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -217,10 +239,10 @@
 			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="5" y="-100" />
+						<Offset x="10" y="-105" />
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-5" y="5" />
+						<Offset x="-10" y="10" />
 					</Anchor>
 				</Anchors>
 				<Frames>
@@ -318,6 +340,28 @@
 					</OnSizeChanged>
 				</Scripts>
 			</ScrollFrame>
+			<Button name="$parent_RESIZE">
+				<Size x="16" y="16"/>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnMouseDown>
+						self:GetParent():StartSizing();
+					</OnMouseDown>
+					<OnMouseUp>
+						self:GetParent():StopMovingOrSizing();
+					</OnMouseUp>
+				</Scripts>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up"/>
+				<HighlightTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Highlight"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Down"/>
+			</Button>
+
 		</Frames>			
 		<Layers>
 			<Layer level="Artwork">
@@ -385,11 +429,7 @@
 		</Layers>
 		<Scripts>
 			<OnMouseDown>
-				if button == "LeftButton" then
 					self:StartMoving();
-				else
-					self:StartSizing();
-				end				
 			</OnMouseDown>
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 			<OnHide>GNOMTEC_BADGE_PLAYERLIST:Hide();</OnHide>

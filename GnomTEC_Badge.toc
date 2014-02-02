@@ -2,7 +2,7 @@
 ## Title: GnomTEC_Badge
 ## Notes: Addon for display and managment of roleplay character descriptions.
 ## Author: GnomTEC
-## Version: 5.3.0.15
+## Version: 5.3.0.16
 ## OptionalDeps: GnomTEC_Gnomcorder 
 ## SavedVariables: GnomTEC_BadgeDB, GnomTEC_Badge_Flags
 ## SavedVariablesPerCharacter: GnomTEC_Badge_Player, GnomTEC_Badge_Options
