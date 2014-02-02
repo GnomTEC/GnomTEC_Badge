@@ -1,5 +1,9 @@
-GnomTEC Badge Addon - Change History 
+﻿GnomTEC Badge Addon - Change History 
 ==========================
+
+5.4.2.34 (2014-01-03)
+============
+- Fixed some issues with nameplates
 
 5.4.2.33 (2014-01-03)
 ============

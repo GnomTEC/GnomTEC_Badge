@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.2.33
+-- Version: 5.4.2.34
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -2014,9 +2014,10 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 				
 	if (nameFrame) then
 		if (nameFrame:GetObjectType() == "FontString") then
+ 			-- add our frame
 			if (not plateFrame.gnomtec_badge) then
  				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
- 				plateFrame.gnomtec_badge:SetFontObject(nameFrame:GetFontObject())
+ 				plateFrame.gnomtec_badge:SetFontObject(GameFontWhite)
 			end 			
 
 
@@ -2030,26 +2031,18 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
  				
  				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
  			else
- 				plateFrame.gnomtec_badge:SetPoint("TOP", nameFrame, "TOP",0,0)
+ 				plateFrame.gnomtec_badge:SetPoint("BOTTOM", nameFrame, "BOTTOM",0,0)
 
  				-- Hide only name-frame
- 				nameFrame.gnomtec_badge_hide = nameFrame:GetAlpha()
+ 				nameFrame.gnomtec_badge_hide = true
  				nameFrame:Hide()
  				
  			end
- 			
- 			-- add our frame
- 			if (not plateFrame.gnomtec_badge) then
- 				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
- 				plateFrame.gnomtec_badge:SetFontObject(nameFrame:GetFontObject())
- 			else
- 				plateFrame.gnomtec_badge:Show()
-			end 			
- 
+
   			plateFrame.gnomtec_badge:Show()
 
 			if ( "PLAYER" == plateData.type ) then
-   	 		local player = nameFrame:GetText()
+   	 		local player = nameFrame:GetText() or ""
    	 		local playerName = player
 				local friend = nil;
    	 		if (not string.match(player, "%([#%*]%)")) then
