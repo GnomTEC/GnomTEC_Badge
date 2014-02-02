@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.0.26
+-- Version: 5.4.0.27
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -39,7 +39,7 @@ GnomTEC_Badge_Options = {
 	["GnomcorderIntegration"] = false,
 	["Tooltip"] = true,	
 	["ChatFrame"] = false,	
-	["Toolbar"] = false,	
+	["Toolbar"] = true,	
 }
 
 -- ----------------------------------------------------------------------
@@ -473,6 +473,22 @@ local function cleanpipe( x )
 	x = string.gsub( x, "|", "/" )	
 	
 	return strtrim(x)
+end
+
+-- function to detect that unit is a player from whom we could get a flag
+-- Fix issue for NPC units for which the API function Fixed_UnitIsPlayer() don't return nil
+-- (such as Wrathion quest line and Proving Grounds)
+local function Fixed_UnitIsPlayer(unitId) 
+	if (UnitIsPlayer(unitId)) then
+		-- NPCs have no race (at least at the moment)
+	   if (UnitRace(unitId)) then
+	   	return true
+	   else
+	   	return false
+	   end
+	else
+ 	  return false
+	end
 end
 
 function GnomTEC_Badge:AddToVAString( addon )
@@ -921,7 +937,7 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 			fc = GnomTEC_Badge_Flags[realm][player].FC
 		end
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
-			msp = "<kein Rollenspielflag vorhanden>"
+			msp = L["L_NORPFLAG"]
 		elseif GnomTEC_Badge_Flags[realm][player].FlagMSP then
 			msp= ""
 		else
@@ -1090,7 +1106,7 @@ function GnomTEC_Badge:UpdatePlayerList()
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
 	GnomTEC_Badge:RedrawPlayerList();
 	local text = ""
-	text = "Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Gesamt: "..acount
+	text = "Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Total: "..acount
 	if (rcount) then
 		text = text.."\n|cFF808000Flag addons used on "..GetRealmName().." ("..string.format("%0.1f",fcount/rcount * 100).."% of seen chars have flags):"
 	
@@ -1326,7 +1342,7 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 		local player, realm = UnitName("target")
 		realm = realm or GetRealmName()
 
-		if UnitIsPlayer("target") and player and realm then
+		if Fixed_UnitIsPlayer("target") and player and realm then
 			GnomTEC_Badge:DisplayBadge(realm, player)
 			if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 				GNOMTEC_BADGE_FRAME:Show();
@@ -1361,7 +1377,7 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	local player, realm = UnitName("mouseover")
 	realm = realm or GetRealmName()
 
- 	if UnitIsPlayer("mouseover") and player and realm then
+ 	if Fixed_UnitIsPlayer("mouseover") and player and realm then
 		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
 		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 
@@ -1538,7 +1554,7 @@ function GnomTEC_Badge:OnEnable()
 		GnomTEC_Badge_Options["DisableInInstance"] = true
 	end
 	if (nil == GnomTEC_Badge_Options["Toolbar"]) then
-		GnomTEC_Badge_Options["Toolbar"] = false
+		GnomTEC_Badge_Options["Toolbar"] = true
 	end
 
 	

@@ -1,6 +1,10 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+5.4.0.27 (2013-10-27)
+============
+- Fix issue for NPC units for which the API function UnitIsPlayer() don't return nil (such as Wrathion quest line and Proving Grounds)
+
 5.4.0.26 (2013-09-14)
 ============
 - Updated interface version for WoW update 5.4.0
