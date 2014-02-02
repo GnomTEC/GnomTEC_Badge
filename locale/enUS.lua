@@ -44,6 +44,7 @@ L["L_OPTIONS_VIEW_AUTOHIDE"] = "Hide roleplay flag automatically."
 L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Don't show or update roleplay flag while in combat."
 L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (requires /reload oder restart)"
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Show roleplay flag also in tooltip"
+L["L_OPTIONS_VIEW_CHATFRAME"] = "Replace player names in blizzard chat frame with names given by their flags."
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
  

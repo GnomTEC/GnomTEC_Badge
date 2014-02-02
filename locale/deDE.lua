@@ -42,6 +42,7 @@ L["L_OPTIONS_VIEW_AUTOHIDE"] = "Verstecke Rollenspielflag automatisch."
 L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Während des Kampfes keine Flags anzeigen oder aktualisieren."
 L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (benötigt /reload oder Neustart)"
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Zeige Rollenspielflag auch im Tooltip an"
+L["L_OPTIONS_VIEW_CHATFRAME"] = "Ersetzte Spielernamen im Blizzard Chatfenster mit deren Namen aus den Flags."
 
 L["L_NORPFLAG"] = "<kein Rollenspielflag vorhanden>"
  

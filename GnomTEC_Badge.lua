@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.16
+-- Version: 5.3.0.17
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -37,6 +37,7 @@ GnomTEC_Badge_Options = {
 	["DisableInCombat"] = true,
 	["GnomcorderIntegration"] = false,
 	["Tooltip"] = true,	
+	["ChatFrame"] = false,	
 }
 
 -- ----------------------------------------------------------------------
@@ -327,6 +328,15 @@ local optionsView = {
 			width = 'full',
 			order = 6
 		},
+		badgeOptionChatFrame = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_CHATFRAME"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["ChatFrame"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["ChatFrame"] end,
+			width = 'full',
+			order = 7
+		},
 	},
 }
 
@@ -343,7 +353,7 @@ local playerListPosition = 0
 -- Startup initialization
 -- ----------------------------------------------------------------------
 
-GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0")
+GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
@@ -1174,6 +1184,30 @@ end
 -- end
 
 -- ----------------------------------------------------------------------
+-- RawHook for GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+-- ----------------------------------------------------------------------
+function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	local player, realm = strsplit( "-", arg2, 2 )
+	local playerName = arg2
+	realm = realm or GetRealmName()
+
+	if GnomTEC_Badge_Flags[realm] then 
+		if GnomTEC_Badge_Flags[realm][player] then
+			playerName = GnomTEC_Badge_Flags[realm][player].NA or arg2
+		end
+	end
+
+	-- let the original function or who ever colorize the name
+	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	
+	if (GnomTEC_Badge_Options["ChatFrame"]) then
+		return string.gsub(colordName,arg2,playerName)
+	else
+		return colordName
+	end
+end
+
+-- ----------------------------------------------------------------------
 -- Addon OnInitialize, OnEnable and OnDisable
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:OnInitialize()
@@ -1195,6 +1229,10 @@ function GnomTEC_Badge:OnEnable()
 	if (nil == GnomTEC_Badge_Options["Tooltip"]) then
 		GnomTEC_Badge_Options["Tooltip"] = true
 	end
+	if (nil == GnomTEC_Badge_Options["ChatFrame"]) then
+		GnomTEC_Badge_Options["ChatFrame"] = false
+	end
+
 	
 	-- Initialize localized strings in GUI
 	GNOMTEC_BADGE_FRAME_TAB_1_TEXT:SetText(L["L_TAB_DESCR"])
@@ -1210,6 +1248,8 @@ function GnomTEC_Badge:OnEnable()
 --	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_ENABLED");
+
+	GnomTEC_Badge:RawHook("GetColoredName", true)
 	
 	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
 
@@ -1247,8 +1287,9 @@ end
 function GnomTEC_Badge:OnDisable()
     -- Called when the addon is disabled
     
-    GnomTEC_Badge:UnregisterAllEvents();
-    table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
+	GnomTEC_Badge:UnhookAll() 
+	GnomTEC_Badge:UnregisterAllEvents();
+	table.vanish( msp.callback.received, GnomTEC_Badge_MSPcallback )
 end
 
 -- ----------------------------------------------------------------------
