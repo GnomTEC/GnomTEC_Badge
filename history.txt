@@ -1,6 +1,12 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.5 (2011-12-11)
+============
+- Überarbeitung/Neustrukturierung Konfigurationsmenue.
+- Flagbeschreibungen aus klassischem Channel sollten jetzt korrekt zusammengefügt werden (und nicht nur die erste Zeile)
+- Neuer "unbekannt"-Status bei Freund/Feind-Funktion hinzugefügt.
+
 V0.4 (2011-12-06)
 ============
 - PlayerModel wird nicht mehr versteckt bei Auswahl aus Liste sondern geleert damit Freund/Feind-Buttons weiter gehen.

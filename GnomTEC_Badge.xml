@@ -33,7 +33,7 @@
 						</Size>
 						<Anchors>
 							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-24" y="0" />
+								<Offset x="-36" y="0" />
 							</Anchor>
 						</Anchors>
 						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-friend"/>
@@ -51,7 +51,7 @@
 						</Size>
 						<Anchors>
 							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-12" y="0" />
+								<Offset x="-24" y="0" />
 							</Anchor>
 						</Anchors>
 						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-neutral"/>
@@ -69,7 +69,7 @@
 						</Size>
 						<Anchors>
 							<Anchor point="BOTTOMRIGHT">
-								<Offset x="0" y="0" />
+								<Offset x="-12" y="0" />
 							</Anchor>
 						</Anchors>
 						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-enemy"/>
@@ -78,6 +78,24 @@
 						<Scripts>
 							<OnClick>
 								GnomTEC_Badge:FriendEnemy();		
+							</OnClick>
+						</Scripts>
+					</Button>				
+					<Button name="$parent_UNKNOWN">
+						<Size>
+							<AbsDimension x="12" y="12"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+								<Offset x="0" y="0" />
+							</Anchor>
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-unknown"/>
+						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\dummy-unknown"/>
+						<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
+						<Scripts>
+							<OnClick>
+								GnomTEC_Badge:FriendUnknown();		
 							</OnClick>
 						</Scripts>
 					</Button>				

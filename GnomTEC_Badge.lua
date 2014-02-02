@@ -28,117 +28,154 @@ local str_fc = {"Außerhalb des Rollenspiels (OOC)", "Im Rollenspiel (IC)", "Suc
 
 local playerisInCombat = false;
 
-local options = {
-	name = "GnomTEC Badge " .. GetAddOnMetadata("GnomTEC_Badge", "Version"),
+local optionsMain = {
+	name = "GnomTEC Badge",
+	type = "group",
+	args = {
+		descriptionTitle = {
+			order = 1,
+			type = "description",
+			name = "Addon zur Anzeige und Verwaltung von Rollenspiel-Charakterbeschreibungen mit Support von Channel- und 'Marry Sue Protocol'-basierten Flagprotokollen.\n\n",
+		},
+		descriptionAbout = {
+			name = "About",
+			type = "group",
+			guiInline = true,
+			order = 2,
+			args = {
+				descriptionVersion = {
+				order = 1,
+				type = "description",			
+				name = "|cffffd700".."Version"..": ".._G["GREEN_FONT_COLOR_CODE"]..GetAddOnMetadata("GnomTEC_Badge", "Version"),
+				},
+				descriptionAuthor = {
+					order = 2,
+					type = "description",
+					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."Lugus Sprengfix",
+				},
+				descriptionEmail = {
+					order = 3,
+					type = "description",
+					name = "|cffffd700".."Email"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."info@gnomtec.de",
+				},
+				descriptionWebsite = {
+					order = 4,
+					type = "description",
+					name = "|cffffd700".."Website"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."http://www.gnomtec.de/",
+				},
+				descriptionLicense = {
+					order = 5,
+					type = "description",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011 by GnomTEC",
+				},
+			}
+		},
+		descriptionLogo = {
+			order = 3,
+			type = "description",
+			name = "",
+			image = "Interface\\AddOns\\GnomTEC_Badge\\Textures\\GnomTEC-Logo",
+			imageCoords = {0.0,1.0,0.0,1.0},
+			imageWidth = 512,
+			imageHeight = 128,
+		},
+	}
+}
+			
+local optionsProfile = {
+	name = "Charakterbeschreibung",
 	type = 'group',
 	args = {
-		badgeOptions = {
-			name = "GnomTEC Badge",
-			desc = '',
-			order = 1,
-			type = 'group',
-			args = {
-				badgePlayerProfile = {
-					name = "Character Profil",
-					type = 'group',
-					order = 1,
-					guiInline = true,
-					args = {
-						badgePlayerNA = {
-							type = "input",
-							name = "Name",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Player["Fields"]["NA"] = val; GnomTEC_Badge:SetMSP() end,
-	   		   				get = function(info) return GnomTEC_Badge_Player["Fields"]["NA"] end,
-							multiline = false,
-							width = 'full',
-							order = 1
-						},
-						badgePlayerNT = {
-							type = "input",
-							name = "Titel",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Player["Fields"]["NT"] = val; GnomTEC_Badge:SetMSP() end,
-    		  				get = function(info) return GnomTEC_Badge_Player["Fields"]["NT"] end,
-							multiline = false,
-							width = 'full',
-							order = 2
-						},
-						badgePlayerDE = {
-							type = "input",
-							name = "Beschreibung",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Player["Fields"]["DE"] = val; GnomTEC_Badge:SetMSP() end,
-     		 				get = function(info) return GnomTEC_Badge_Player["Fields"]["DE"] end,
-							multiline = 13,
-							width = 'full',
-							order = 3
-						},
-						badgePlayerFR = {
-							type = "select",
-							name = "Rollenspielerfahrung",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Player["Fields"]["FR"] = val; GnomTEC_Badge:SetMSP() end,
-      						get = function(info) return GnomTEC_Badge_Player["Fields"]["FR"] end,
-							values = str_fr,
-							order = 4
-						},
-						badgePlayerFC = {
-							type = "select",
-							name = "Rollenspielstatus",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Player["Fields"]["FC"] = val; GnomTEC_Badge:SetMSP() end,
-      						get = function(info) return GnomTEC_Badge_Player["Fields"]["FC"] end,
-							values = str_fc,
-							order = 5
-						},
-					},
-				},
-				badgeOptions = {
-					name = "Anzeigeoptionen",
-					type = 'group',
-					order = 2,
-					guiInline = true,
-					args = {
-						badgeOptionMouseOver = {
-							type = "toggle",
-							name = "Zeige Rollenspielflag auch bei MouseOver.",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Options["MouseOver"] = val end,
-	   		   				get = function(info) return GnomTEC_Badge_Options["MouseOver"] end,
-							width = 'full',
-							order = 1
-						},
-						badgeOptionLockOnTarget = {
-							type = "toggle",
-							name = "Bevorzuge Target vor MouseOver bei der Anzeige.",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
-	   		   				get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
-							width = 'full',
-							order = 2
-						},
-						badgeOptionAutoHide = {
-							type = "toggle",
-							name = "Verstecke Rollenspielflag automatisch.",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
-	   		   				get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
-							width = 'full',
-							order = 3
-						},
-						badgeOptionDisableInCombat = {
-							type = "toggle",
-							name = "Während des Kampfes keine Flags anzeigen oder aktualisieren.",
-							desc = "",
-							set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
-	   		   				get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
-							width = 'full',
-							order = 4
-						},
-					},
-				},
-			},
+		badgePlayerNA = {
+			type = "input",
+			name = "Name",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NA"] = val; GnomTEC_Badge:SetMSP() end,
+	   		get = function(info) return GnomTEC_Badge_Player["Fields"]["NA"] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		badgePlayerNT = {
+			type = "input",
+			name = "Titel",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NT"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["NT"] end,
+			multiline = false,
+			width = 'full',
+			order = 2
+		},
+		badgePlayerDE = {
+			type = "input",
+			name = "Beschreibung",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["DE"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["DE"] end,
+			multiline = 13,
+			width = 'full',
+			order = 3
+		},
+		badgePlayerFR = {
+			type = "select",
+			name = "Rollenspielerfahrung",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FR"] = val; GnomTEC_Badge:SetMSP() end,
+			get = function(info) return GnomTEC_Badge_Player["Fields"]["FR"] end,
+			values = str_fr,
+			order = 4
+		},
+		badgePlayerFC = {
+			type = "select",
+			name = "Rollenspielstatus",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FC"] = val; GnomTEC_Badge:SetMSP() end,
+			get = function(info) return GnomTEC_Badge_Player["Fields"]["FC"] end,
+			values = str_fc,
+			order = 5
+		},
+	},
+}
+
+local optionsView = {
+	name = "Anzeigeoptionen",
+	type = 'group',
+	args = {
+		badgeOptionMouseOver = {
+			type = "toggle",
+			name = "Zeige Rollenspielflag auch bei MouseOver.",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["MouseOver"] = val end,
+			get = function(info) return GnomTEC_Badge_Options["MouseOver"] end,
+			width = 'full',
+			order = 1
+		},
+		badgeOptionLockOnTarget = {
+			type = "toggle",
+			name = "Bevorzuge Target vor MouseOver bei der Anzeige.",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
+			width = 'full',
+			order = 2
+		},
+		badgeOptionAutoHide = {
+			type = "toggle",
+			name = "Verstecke Rollenspielflag automatisch.",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
+			width = 'full',
+			order = 3
+		},
+		badgeOptionDisableInCombat = {
+			type = "toggle",
+			name = "Während des Kampfes keine Flags anzeigen oder aktualisieren.",
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
+			width = 'full',
+			order = 4
 		},
 	},
 }
@@ -149,8 +186,12 @@ local displayedPlayerNote = false;
 
 
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0")
-LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC_Badge", options, nil)
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC_Badge", "GnomTEC Badge", nil, "badgeOptions");
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View", optionsView)
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", "Charakterbeschreibung", "GnomTEC Badge");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", "Anzeigeoptionen", "GnomTEC Badge");
 
 -- Detect any other MSP AddOn and bail out in case of conflict
 if _G.msp_RPAddOn or _G.mrp then
@@ -318,8 +359,10 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	displayedPlayerName = player;
 	
 	if (GnomTEC_Badge_Flags[realm][player]) then	
-		local f = GnomTEC_Badge_Flags[realm][player].FRIEND or 0;
-		if (f < 0) then
+		local f = GnomTEC_Badge_Flags[realm][player].FRIEND;
+		if (f == nil) then
+			GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")		
+		elseif (f < 0) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cffff0000"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
 		elseif (f > 0) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cff00ff00"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
@@ -365,7 +408,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
 		end
 	else
-		GNOMTEC_BADGE_FRAME_NA:SetText("|cff4040ff"..player.."|r")
+		GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..player.."|r")
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText("")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText("")
@@ -406,8 +449,10 @@ function GnomTEC_Badge:UpdatePlayerList()
 	else
 		GNOMTEC_BADGE_PLAYERLIST_LIST:SetMaxLines(count);
 		for id,value in ipairs(results) do
-			local f = GnomTEC_Badge_Flags[GetRealmName()][value].FRIEND or 0;
-			if (f < 0) then
+			local f = GnomTEC_Badge_Flags[GetRealmName()][value].FRIEND;
+			if (f == nil) then
+				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cffC0C0C0|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")		
+			elseif (f < 0) then
 				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cffff0000|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
 			elseif (f > 0) then
 				GNOMTEC_BADGE_PLAYERLIST_LIST:AddMessage("|cff00ff00|Hplayer:"..value.."|h"..(GnomTEC_Badge_Flags[GetRealmName()][value].NA or value).."|h|r")
@@ -477,6 +522,20 @@ function GnomTEC_Badge:FriendNeutral()
 
 	if (GnomTEC_Badge_Flags[realm][player]) then
 		GnomTEC_Badge_Flags[realm][player].FRIEND = 0;
+			
+		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+			GnomTEC_Badge:UpdatePlayerList()
+		end
+		GnomTEC_Badge:DisplayBadge(realm, player)
+	end
+end
+
+function GnomTEC_Badge:FriendUnknown()
+	local realm = displayedPlayerRealm;
+	local player = displayedPlayerName;
+
+	if (GnomTEC_Badge_Flags[realm][player]) then
+		GnomTEC_Badge_Flags[realm][player].FRIEND = nil;
 			
 		if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
 			GnomTEC_Badge:UpdatePlayerList()
@@ -686,7 +745,7 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 					GnomTEC_Badge_Flags[realm][player].DE = ""
 					while GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i] ~= nil do
 						lastPart = string.sub(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i], string.len(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i])-3);
-						if lastPart ~= "\\eod" then
+						if lastPart == "\\eod" then
 							GnomTEC_Badge_Flags[realm][player].DE = GnomTEC_Badge_Flags[realm][player].DE..string.sub(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i], 1, string.len(GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[i])-4)
 							i = -2;
 						else
