@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.21
+-- Version: 5.3.0.22
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -1186,9 +1186,11 @@ function GnomTEC_Badge:CURSOR_UPDATE(eventName)
 		end
 	end	
 end
-    
+
 function GnomTEC_Badge:RequestMSP(unitName)
-	msp:Request(unitName, { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+	if (nil ~= emptynil(unitName)) then
+		msp:Request(unitName, { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+	end
 end
 
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
