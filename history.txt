@@ -1,5 +1,10 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
+
+V0.9 (2012-03-18)
+============
+- Filter for UI escape sequences inserted (yet easy one which exchanges "|" with "*" and so leaving text artefacts)
+
 V0.8 (2012-01-27)
 ============
 - Refactoring (Struktur und Vorbereitung Änderung an SavedVariables)

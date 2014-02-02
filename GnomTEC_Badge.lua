@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.8
+-- Version: 0.9
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
@@ -256,6 +256,7 @@ _G.msp_RPAddOn = "GnomTEC_Badge"
 
 -- function which returns also nil for empty strings
 local function emptynil( x ) return x ~= "" and x or nil end
+local function cleanpipe( x ) return strtrim( ( string.gsub( x or "", "|", "*" ) ) ) end
 
 function GnomTEC_Badge:AddToVAString( addon )
 	if not select( 4, GetAddOnInfo( addon ) ) then return end
@@ -275,13 +276,13 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	r.timeStamp = time()
 	r.faction = faction
 	local p = msp.char[ player ]
-	r.NA = emptynil( strtrim( p.field.NA ) )
+	r.NA = emptynil( cleanpipe( p.field.NA ) )
 	if ( tonumber( p.field.FC ) or -1 ) > 0 then
 		r.FC = tonumber( p.field.FC )
 	elseif p.field.FC == "0" then
 		r.FC = nil
 	else
-		r.FC = emptynil( strtrim( p.field.FC ) )
+		r.FC = emptynil( cleanpipe( p.field.FC ) )
 	end
 	if ( tonumber( p.field.FR ) or -1 ) > 0 then
 		r.FR = tonumber( p.field.FR )
@@ -290,10 +291,10 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	elseif p.field.FR == "0" then
 		r.FR = nil
 	else
-		r.FR = emptynil( strtrim( p.field.FR ) )
+		r.FR = emptynil( cleanpipe( p.field.FR ) )
 	end
-	r.NT = emptynil( strtrim( p.field.NT ) )
-	r.DE = emptynil( strtrim( p.field.DE ) )	
+	r.NT = emptynil( cleanpipe( p.field.NT ) )
+	r.DE = emptynil( cleanpipe( p.field.DE ) )	
 
 end
 
@@ -351,7 +352,10 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	displayedPlayerName = player;
 	
 	if (GnomTEC_Badge_Flags[realm][player]) then	
+				
 		local f = GnomTEC_Badge_Flags[realm][player].FRIEND;
+		-- cleanup UI Escape Sequences which ar not yet filtered
+		GnomTEC_Badge_Flags[realm][player].NA = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].NA))
 		if (f == nil) then
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")		
 		elseif (f < 0) then
@@ -361,6 +365,8 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		else
 			GNOMTEC_BADGE_FRAME_NA:SetText("|cff8080ff"..(GnomTEC_Badge_Flags[realm][player].NA or player).."|r")
 		end
+		-- cleanup UI Escape Sequences which ar not yet filtered
+		GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].NT))
 		GNOMTEC_BADGE_FRAME_NT:SetText(GnomTEC_Badge_Flags[realm][player].NT or "")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText(GnomTEC_Badge_Flags[realm][player].Guild or "")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
@@ -370,11 +376,15 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		if type(GnomTEC_Badge_Flags[realm][player].FR) == "number" then
 			fr = str_fr[GnomTEC_Badge_Flags[realm][player].FR]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FR) == "string" then
+			-- cleanup UI Escape Sequences which ar not yet filtered
+			GnomTEC_Badge_Flags[realm][player].FR = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].FR))
 			fr = GnomTEC_Badge_Flags[realm][player].FR
 		end
 		if type(GnomTEC_Badge_Flags[realm][player].FC) == "number" then
 			fc = str_fc[GnomTEC_Badge_Flags[realm][player].FC]
 		elseif type(GnomTEC_Badge_Flags[realm][player].FC) == "string" then
+			-- cleanup UI Escape Sequences which ar not yet filtered
+			GnomTEC_Badge_Flags[realm][player].FC = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].FC))
 			fc = GnomTEC_Badge_Flags[realm][player].FC
 		end
 		if GnomTEC_Badge_Flags[realm][player].FlagMSP == nil then
@@ -397,6 +407,8 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		if (displayedPlayerNote) then
 			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].NOTE or "")
 		else
+			-- cleanup UI Escape Sequences which ar not yet filtered
+			GnomTEC_Badge_Flags[realm][player].DE = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].DE))
 			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
 		end
 	else
@@ -436,6 +448,9 @@ function GnomTEC_Badge:RedrawPlayerList()
 			button:Hide();
 		else
 			local player = GnomTEC_Badge_Flags[GetRealmName()][playerList[playerListPosition+i]];
+			-- cleanup UI Escape Sequences which ar not yet filtered
+			player.NA = emptynil(cleanpipe(player.NA))
+
 			if (player.FRIEND == nil) then
 				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
 			elseif (player.FRIEND < 0) then
@@ -445,6 +460,8 @@ function GnomTEC_Badge:RedrawPlayerList()
 			else
 				textNA:SetText("|cff8080ff"..(player.NA or playerList[playerListPosition+i]).."|r")
 			end	
+			-- cleanup UI Escape Sequences which ar not yet filtered
+			player.NT = emptynil(cleanpipe(player.NT))
 			textNT:SetText(player.NT or "")
 			textENGINEDATA:SetText((player.EngineData or "Stufe -- Unbekannt Unbekannt").." ("..playerList[playerListPosition+i]..")")
 			button:Show();
@@ -708,7 +725,7 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 						GnomTEC_Badge_Flags[realm][player].FR = 1;
 					end
 				elseif (attributeName == "CSTATUS") then
-					GnomTEC_Badge_Flags[realm][player].FC = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].FC = emptynil(cleanpipe(attributeValue))
 				elseif string.sub(attributeName,1,2) == "CS" then		
 					local cStatus = string.sub(attributeName,3,3);
 	
@@ -726,25 +743,25 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 						GnomTEC_Badge_Flags[realm][player].FC = nil
 					end
 				elseif (attributeName == "TITEL") then
-				GnomTEC_Badge_Flags[realm][player].NT = emptynil(attributeValue)
+				GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(attributeValue))
 				elseif (attributeName == "T") then
-					GnomTEC_Badge_Flags[realm][player].NT = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].NT = emptynil(cleanpipe(attributeValue))
 				elseif (attributeName == "NAME") then
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
 					if not GnomTEC_Badge_Flags[realm][player].AN3 then
 						GnomTEC_Badge_Flags[realm][player].NA = Player
 					else
 						GnomTEC_Badge_Flags[realm][player].NA = Player..GnomTEC_Badge_Flags[realm][player].AN3
 					end
 				elseif (attributeName == "N") then				
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
 					if not GnomTEC_Badge_Flags[realm][player].AN3 then
 						GnomTEC_Badge_Flags[realm][player].NA = Player
 					else
 						GnomTEC_Badge_Flags[realm][player].NA = Player..GnomTEC_Badge_Flags[realm][player].AN3
 					end
 				elseif (attributeName == "AN1") then
-					GnomTEC_Badge_Flags[realm][player].AN1 = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].AN1 = emptynil(cleanpipe(attributeValue))
 					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
 						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
 					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
@@ -763,7 +780,7 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 						GnomTEC_Badge_Flags[realm][player].NA = nil
 					end
 				elseif (attributeName == "AN2") then
-					GnomTEC_Badge_Flags[realm][player].AN2 = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].AN2 = emptynil(cleanpipe(attributeValue))
 					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
 						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
 					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
@@ -782,7 +799,7 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 						GnomTEC_Badge_Flags[realm][player].NA = nil
 					end
 				elseif (attributeName == "AN3") then
-					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(attributeValue)
+					GnomTEC_Badge_Flags[realm][player].AN3 = emptynil(cleanpipe(attributeValue))
 					if GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 and GnomTEC_Badge_Flags[realm][player].AN3 then
 						GnomTEC_Badge_Flags[realm][player].NA = GnomTEC_Badge_Flags[realm][player].AN1.." "..GnomTEC_Badge_Flags[realm][player].AN2.." "..GnomTEC_Badge_Flags[realm][player].AN3
 					elseif GnomTEC_Badge_Flags[realm][player].AN1 and GnomTEC_Badge_Flags[realm][player].AN2 then
@@ -815,7 +832,7 @@ function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender, language, ch
 				elseif (string.sub(attributeName,1,1) == "D") or (string.sub(attributeName,1,1) == "P") then
 				
 					if not GnomTEC_Badge_Flags[realm][player].FlagRSPDesc then GnomTEC_Badge_Flags[realm][player].FlagRSPDesc = {} end
-					GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[tonumber(string.sub(attributeName,2,3))] = attributeValue
+					GnomTEC_Badge_Flags[realm][player].FlagRSPDesc[tonumber(string.sub(attributeName,2,3))] = emptynil(cleanpipe(attributeValue))
 					
 					local i = 1;
 					local lastPart;
