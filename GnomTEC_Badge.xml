@@ -347,7 +347,9 @@
 				</Anchors>
 				<Scripts>
 					<OnMouseDown>
-						self:GetParent():StartSizing();
+						if (not GnomTEC_Badge.db.profile["ViewFlag"]["Locked"]) then
+							self:GetParent():StartSizing();
+						end
 					</OnMouseDown>
 					<OnMouseUp>
 						self:GetParent():StopMovingOrSizing();
@@ -425,7 +427,9 @@
 		</Layers>
 		<Scripts>
 			<OnMouseDown>
+				if (not GnomTEC_Badge.db.profile["ViewFlag"]["Locked"]) then
 					self:StartMoving();
+				end
 			</OnMouseDown>
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 			<OnHide>GNOMTEC_BADGE_PLAYERLIST:Hide();</OnHide>
@@ -901,7 +905,9 @@
 		</Frames>
 		<Scripts>
 			<OnMouseDown>
-				self:StartMoving();
+				if (not GnomTEC_Badge.db.profile["ViewToolbar"]["Locked"]) then
+					self:StartMoving();
+				end
 			</OnMouseDown>
 			<OnMouseUp>self:StopMovingOrSizing();</OnMouseUp>
 		</Scripts>

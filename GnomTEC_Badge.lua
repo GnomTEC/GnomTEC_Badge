@@ -1,8 +1,8 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.1.32
+-- Version: 5.4.2.33
 -- Author: GnomTEC
--- Copyright 2011-2013 by GnomTEC
+-- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -30,25 +30,45 @@ GnomTEC_Badge_Flags = {
 	},
 }
 
-GnomTEC_Badge_Options = {
-	["MouseOver"] = false,
-	["LockOnTarget"] = true,
-	["AutoHide"] = true,	
-	["DisabledFlagDisplay"] = false;
-	["DisableAutomatic"] = true,	
-	["DisableInCombat"] = true,
-	["DisableInInstance"] = true,
-	["GnomcorderIntegration"] = false,
-	["Tooltip"] = true,	
-	["ChatFrame"] = false,	
-	["Toolbar"] = true,	
-	["Nameplates"] = true,
-}
-
 -- ----------------------------------------------------------------------
 -- Addon global Constants (local)
 -- ----------------------------------------------------------------------
 
+local defaultsDb = {
+	profile = {
+		["ViewFlag"] = {
+			["ShowOnlyFlagUser"] = false,
+			["MouseOver"] = false,
+			["LockOnTarget"] = true,
+			["AutoHide"] = true,	
+			["DisabledFlagDisplay"] = false;
+			["DisableAutomatic"] = true,	
+			["DisableInCombat"] = true,
+			["DisableInInstance"] = true,
+			["GnomcorderIntegration"] = false,
+			["ColorBackground"] = {0.25,0.25,0.25,1.0}, 
+			["ColorBorder"] = {1.0,1.0,1.0,1.0}, 
+			["ColorText"] = {1.0,1.0,1.0,1.0}, 
+			["ColorTitle"] = {1.0,1.0,0.5,1.0}, 
+			["Locked"] = false,
+			
+		},
+		["ViewTooltip"] = {
+			["Enabled"] = true,
+		},	
+		["ViewChatFrame"] = {
+			["Enabled"] = false,
+		},
+		["ViewToolbar"] = {
+			["Enabled"] = true,
+		},
+		["ViewNameplates"] = {
+			["Enabled"] = false,
+			["ShowOnlyName"] = true,
+			
+		},
+  }
+}
 local str_fr = {L["L_STR_FR0"], L["L_STR_FR1"], L["L_STR_FR2"], L["L_STR_FR3"], L["L_STR_FR4"],}
 local str_fc = {L["L_STR_FC0"], L["L_STR_FC1"], L["L_STR_FC2"], L["L_STR_FC3"],}
 
@@ -144,17 +164,17 @@ local flagDisplayStates = {
 	["On"] = {
 		text = "|TInterface\\LFGFrame\\BattlenetWorking0:0|t On",
 		notCheckable = 1,
-		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking0");GnomTEC_Badge_Options["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(false); end,	
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking0");GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(false); end,	
 	},
 	["Auto"] = {
 		text = "|TInterface\\LFGFrame\\BattlenetWorking2:0|t Auto",
 		notCheckable = 1,
-		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking2");GnomTEC_Badge_Options["DisableAutomatic"] = true; GnomTEC_Badge:DisableFlagDisplay(GnomTEC_Badge:GetAutomaticState()); end,	
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking2");GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"] = true; GnomTEC_Badge:DisableFlagDisplay(GnomTEC_Badge:GetAutomaticState()); end,	
 	},
 	["Off"] = {
 		text = "|TInterface\\LFGFrame\\BattlenetWorking4:0|t Off",
 		notCheckable = 1,
-		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking4");GnomTEC_Badge_Options["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(true); end,	
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking4");GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"] = false; GnomTEC_Badge:DisableFlagDisplay(true); end,	
 	},
 }
 
@@ -165,6 +185,15 @@ local flagDisplayStates = {
 local playerIsInCombat = false;
 local playerIsInInstance = false;
 local disabledFlagDisplay = false;
+
+local panelConfiguration = nil
+
+local displayedPlayerName = ""
+local displayedPlayerRealm = ""
+local displayedTAB = 1
+
+local playerList = {}
+local playerListPosition = 0
 
 -- Main options menue with general addon information
 local optionsMain = {
@@ -205,7 +234,7 @@ local optionsMain = {
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2013 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2014 by GnomTEC",
 				},
 			}
 		},
@@ -350,26 +379,6 @@ local optionsMeta = {
 			width = 'full',
 			order = 1
 		},
-		badgePlayerMO = {
-			type = "input",
-			name = L["L_OPTIONS_META_MO"],
-			desc = "",
-			set = function(info,val) GnomTEC_Badge_Player["Fields"]["MO"] = val; GnomTEC_Badge:SetMSP() end,
-    		get = function(info) return GnomTEC_Badge_Player["Fields"]["MO"] end,
-			multiline = 2,
-			width = 'full',
-			order = 4
-		},
-		badgePlayerHH = {
-			type = "input",
-			name = L["L_OPTIONS_META_HH"],
-			desc = "",
-			set = function(info,val) GnomTEC_Badge_Player["Fields"]["HH"] = val; GnomTEC_Badge:SetMSP() end,
-    		get = function(info) return GnomTEC_Badge_Player["Fields"]["HH"] end,
-			multiline = false,
-			width = 'full',
-			order = 2
-		},
 		badgePlayerHB = {
 			type = "input",
 			name = L["L_OPTIONS_META_HB"],
@@ -380,6 +389,26 @@ local optionsMeta = {
 			width = 'full',
 			order = 2
 		},
+		badgePlayerHH = {
+			type = "input",
+			name = L["L_OPTIONS_META_HH"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["HH"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["HH"] end,
+			multiline = false,
+			width = 'full',
+			order = 3
+		},
+		badgePlayerMO = {
+			type = "input",
+			name = L["L_OPTIONS_META_MO"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["MO"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["MO"] end,
+			multiline = 2,
+			width = 'full',
+			order = 4
+		},
 		badgePlayerHI = {
 			type = "input",
 			name = L["L_OPTIONS_META_HI"],
@@ -388,134 +417,244 @@ local optionsMeta = {
     		get = function(info) return GnomTEC_Badge_Player["Fields"]["HI"] end,
 			multiline = 10,
 			width = 'full',
-			order = 6
+			order = 5
 		},
 	},
 }
-local optionsView = {
-	name = L["L_OPTIONS_VIEW"],
+
+local optionsViewFlag = {
+	name = L["L_OPTIONS_VIEW_FLAG"],
 	type = 'group',
 	args = {
-		badgeOptionMouseOver = {
+		badgeOptionShowOnlyFlagUser = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_MOUSEOVER"],
+			name = L["L_OPTIONS_VIEW_FLAG_SHOWONLYFLAGUSER"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["MouseOver"] = val end,
-			get = function(info) return GnomTEC_Badge_Options["MouseOver"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["ShowOnlyFlagUser"] = val end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["ShowOnlyFlagUser"] end,
 			width = 'full',
 			order = 1
 		},
-		badgeOptionLockOnTarget = {
+		badgeOptionMouseOver = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_LOCKONTARGET"],
+			name = L["L_OPTIONS_VIEW_FLAG_MOUSEOVER"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["LockOnTarget"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["LockOnTarget"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] = val end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] end,
 			width = 'full',
 			order = 2
 		},
-		badgeOptionAutoHide = {
+		badgeOptionLockOnTarget = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_AUTOHIDE"],
+			name = L["L_OPTIONS_VIEW_FLAG_LOCKONTARGET"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["AutoHide"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["AutoHide"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] end,
 			width = 'full',
 			order = 3
 		},
+		badgeOptionAutoHide = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_FLAG_AUTOHIDE"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"] end,
+			width = 'full',
+			order = 4
+		},
 		badgeOptionDisableInCombat = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_DISABLEINCOMBAT"],
+			name = L["L_OPTIONS_VIEW_FLAG_DISABLEINCOMBAT"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["DisableInCombat"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
-	   	get = function(info) return GnomTEC_Badge_Options["DisableInCombat"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["DisableInCombat"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["DisableInCombat"] end,
 			width = 'full',
 			order = 5
 		},
 		badgeOptionDisableInInstance = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_DISABLEININSTANCE"],
+			name = L["L_OPTIONS_VIEW_FLAG_DISABLEININSTANCE"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["DisableInInstance"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
-	   	get = function(info) return GnomTEC_Badge_Options["DisableInInstance"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"] = val; GnomTEC_Badge:PLAYER_ENTERING_WORLD(nil) end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"] end,
 			width = 'full',
-			order = 5
+			order = 6
 		},
 		badgeOptionGnomcorderIntegration = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"],
+			name = L["L_OPTIONS_VIEW_FLAG_GNOMCORDERINTEGRATION"],
 			desc = "",
 			disabled = function(info) return not GnomTEC_Gnomcorder end,
-			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"] end,
 			width = 'full',
 			order = 7
 		},
-		badgeOptionTooltip = {
-			type = "toggle",
-			name = L["L_OPTIONS_VIEW_TOOLTIP"],
-			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["Tooltip"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["Tooltip"] end,
+		badgeOptionColor = {
+			type = 'group',
+			name = L["L_OPTIONS_VIEW_FLAG_COLOR"],
+			inline = true,
 			width = 'full',
-			order = 8
+			order = 8,
+			args = {
+				badgeOptionColorBackground = {
+					type = "color",
+					name = L["L_OPTIONS_VIEW_FLAG_COLOR_BACKGROUND"],
+					desc = "",
+					set = function(info,r,g,b,a) GnomTEC_Badge.db.profile["ViewFlag"]["ColorBackground"] = {r,g,b,a}, GNOMTEC_BADGE_FRAME:SetBackdropColor(r,g,b,a) end,
+	   			get = function(info) return unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBackground"]) end,
+	 			  	hasAlpha = true,
+					order = 1
+				},
+				badgeOptionColorBorder = {
+					type = "color",
+					name = L["L_OPTIONS_VIEW_FLAG_COLOR_BORDER"],
+					desc = "",
+					set = function(info,r,g,b,a) GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"] = {r,g,b,a}, GNOMTEC_BADGE_FRAME:SetBackdropBorderColor(r,g,b,a) end,
+			   	get = function(info) return  unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"]) end,
+	 			  	hasAlpha = true,
+					order = 2
+				},
+				badgeOptionColorText = {
+					type = "color",
+					name = L["L_OPTIONS_VIEW_FLAG_COLOR_TEXT"],
+					desc = "",
+					disabled = true,
+					set = function(info,r,g,b,a) GnomTEC_Badge.db.profile["ViewFlag"]["ColorText"] = {r,g,b,a}, GnomTEC_Badge:DisplayBadge(displayedPlayerRealm, displayedPlayerName) end,
+			   	get = function(info) return  unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorText"]) end,
+	 			  	hasAlpha = true,
+					order = 3
+				},
+				badgeOptionColorTitle = {
+					type = "color",
+					name = L["L_OPTIONS_VIEW_FLAG_COLOR_TITLE"],
+					desc = "",
+					disabled = true,
+					set = function(info,r,g,b,a) GnomTEC_Badge.db.profile["ViewFlag"]["ColorTitle"] = {r,g,b,a}, GnomTEC_Badge:DisplayBadge(displayedPlayerRealm, displayedPlayerName) end,
+			   	get = function(info) return  unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorTitle"]) end,
+	 			  	hasAlpha = true,
+					order = 4
+				},
+				badgeOptionColorReset = {
+					type = "execute",
+					name = L["L_OPTIONS_VIEW_FLAG_COLOR_RESET"],
+					desc = "",
+					func = function(info)
+						GnomTEC_Badge.db.profile["ViewFlag"]["ColorBackground"] = {unpack(defaultsDb.profile["ViewFlag"]["ColorBackground"])}
+						GNOMTEC_BADGE_FRAME:SetBackdropColor(unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBackground"]))
+						GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"] = {unpack(defaultsDb.profile["ViewFlag"]["ColorBorder"])}
+						GNOMTEC_BADGE_FRAME:SetBackdropBorderColor(unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"]))
+						GnomTEC_Badge.db.profile["ViewFlag"]["ColorText"] = {unpack(defaultsDb.profile["ViewFlag"]["ColorText"])}
+						GnomTEC_Badge.db.profile["ViewFlag"]["ColorTitle"] = {unpack(defaultsDb.profile["ViewFlag"]["ColorTitle"])}
+						GnomTEC_Badge:DisplayBadge(displayedPlayerRealm, displayedPlayerName)
+					end,
+					width = 'full',
+					order = 5
+				},
+			},
 		},
-		badgeOptionChatFrame = {
+		badgeOptionViewFlagLocked = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_CHATFRAME"],
+			name = L["L_OPTIONS_VIEW_FLAG_LOCKED"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["ChatFrame"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["ChatFrame"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewFlag"]["Locked"] = val end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewFlag"]["Locked"] end,
 			width = 'full',
 			order = 9
 		},
+	},
+}
+
+local optionsViewTooltip = {
+	name = L["L_OPTIONS_VIEW_TOOLTIP"],
+	type = 'group',
+	args = {
+		badgeOptionTooltip = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_TOOLTIP_ENABLED"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] end,
+			width = 'full',
+			order = 1
+		},
+	},
+}
+
+local optionsViewToolbar = {
+	name = L["L_OPTIONS_VIEW_TOOLBAR"],
+	type = 'group',
+	args = {
 		badgeOptionToolbar = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_TOOLBAR"],
+			name = L["L_OPTIONS_VIEW_TOOLBAR_ENABLED"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["Toolbar"] = val; if (GnomTEC_Badge_Options["Toolbar"]) then GNOMTEC_BADGE_TOOLBAR:Show(); else GNOMTEC_BADGE_TOOLBAR:Hide(); end; end,
-	   	get = function(info) return GnomTEC_Badge_Options["Toolbar"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"] = val; if (GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"]) then GNOMTEC_BADGE_TOOLBAR:Show(); else GNOMTEC_BADGE_TOOLBAR:Hide(); end; end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"] end,
 			width = 'full',
-			order = 10
+			order = 1
 		},
-		badgeOptionNameplates = {
+		badgeOptionViewToolbarLocked = {
 			type = "toggle",
-			name = L["L_OPTIONS_VIEW_NAMEPLATES"],
+			name = L["L_OPTIONS_VIEW_TOOLBAR_LOCKED"],
 			desc = "",
-			set = function(info,val) GnomTEC_Badge_Options["Nameplates"] = val end,
-	   	get = function(info) return GnomTEC_Badge_Options["Nameplates"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewToolbar"]["Locked"] = val end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewToolbar"]["Locked"] end,
 			width = 'full',
-			order = 11
+			order = 2
 		},
-
-
-
 
 	},
 }
 
-local panelConfiguration = nil
+local optionsViewNameplates = {
+	name = L["L_OPTIONS_VIEW_NAMEPLATES"],
+	type = 'group',
+	args = {
+		badgeOptionNameplates = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_NAMEPLATES_ENABLED"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] end,
+			width = 'full',
+			order = 1
+		},
+		badgeOptionNameplatesShowOnlyName = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"],
+			desc = "",
+			disabled = function(info) return not GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] end,
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"] end,
+			width = 'full',
+			order = 2
+		},
+	},
+}
 
-local displayedPlayerName = ""
-local displayedPlayerRealm = ""
-local displayedTAB = 1
+local optionsViewChat = {
+	name = L["L_OPTIONS_VIEW_CHATFRAME"],
+	type = 'group',
+	args = {
+		badgeOptionChatFrame = {
+			type = "toggle",
+			name = L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] = val end,
+	   	get = function(info) return GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] end,
+			width = 'full',
+			order = 1
+		},
+	},
+}
 
-local playerList = {}
-local playerListPosition = 0
 
 -- ----------------------------------------------------------------------
 -- Startup initialization
 -- ----------------------------------------------------------------------
 
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "LibNameplateRegistry-1.0")
-LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
-LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
-LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
-LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View", optionsView)
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
-panelConfiguration = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Meta", L["L_OPTIONS_META"], "GnomTEC Badge");
-LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", L["L_OPTIONS_VIEW"], "GnomTEC Badge");
 
 -- Detect any other MSP AddOn and bail out in case of conflict
 if _G.msp_RPAddOn or _G.mrp then
@@ -742,6 +881,8 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 	elseif (not GnomTEC_Badge_Flags[realm]) then
 		return;
 	elseif (not GnomTEC_Badge_Flags[realm][player]) then
+		return;
+	elseif ((GnomTEC_Badge.db.profile["ViewFlag"]["ShowOnlyFlagUser"]) and (not GnomTEC_Badge_Flags[realm][player].VA) and (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"])) then
 		return;
 	end
 
@@ -1032,7 +1173,7 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 end
 
 function GnomTEC_Badge:UpdateTooltip(realm, player)
-	if ((not disabledFlagDisplay) and GnomTEC_Badge_Options["Tooltip"] and GnomTEC_Badge_Flags[realm][player]) then
+	if ((not disabledFlagDisplay) and GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] and GnomTEC_Badge_Flags[realm][player]) then
 		local i, n
 
 		-- we need two line more then standard tooltip for role play status and titel
@@ -1279,19 +1420,20 @@ function GnomTEC_Badge:UpdatePlayerList()
 	count = 0;
 	playerList = {}
 	for key,value in pairs(GnomTEC_Badge_Flags[string.gsub(GetRealmName(), "%s+", "")]) do
-	 	if (filter == "") or (string.match(string.lower(key),filter) ~= nil) or (string.match(string.lower(value.NA or ""),filter) ~= nil ) then
-			if (value.FRIEND == nil) then
-				if showUnknown then
+		if ((not GnomTEC_Badge.db.profile["ViewFlag"]["ShowOnlyFlagUser"]) or (value.VA)) then
+		 	if (filter == "") or (string.match(string.lower(key),filter) ~= nil) or (string.match(string.lower(value.NA or ""),filter) ~= nil ) then
+				if (value.FRIEND == nil) then
+					if showUnknown then
+						count = count + 1;
+						playerList[count] = key;				
+					end
+				elseif ((value.FRIEND < 0) and showEnemy) or ((value.FRIEND > 0) and showFriend) or ((value.FRIEND == 0) and showNeutral) then
 					count = count + 1;
-					playerList[count] = key;				
+					playerList[count] = key;
 				end
-			elseif ((value.FRIEND < 0) and showEnemy) or ((value.FRIEND > 0) and showFriend) or ((value.FRIEND == 0) and showNeutral) then
-				count = count + 1;
-				playerList[count] = key;
 			end
 		end
 	end
-	
 	table.sort(playerList)
 	
 	playerListPosition = floor(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue());
@@ -1589,11 +1731,11 @@ end
 
 function GnomTEC_Badge:DisableFlagDisplay(bool)
 	disabledFlagDisplay = bool
-   GnomTEC_Badge_Options["DisabledFlagDisplay"] = disabledFlagDisplay
+   GnomTEC_Badge.db.profile["ViewFlag"]["DisabledFlagDisplay"] = disabledFlagDisplay
 end
 
 function GnomTEC_Badge:GetAutomaticState()
-	return (playerIsInCombat and GnomTEC_Badge_Options["DisableInCombat"]) or (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"])
+	return (playerIsInCombat and GnomTEC_Badge.db.profile["ViewFlag"]["DisableInCombat"]) or (playerIsInInstance and GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"])
 end
 
 
@@ -1616,11 +1758,11 @@ end
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
 	playerIsInCombat = true;
-	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
-		if (GnomTEC_Badge_Options["DisableInCombat"]) then
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"]) then
+		if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableInCombat"]) then
 			GnomTEC_Badge:DisableFlagDisplay(true)
 		end
-		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
 			if (disabledFlagDisplay) then
 				GNOMTEC_BADGE_FRAME:Hide();
 			end
@@ -1630,8 +1772,8 @@ end
 
 function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
 	playerIsInCombat = false;	
-	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
-		if (GnomTEC_Badge_Options["DisableInInstance"]) then
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"]) then
+		if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"]) then
 			GnomTEC_Badge:DisableFlagDisplay(playerIsInInstance);
 		else 
 			GnomTEC_Badge:DisableFlagDisplay(false)
@@ -1641,16 +1783,16 @@ end
 
 function GnomTEC_Badge:PLAYER_ENTERING_WORLD(event)
 	playerIsInInstance = (nil ~= IsInInstance())
-	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
-		if (playerIsInInstance and GnomTEC_Badge_Options["DisableInInstance"]) then
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"]) then
+		if (playerIsInInstance and GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"]) then
 			GnomTEC_Badge:DisableFlagDisplay(true)
-		elseif (GnomTEC_Badge_Options["DisableInCombat"]) then
+		elseif (GnomTEC_Badge.db.profile["ViewFlag"]["DisableInCombat"]) then
 			GnomTEC_Badge:DisableFlagDisplay(playerIsInCombat)
 		else 
 			GnomTEC_Badge:DisableFlagDisplay(false)
 		end
 
-		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
 			if (disabledFlagDisplay) then
 				GNOMTEC_BADGE_FRAME:Hide();
 			end
@@ -1682,13 +1824,21 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 
 		if Fixed_UnitIsPlayer("target") and player and realm then
 			GnomTEC_Badge:DisplayBadge(realm, player)
-			if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-				GNOMTEC_BADGE_FRAME:Show();
+			if (displayedPlayerRealm == realm) and (displayedPlayerName == player) then
+				if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
+					GNOMTEC_BADGE_FRAME:Show();
+				end
+				GnomTEC_Badge:SetPlayerModelToUnit("target")
+			else
+				if GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
+					if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
+						GNOMTEC_BADGE_FRAME:Hide();
+					end
+				end	
 			end
-			GnomTEC_Badge:SetPlayerModelToUnit("target")
 		else
-			if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
-				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+			if GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
+				if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
 					GNOMTEC_BADGE_FRAME:Hide();
 				end
 			end	
@@ -1698,8 +1848,8 @@ end
     
 function GnomTEC_Badge:CURSOR_UPDATE(eventName)
     -- process the event
-	if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) and GnomTEC_Badge_Options["AutoHide"]  and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
-		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] and (not (GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] and UnitExists("target")))) and GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"]  and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
+		if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
 			GNOMTEC_BADGE_FRAME:Hide();
 		end
 	end	
@@ -1745,19 +1895,29 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	    	if ((not UnitIsUnit("mouseover", "player")) and UnitIsFriend("mouseover", "player")) then
 				GnomTEC_Badge:RequestMSP(table.concat( { UnitName("mouseover") }, "-" ))
 			end
-			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
+			if (GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] and (not (GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] and UnitExists("target")))) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
-				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-					GNOMTEC_BADGE_FRAME:Show();
+				if (displayedPlayerRealm == realm) and (displayedPlayerName == player) then
+					if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
+						GNOMTEC_BADGE_FRAME:Show();
+					end
+					GnomTEC_Badge:SetPlayerModelToUnit("mouseover")
 				end
-				GnomTEC_Badge:SetPlayerModelToUnit("mouseover")
 			end
 		end
 
 		-- tooltip handling
 		GnomTEC_Badge:UpdateTooltip(realm, player)
-
 	end	
+	
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] and (not (GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] and UnitExists("target")))) and GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"]  and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
+		if (displayedPlayerRealm ~= realm) or (displayedPlayerName ~= player) then
+			if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
+				GNOMTEC_BADGE_FRAME:Hide();
+			end
+		end
+	end
+
 
 end
 
@@ -1846,7 +2006,7 @@ function GnomTEC_Badge:CHAT_MSG_YELL(eventName, message, sender)
 end
 
 function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
-	if (not GnomTEC_Badge_Options["Nameplates"]) then
+	if (not GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"]) then
 		return
 	end
 
@@ -1854,22 +2014,40 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 				
 	if (nameFrame) then
 		if (nameFrame:GetObjectType() == "FontString") then
- 			-- Hide all sub-frames 
-			local frames = { plateFrame:GetChildren() };
-			for _, frame in ipairs(frames) do
-  				frame.gnomtec_badge_hide = frame:GetAlpha()
-  				frame:SetAlpha(0)
+			if (not plateFrame.gnomtec_badge) then
+ 				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
+ 				plateFrame.gnomtec_badge:SetFontObject(nameFrame:GetFontObject())
+			end 			
+
+
+			if (GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"]) then
+ 				-- Hide all sub-frames 
+				local frames = { plateFrame:GetChildren() };
+				for _, frame in ipairs(frames) do
+  					frame.gnomtec_badge_alpha = frame:GetAlpha()
+  					frame:SetAlpha(0)
+ 				end
+ 				
+ 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
+ 			else
+ 				plateFrame.gnomtec_badge:SetPoint("TOP", nameFrame, "TOP",0,0)
+
+ 				-- Hide only name-frame
+ 				nameFrame.gnomtec_badge_hide = nameFrame:GetAlpha()
+ 				nameFrame:Hide()
+ 				
  			end
+ 			
  			-- add our frame
  			if (not plateFrame.gnomtec_badge) then
  				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
- 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
  				plateFrame.gnomtec_badge:SetFontObject(nameFrame:GetFontObject())
  			else
- 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
  				plateFrame.gnomtec_badge:Show()
 			end 			
- 	
+ 
+  			plateFrame.gnomtec_badge:Show()
+
 			if ( "PLAYER" == plateData.type ) then
    	 		local player = nameFrame:GetText()
    	 		local playerName = player
@@ -1907,10 +2085,18 @@ function GnomTEC_Badge:LNR_ON_RECYCLE_PLATE(eventname, plateFrame, plateData)
  	-- Show all sub-frames 
 	local frames = { plateFrame:GetChildren() };
 	for _, frame in ipairs(frames) do
-  		if (frame.gnomtec_badge_hide) then
-  			frame:SetAlpha(frame.gnomtec_badge_hide)
-  			frame.gnomtec_badge_hide = nil
+  		if (frame.gnomtec_badge_alpha) then
+  			frame:SetAlpha(frame.gnomtec_badge_alpha)
+  			frame.gnomtec_badge_alpha = nil
   		end
+ 	end
+
+	local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
+	if (nameFrame) then
+	 	if (nameFrame.gnomtec_badge_hide) then
+  			nameFrame:Show()
+  			nameFrame.gnomtec_badge_hide = nil
+ 		end
  	end
  	if (plateFrame.gnomtec_badge) then
 		plateFrame.gnomtec_badge:Hide()
@@ -1947,7 +2133,7 @@ function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6,
 
 	-- let the original function or who ever colorize the name
 	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	if (GnomTEC_Badge_Options["ChatFrame"]) then
+	if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"]) then
 		return string.gsub(colordName,string.gsub(arg2, "%-", "%%%-"),playerName)
 	else
 		return colordName
@@ -1959,51 +2145,111 @@ end
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:OnInitialize()
  	-- Code that you want to run when the addon is first loaded goes here.
-	self.db = LibStub("AceDB-3.0"):New("GnomTEC_BadgeDB")
+	self.db = LibStub("AceDB-3.0"):New("GnomTEC_BadgeDB", defaultsDb, true);
+
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View Flag", optionsViewFlag)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View Tooltip", optionsViewTooltip)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View Toolbar", optionsViewToolbar)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View Nameplates", optionsViewNameplates)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View Chatframe", optionsViewChat)
+	self.profileOptions = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db);
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profiles", self.profileOptions);
+
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
+	panelConfiguration = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Meta", L["L_OPTIONS_META"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Flag", L["L_OPTIONS_VIEW_FLAG"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Tooltip", L["L_OPTIONS_VIEW_TOOLTIP"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Toolbar", L["L_OPTIONS_VIEW_TOOLBAR"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Nameplates", L["L_OPTIONS_VIEW_NAMEPLATES"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Chatframe", L["L_OPTIONS_VIEW_CHATFRAME"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles", L["L_OPTIONS_PROFILES"], "GnomTEC Badge");
 
   	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
 end
 
 function GnomTEC_Badge:OnEnable()
     -- Called when the addon is enabled
+	local player, realm = UnitName("player")
+	realm = realm or GetRealmName()
 
-	-- Initialize options which are propably not valid because they are new added in new versions of addon
-	if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
-		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
-	end
-	if (nil == GnomTEC_Badge_Options["Tooltip"]) then
-		GnomTEC_Badge_Options["Tooltip"] = true
-	end
-	if (nil == GnomTEC_Badge_Options["ChatFrame"]) then
-		GnomTEC_Badge_Options["ChatFrame"] = false
-	end
-	if (nil == GnomTEC_Badge_Options["DisableInInstance"]) then
-		GnomTEC_Badge_Options["DisableInInstance"] = true
-	end
-	if (nil == GnomTEC_Badge_Options["Toolbar"]) then
-		GnomTEC_Badge_Options["Toolbar"] = true
-	end
-	if (nil == GnomTEC_Badge_Options["DisableAutomatic"]) then
-		GnomTEC_Badge_Options["DisableAutomatic"] = true
-	end
-	if (nil == GnomTEC_Badge_Options["DisabledFlagDisplay"]) then
-		GnomTEC_Badge_Options["DisabledFlagDisplay"] = false
-	end
+	if (not self.db.char.badge_version) then
+		-- with this char we never used profiles before.
+		
+		-- set profile
+		self.db:SetProfile(table.concat( { player, realm }, " - " ))
 
-	-- remove spaces from realm names to avoid duplicates when playing on multiple realms
-	-- Blizzard API uses spaces in realm names only on actual realm when using GetRealmName().
-	-- Players from other realms will come with realm name without spaces
-	local realmsToRename ={}
-	for key,value in pairs(GnomTEC_Badge_Flags) do
-		local newkey = string.gsub(key, "%s+", "")
-		if (key ~= newkey) then
-			realmsToRename[key] = newkey
+		if (GnomTEC_Badge_Options) then
+		-- legacy version used and some options are set
+
+			-- Initialize options which are propably not valid because they are new added in a newer version of addon
+			if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+				GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+			end
+			if (nil == GnomTEC_Badge_Options["Tooltip"]) then
+				GnomTEC_Badge_Options["Tooltip"] = true
+			end
+			if (nil == GnomTEC_Badge_Options["ChatFrame"]) then
+				GnomTEC_Badge_Options["ChatFrame"] = false
+			end
+			if (nil == GnomTEC_Badge_Options["DisableInInstance"]) then
+				GnomTEC_Badge_Options["DisableInInstance"] = true
+			end
+			if (nil == GnomTEC_Badge_Options["Toolbar"]) then
+				GnomTEC_Badge_Options["Toolbar"] = true
+			end
+			if (nil == GnomTEC_Badge_Options["DisableAutomatic"]) then
+				GnomTEC_Badge_Options["DisableAutomatic"] = true
+			end
+			if (nil == GnomTEC_Badge_Options["DisabledFlagDisplay"]) then
+				GnomTEC_Badge_Options["DisabledFlagDisplay"] = false
+			end
+			if (nil == GnomTEC_Badge_Options["Nameplates"]) then
+				GnomTEC_Badge_Options["Nameplates"] = false
+			end
+		
+			-- remove spaces from realm names to avoid duplicates when playing on multiple realms
+			-- Blizzard API uses spaces in realm names only on actual realm when using GetRealmName().
+			-- Players from other realms will come with realm name without spaces
+			local realmsToRename ={}
+			for key,value in pairs(GnomTEC_Badge_Flags) do
+				local newkey = string.gsub(key, "%s+", "")
+				if (key ~= newkey) then
+					realmsToRename[key] = newkey
+				end
+			end
+			for key,value in pairs(realmsToRename) do
+				GnomTEC_Badge_Flags[value] = GnomTEC_Badge_Flags[key]
+				GnomTEC_Badge_Flags[key] = nil
+			end
+
+			-- copy all previously set options to profile
+			self.db.profile["ViewFlag"]["MouseOver"] = GnomTEC_Badge_Options["MouseOver"]
+			self.db.profile["ViewFlag"]["LockOnTarget"] = GnomTEC_Badge_Options["LockOnTarget"]
+			self.db.profile["ViewFlag"]["AutoHide"] = GnomTEC_Badge_Options["AutoHide"]
+			self.db.profile["ViewFlag"]["DisabledFlagDisplay"] = GnomTEC_Badge_Options["DisabledFlagDisplay"]
+			self.db.profile["ViewFlag"]["DisableAutomatic"] = GnomTEC_Badge_Options["DisableAutomatic"]
+			self.db.profile["ViewFlag"]["DisableInCombat"] = GnomTEC_Badge_Options["DisableInCombat"]
+			self.db.profile["ViewFlag"]["DisableInInstance"] = GnomTEC_Badge_Options["DisableInInstance"]
+			self.db.profile["ViewFlag"]["GnomcorderIntegration"] = GnomTEC_Badge_Options["GnomcorderIntegration"]
+			self.db.profile["ViewTooltip"]["Enabled"] = GnomTEC_Badge_Options["Tooltip"]
+			self.db.profile["ViewChatFrame"]["Enabled"] = GnomTEC_Badge_Options["ChatFrame"]
+			self.db.profile["ViewToolbar"]["Enabled"] = GnomTEC_Badge_Options["Toolbar"]
+			self.db.profile["ViewNameplates"]["Enabled"] = GnomTEC_Badge_Options["Nameplates"]
+				
+			-- remove legacy options variale
+			GnomTEC_Badge_Options = nil
 		end
-	end
-	for key,value in pairs(realmsToRename) do
-		GnomTEC_Badge_Flags[value] = GnomTEC_Badge_Flags[key]
-		GnomTEC_Badge_Flags[key] = nil
-	end
+	end	
+
+	-- do some other update things here 
+	--
+	
+	-- set actual version in char db
+	self.db.char.badge_version = GetAddOnMetadata("GnomTEC_Badge", "Version")
 	
 	-- Initialize localized strings in GUI
 	GNOMTEC_BADGE_FRAME_TAB_1_TEXT:SetText(L["L_TAB_DESCR"])
@@ -2013,7 +2259,11 @@ function GnomTEC_Badge:OnEnable()
 	GNOMTEC_BADGE_FRAME_TAB_5_TEXT:SetText(L["L_TAB_LOG"])
 	GnomTEC_Badge:ClickedTAB(1)
 	
-	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
+	-- Initialize color settings in GUI
+	GNOMTEC_BADGE_FRAME:SetBackdropColor(unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBackground"]))
+	GNOMTEC_BADGE_FRAME:SetBackdropBorderColor(unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"])) 
+
+	-- setup events and hooks
 	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
@@ -2052,7 +2302,7 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:SetMSP(true)
 	
 	-- GnomTEC Gnomcorder support
-	if (GnomTEC_Gnomcorder) and GnomTEC_Badge_Options["GnomcorderIntegration"] then
+	if (GnomTEC_Gnomcorder) and GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"] then
 		GNOMTEC_BADGE_FRAME:SetWidth(400);
 		GNOMTEC_BADGE_FRAME:SetHeight(300);
 		GNOMTEC_BADGE_FRAME:SetMovable(false);
@@ -2061,7 +2311,7 @@ function GnomTEC_Badge:OnEnable()
 		GNOMTEC_BADGE_FRAME_CloseButton:Hide();
 		GnomTEC_Gnomcorder:AddButton("GnomTEC_Badge", "Badge", "Badge anzeigen", GNOMTEC_BADGE_FRAME, "Interface\\ICONS\\INV_Misc_GroupLooking", "Interface\\ICONS\\INV_Misc_GroupLooking", false, nil)
 	else
-		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+		GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"] = false
 	end
 	
 	local player, realm = UnitName("player")
@@ -2081,10 +2331,10 @@ function GnomTEC_Badge:OnEnable()
 		GNOMTEC_BADGE_TOOLBAR_SELECTAFK_BUTTON:SetText(playerStatesAFK["Online"].text) 
 	end
 	
-	disabledFlagDisplay = GnomTEC_Badge_Options["DisabledFlagDisplay"];
-	if (GnomTEC_Badge_Options["DisableAutomatic"]) then
+	disabledFlagDisplay = GnomTEC_Badge.db.profile["ViewFlag"]["DisabledFlagDisplay"];
+	if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"]) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking2") 
-	elseif (GnomTEC_Badge_Options["DisabledFlagDisplay"]) then
+	elseif (GnomTEC_Badge.db.profile["ViewFlag"]["DisabledFlagDisplay"]) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking4") 
 	else
 		GNOMTEC_BADGE_TOOLBAR_SELECTFLAGDISPLAY_BUTTON:SetNormalTexture("Interface\\LFGFrame\\BattlenetWorking0") 
@@ -2106,9 +2356,11 @@ function GnomTEC_Badge:OnEnable()
 	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
 	
 	GnomTEC_Badge:DisableFlagDisplay(disabledFlagDisplay)
-	if (GnomTEC_Badge_Options["Toolbar"]) then
+	if (GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"]) then
 		GNOMTEC_BADGE_TOOLBAR:Show()
 	end
+	
+	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
 end
 
 function GnomTEC_Badge:OnDisable()

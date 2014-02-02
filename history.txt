@@ -1,6 +1,15 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+5.4.2.33 (2014-01-03)
+============
+- Rearranged configuration options
+- Added options to lock windows moving and resizing for flag window and toolbar.
+- Added color options for flag window (yet in progress).
+- Added option to show flag window only for targets which uses a MSP compatible flag addon.
+- Added option to allow replacement of only the name in nameplates and leave other parts visible.
+- Added profile support for all options except the characters flag data.
+
 5.4.2.32 (2013-12-28)
 ============
 - Included LibNameplateRegistry-1.0 for manipulating name plates

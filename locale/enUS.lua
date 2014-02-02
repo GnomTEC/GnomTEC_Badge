@@ -38,17 +38,40 @@ L["L_OPTIONS_META_HB"] = "Birthplace"
 L["L_OPTIONS_META_NH"] = "House name"
 L["L_OPTIONS_META_NI"] = "Nickname"
 
-L["L_OPTIONS_VIEW"] = "Display options"
-L["L_OPTIONS_VIEW_MOUSEOVER"] = "Show roleplay flag also on mouseover."
-L["L_OPTIONS_VIEW_LOCKONTARGET"] = "Prefer target over mouseover for display."
-L["L_OPTIONS_VIEW_AUTOHIDE"] = "Hide roleplay flag automatically."
-L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Don't show or update roleplay flag while in combat."
-L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "Don't show or update roleplay flag while in group, raid, battlefield or arena instances."
-L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (requires /reload or restart)."
-L["L_OPTIONS_VIEW_TOOLTIP"] = "Show roleplay flag also in tooltip."
-L["L_OPTIONS_VIEW_CHATFRAME"] = "Replace player names in blizzard chat frame with names given by their flags."
-L["L_OPTIONS_VIEW_TOOLBAR"] = "Show toolbar for faster changing of different state variables."
-L["L_OPTIONS_VIEW_NAMEPLATES"] = "Replaced nameplates by name from the RPG flags."
+L["L_OPTIONS_VIEW_FLAG"] = "Display - Flag"
+L["L_OPTIONS_VIEW_FLAG_SHOWONLYFLAGUSER"] = "Show roleplay flag only for target which uses roleplay flags."
+L["L_OPTIONS_VIEW_FLAG_MOUSEOVER"] = "Show roleplay flag also on mouseover."
+L["L_OPTIONS_VIEW_FLAG_LOCKONTARGET"] = "Prefer target over mouseover for display."
+L["L_OPTIONS_VIEW_FLAG_AUTOHIDE"] = "Hide roleplay flag automatically."
+L["L_OPTIONS_VIEW_FLAG_DISABLEINCOMBAT"] = "Don't show or update roleplay flag while in combat."
+L["L_OPTIONS_VIEW_FLAG_DISABLEININSTANCE"] = "Don't show or update roleplay flag while in group, raid, battlefield or arena instances."
+L["L_OPTIONS_VIEW_FLAG_GNOMCORDERINTEGRATION"] = "Integration in GnomTEC Gnomcorder (requires /reload or restart)."
+L["L_OPTIONS_VIEW_FLAG_COLOR"] = "General color settings"
+L["L_OPTIONS_VIEW_FLAG_COLOR_BACKGROUND"] = "Background"
+L["L_OPTIONS_VIEW_FLAG_COLOR_BORDER"] = "Border"
+L["L_OPTIONS_VIEW_FLAG_COLOR_TEXT"] = "Texts"
+L["L_OPTIONS_VIEW_FLAG_COLOR_TITLE"] = "Titles"
+L["L_OPTIONS_VIEW_FLAG_COLOR_RESET"] = "Reset colors"
+L["L_OPTIONS_VIEW_FLAG_LOCKED"] = "Lock window."
+
+L["L_OPTIONS_VIEW_TOOLTIP"] = "Display - Tooltip"
+L["L_OPTIONS_VIEW_TOOLTIP_ENABLED"] = "Show roleplay flag also in tooltip."
+
+L["L_OPTIONS_VIEW_TOOLBAR"] = "Display - Toolbar"
+L["L_OPTIONS_VIEW_TOOLBAR_ENABLED"] = "Show toolbar for faster changing of different state variables."
+L["L_OPTIONS_VIEW_TOOLBAR_LOCKED"] = "Lock toolbar."
+
+L["L_OPTIONS_VIEW_NAMEPLATES"] = "Display - Nameplates"
+L["L_OPTIONS_VIEW_NAMEPLATES_ENABLED"] = "Replaced nameplates by name from the RPG flags."
+L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"] = "Hide all other namplate parts except player name."
+
+
+
+L["L_OPTIONS_VIEW_CHATFRAME"] = "Display - Chatframe"
+L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"] = "Replace player names in blizzard chat frame with names given by their flags."
+
+L["L_OPTIONS_PROFILES"] = "Profiles"
+
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
 L["L_HIDDENRPFLAG"] = "<no roleplay state set>"

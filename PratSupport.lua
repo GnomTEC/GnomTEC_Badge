@@ -1,8 +1,8 @@
 -- **********************************************************************
 -- GnomTEC Badge - PratSupport
--- Version: 5.4.2.32
+-- Version: 5.4.2.33
 -- Author: GnomTEC
--- Copyright 2011-2013 by GnomTEC
+-- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 
@@ -85,7 +85,7 @@ Prat:AddModuleToLoad(function()
   -- replace text using prat event implementation
   function module:Prat_PreAddMessage(e, m, frame, event)
   
-	if (GnomTEC_Badge_Options["ChatFrame"]) then
+	if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] ) then
    	local player = cleanpipe(m.PLAYER)
 	   local realm = string.gsub(emptynil(cleanpipe(m.SERVER)) or GetRealmName(), "%s+", "")
 		if GnomTEC_Badge_Flags[realm] then 
