@@ -386,10 +386,10 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 
 	if UnitIsPlayer("target") and player and realm then
 		GnomTEC_Badge:DisplayBadge(realm, player)
+		GNOMTEC_BADGE_FRAME:Show();
 		GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
 		GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
 		GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
-		GNOMTEC_BADGE_FRAME:Show();
 	else
 		if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
 			GNOMTEC_BADGE_FRAME:Hide();
@@ -419,10 +419,10 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 		end
 		if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
 			GnomTEC_Badge:DisplayBadge(realm, player)
+			GNOMTEC_BADGE_FRAME:Show();
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:Show();
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
-			GNOMTEC_BADGE_FRAME:Show();
 		end
 	end
 
