@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.19
+-- Version: 5.3.0.20
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -340,7 +340,7 @@ local optionsView = {
 	},
 }
 
-panelConfiguration = nil
+local panelConfiguration = nil
 
 local displayedPlayerName = ""
 local displayedPlayerRealm = ""
