@@ -1,9 +1,40 @@
 ﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Button name="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" virtual="true">
+		<Size>
+			<AbsDimension x="50" y="13"/>
+		</Size>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString name="$parent_TEXT" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+					<Color r="0.8" g="0.8" b="0.8"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset>
+								<AbsDimension x="5" y="-2"/>
+							</Offset>
+						</Anchor>
+						<Anchor point="RIGHT">
+							<Offset x="-5" y="0"/>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<NormalTexture file="Interface\CHATFRAME\ChatFrameTab">
+			<TexCoords left="0" right="1" top="0.3" bottom="1"/>
+		</NormalTexture>
+		<HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
+		<Scripts>
+			<OnClick>
+				GnomTEC_Badge:ClickedTAB(self:GetID());
+			</OnClick>
+		</Scripts>
+	</Button>
 	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
-		<Size x="400" y="170" />
+		<Size x="400" y="200" />
 		<ResizeBounds>
             <minResize>
-                <AbsDimension x="200" y="150"/>
+                <AbsDimension x="250" y="150"/>
             </minResize>
         </ResizeBounds>
 		<Anchors>
@@ -146,66 +177,53 @@
 				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-BattleBro-Down"/>
 				<HighlightTexture file="Interface\Buttons\UI-Common-MouseHilight" alphaMode="ADD"/>
 			</Button>
+			
+			<Button name="$parent_TAB_1" inherits="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset>
+							<AbsDimension x="5" y="-88"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="$parent_TAB_2" inherits="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" id="2">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent_TAB_1">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="$parent_TAB_3" inherits="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" id="3">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent_TAB_2">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>
+			<Button name="$parent_TAB_4" inherits="GNOMTEC_BADGE_TAB_BUTTONTEMPLATE" id="4">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="$parent_TAB_3">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</Button>	
 			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset x="26" y="-89" />
+						<Offset x="5" y="-100" />
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset x="-10" y="10" />
+						<Offset x="-5" y="5" />
 					</Anchor>
 				</Anchors>
-				<Size x="364" y="75" />
 				<Frames>
-					<Button name="$parent_SELECT_DE" parentKey="select_de">
-						<Size>
-							<AbsDimension x="16" y="16"/>
-						</Size>
-						<Anchors>
-							<Anchor point="TOPRIGHT" relativePoint="TOPLEFT">
-								<Offset x="0" y="0" />
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user-arrow"/>
-						<HighlightTexture file="Interface\AddOns\GnomTEC_Badge\Icons\user-arrow"/>
-						<Scripts>
-							<OnLoad>
-								self:LockHighlight();
-							</OnLoad>
-							<OnClick>
-								local parent = self:GetParent();
-								self:LockHighlight();
-								parent.select_note:UnlockHighlight();
-								parent.child:EnableKeyboard(false);
-								parent.child:EnableMouse(false);	
-								GnomTEC_Badge:DisplayNote(false);
-							</OnClick>
-						</Scripts>
-					</Button>						
-					<Button name="$parent_SELECT_NOTE" parentKey="select_note">
-						<Size>
-							<AbsDimension x="16" y="16"/>
-						</Size>
-						<Anchors>
-							<Anchor point="TOPRIGHT" relativeTo="$parent_SELECT_DE" relativePoint="BOTTOMRIGHT">
-								<Offset x="0" y="-2" />
-							</Anchor>
-						</Anchors>
-						<NormalTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report"/>
-						<PushedTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report-arrow"/>
-						<HighlightTexture file="Interface\AddOns\GnomTEC_Badge\Icons\report-arrow"/>
-						<Scripts>
-							<OnClick>
-								local parent = self:GetParent();
-								self:LockHighlight();
-								parent.select_de:UnlockHighlight();
-								parent.child:EnableKeyboard(true);
-								parent.child:EnableMouse(true);								
-								GnomTEC_Badge:DisplayNote(true);
-							</OnClick>
-						</Scripts>
-					</Button>						
 					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true">
 						<Anchors>
 							<Anchor point="TOPRIGHT">
@@ -232,11 +250,10 @@
 									<OnEnter>
 										local parent = self:GetParent();
 										parentOfParent = parent:GetParent();
-									  	parentOfParent:UpdateScrollChildRect();
+										parentOfParent:UpdateScrollChildRect();
 										parent:SetMinMaxValues(0, parentOfParent:GetVerticalScrollRange());
 										parent:SetValue(parentOfParent:GetVerticalScroll());   
 									</OnEnter>
-
 								</Scripts>
 							</Button>
 							<Button name="$parentScrollDownButton" inherits="UIPanelScrollDownButtonTemplate">
@@ -252,7 +269,7 @@
 									<OnEnter>
 										local parent = self:GetParent();
 										parentOfParent = parent:GetParent();
-									  	parentOfParent:UpdateScrollChildRect();
+										parentOfParent:UpdateScrollChildRect();
 										parent:SetMinMaxValues(0, parentOfParent:GetVerticalScrollRange());
 										parent:SetValue(parentOfParent:GetVerticalScroll());   
 									</OnEnter>
@@ -265,7 +282,7 @@
 							</OnValueChanged>
 							<OnEnter>
 								local parent = self:GetParent();
-							  	parent:UpdateScrollChildRect();
+								parent:UpdateScrollChildRect();
 								self:SetMinMaxValues(0, parent:GetVerticalScrollRange());
 								self:SetValue(parent:GetVerticalScroll());   
 							</OnEnter>
@@ -278,17 +295,8 @@
 					</Slider>
 				</Frames>
 				<ScrollChild>
-					<EditBox name="$parent_DE" parentKey="child" resizable="true" setAllPoints="true" multiline="true" autofocus="false">
+					<EditBox name="$parent_TEXT" parentKey="child" resizable="true" setAllPoints="true" multiline="true" autofocus="false">
 						<FontString inherits="GameFontWhite"/>
-						<Anchors>
-							<Anchor point="TOPLEFT">
-								<Offset x="0" y="0" />
-							</Anchor>
-							<Anchor point="BOTTOMRIGHT">
-								<Offset x="-16" y="0" />
-							</Anchor>
-						</Anchors>
-						<Size x="348" y="75" />
 						<Scripts>
 							<OnLoad>
 								self:EnableKeyboard(false);
@@ -299,9 +307,6 @@
 --								self:SetWidth(parent:GetWidth()-16);		
 								parent:UpdateScrollChildRect();
 							</OnSizeChanged>
-							<OnTextChanged>
-								GnomTEC_Badge:UpdateNote();
-							</OnTextChanged>
 						</Scripts>
 					</EditBox>
 				</ScrollChild>
@@ -313,8 +318,6 @@
 					</OnSizeChanged>
 				</Scripts>
 			</ScrollFrame>
-			
-
 		</Frames>			
 		<Layers>
 			<Layer level="Artwork">

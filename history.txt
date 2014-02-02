@@ -1,5 +1,12 @@
-﻿GnomTEC Badge Addon - Change History 
+GnomTEC Badge Addon - Change History 
 ==========================
+
+V5.3.0.15 (2013-05-24)
+============
+- Added  support of additional flag informations (all known specified MSP fields).
+- Player notes feature temporarly removed from interface.
+- New layout of flag display to show additional informations.
+- Extended configuration interface for all new fields. 
 
 V5.3.0.14 (2013-05-23)
 ============

@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.14
+-- Version: 5.3.0.15
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -116,7 +116,7 @@ local optionsProfile = {
 			name = L["L_OPTIONS_PROFILE_NA"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NA"] = val; GnomTEC_Badge:SetMSP() end,
-	   		get = function(info) return GnomTEC_Badge_Player["Fields"]["NA"] end,
+	   	get = function(info) return GnomTEC_Badge_Player["Fields"]["NA"] end,
 			multiline = false,
 			width = 'full',
 			order = 1
@@ -131,16 +131,6 @@ local optionsProfile = {
 			width = 'full',
 			order = 2
 		},
-		badgePlayerDE = {
-			type = "input",
-			name = L["L_OPTIONS_PROFILE_DE"],
-			desc = "",
-			set = function(info,val) GnomTEC_Badge_Player["Fields"]["DE"] = val; GnomTEC_Badge:SetMSP() end,
-    		get = function(info) return GnomTEC_Badge_Player["Fields"]["DE"] end,
-			multiline = 13,
-			width = 'full',
-			order = 3
-		},
 		badgePlayerFR = {
 			type = "select",
 			name = L["L_OPTIONS_PROFILE_FR"],
@@ -148,7 +138,7 @@ local optionsProfile = {
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FR"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge_Player["Fields"]["FR"] end,
 			values = str_fr,
-			order = 4
+			order = 3
 		},
 		badgePlayerFC = {
 			type = "select",
@@ -157,11 +147,127 @@ local optionsProfile = {
 			set = function(info,val) GnomTEC_Badge_Player["Fields"]["FC"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge_Player["Fields"]["FC"] end,
 			values = str_fc,
+			order = 3
+		},
+		badgePlayerCU = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_CU"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["CU"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["CU"] end,
+			multiline = 2,
+			width = 'full',
+			order = 4
+		},
+		badgePlayerAG = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_AG"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["AG"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["AG"] end,
+			multiline = false,
+			width = 'half',
 			order = 5
+		},
+		badgePlayerAE = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_AE"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["AE"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["AE"] end,
+			multiline = false,
+			width = 'half',
+			order = 5
+		},
+		badgePlayerAH = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_AH"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["AH"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["AH"] end,
+			multiline = false,
+			width = 'half',
+			order = 5
+		},
+		badgePlayerAW = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_AW"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["AW"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["AW"] end,
+			multiline = false,
+			width = 'half',
+			order = 5
+		},
+		badgePlayerDE = {
+			type = "input",
+			name = L["L_OPTIONS_PROFILE_DE"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["DE"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["DE"] end,
+			multiline = 10,
+			width = 'full',
+			order = 6
 		},
 	},
 }
 
+local optionsMeta = {
+	name = L["L_OPTIONS_META"],
+	type = 'group',
+	args = {
+		badgePlayerNH = {
+			type = "input",
+			name = L["L_OPTIONS_META_NH"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["NH"] = val; GnomTEC_Badge:SetMSP() end,
+	   	get = function(info) return GnomTEC_Badge_Player["Fields"]["NH"] end,
+			multiline = false,
+			width = 'full',
+			order = 1
+		},
+		badgePlayerMO = {
+			type = "input",
+			name = L["L_OPTIONS_META_MO"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["MO"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["MO"] end,
+			multiline = 2,
+			width = 'full',
+			order = 4
+		},
+		badgePlayerHH = {
+			type = "input",
+			name = L["L_OPTIONS_META_HH"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["HH"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["HH"] end,
+			multiline = false,
+			width = 'full',
+			order = 2
+		},
+		badgePlayerHB = {
+			type = "input",
+			name = L["L_OPTIONS_META_HB"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["HB"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["HB"] end,
+			multiline = false,
+			width = 'full',
+			order = 2
+		},
+		badgePlayerHI = {
+			type = "input",
+			name = L["L_OPTIONS_META_HI"],
+			desc = "",
+			set = function(info,val) GnomTEC_Badge_Player["Fields"]["HI"] = val; GnomTEC_Badge:SetMSP() end,
+    		get = function(info) return GnomTEC_Badge_Player["Fields"]["HI"] end,
+			multiline = 10,
+			width = 'full',
+			order = 6
+		},
+	},
+}
 local optionsView = {
 	name = L["L_OPTIONS_VIEW"],
 	type = 'group',
@@ -226,7 +332,7 @@ local optionsView = {
 
 local displayedPlayerName = ""
 local displayedPlayerRealm = ""
-local displayedPlayerNote = false;
+local displayedTAB = 1
 
 local playerList = {}
 local playerListPosition = 0
@@ -238,9 +344,11 @@ local playerListPosition = 0
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0")
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Main", optionsMain)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profile", optionsProfile)
+LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Meta", optionsMeta)
 LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge View", optionsView)
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
+LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Meta", L["L_OPTIONS_META"], "GnomTEC Badge");
 LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View", L["L_OPTIONS_VIEW"], "GnomTEC Badge");
 
 -- Detect any other MSP AddOn and bail out in case of conflict
@@ -263,6 +371,8 @@ _G.msp_RPAddOn = "GnomTEC_Badge"
 
 -- function which returns also nil for empty strings
 local function emptynil( x ) return x ~= "" and x or nil end
+
+-- function to cleanup control sequences
 local function cleanpipe( x )
 	x = x or ""
 	
@@ -298,6 +408,34 @@ function GnomTEC_Badge:AddToVAString( addon )
 			(GetAddOnMetadata( addon, "X-Test" )=="Beta" and "b") or "" ) ), "; " )
 end
 
+function GnomTEC_Badge:DebugPrintFlag(realm, player)
+	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+	if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+	local r = GnomTEC_Badge_Flags[realm][player]
+	
+	 GnomTEC_Badge:Print("============================")
+	 GnomTEC_Badge:Print("Player: "..player.."-"..realm)
+	 
+	 GnomTEC_Badge:Print("VA Addon versions: "..(r.VA or ""))
+	 GnomTEC_Badge:Print("NA Name: "..(r.NA or ""))
+	 GnomTEC_Badge:Print("NH House Name: "..(r.NH or ""))
+	 GnomTEC_Badge:Print("NI Nickname: "..(r.NI or ""))
+	 GnomTEC_Badge:Print("NT Title: "..(r.NT or ""))
+	 GnomTEC_Badge:Print("RA Race: "..(r.RA or ""))
+	 GnomTEC_Badge:Print("FR RP Style: "..(r.FR or ""))
+	 GnomTEC_Badge:Print("FC Character Status: "..(r.FC or ""))
+	 GnomTEC_Badge:Print("CU Currently: "..(r.CU or ""))
+	 GnomTEC_Badge:Print("DE Physical Description: "..(r.DE or ""))
+	 GnomTEC_Badge:Print("AG Age: "..(r.AG or ""))
+	 GnomTEC_Badge:Print("AE Eye Colour: "..(r.AE or ""))
+	 GnomTEC_Badge:Print("AH Height: "..(r.AH or ""))
+	 GnomTEC_Badge:Print("AW Weight: "..(r.AW or ""))
+	 GnomTEC_Badge:Print("MO Motto: "..(r.MO or ""))
+	 GnomTEC_Badge:Print("HI History: "..(r.HI or ""))
+	 GnomTEC_Badge:Print("HH Home: "..(r.HH or ""))
+	 GnomTEC_Badge:Print("HB Birthplace: "..(r.HB or ""))
+	 
+end
 
 function GnomTEC_Badge:SaveFlag(realm, player)
 	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
@@ -333,7 +471,35 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	r.NT = emptynil( cleanpipe( p.field.NT ) )
 	r.DE = emptynil( cleanpipe( p.field.DE ) )	
 
-end
+	-- newly supported flag parts with v5.3.0.15 which will not displayed yet
+	
+	-- Additional visible character infos 
+	r.CU = emptynil( cleanpipe( p.field.CU ) )
+	r.RA = emptynil( cleanpipe( p.field.RA ) )
+	r.AG = emptynil( cleanpipe( p.field.AG ) )
+	r.AE = emptynil( cleanpipe( p.field.AE ) )
+	if ( tonumber( p.field.AH ) or -1 ) > 0 then
+		r.AH = tonumber( p.field.AH ).." cm"
+	else
+		r.AH = emptynil( cleanpipe( p.field.AH ) )
+	end
+	if ( tonumber( p.field.AW ) or -1 ) > 0 then
+		r.AW = tonumber( p.field.AW ).." kg"
+	else
+		r.AW = emptynil( cleanpipe( p.field.AW ) )
+	end
+	
+	-- Additional meta information
+	r.NH = emptynil( cleanpipe( p.field.NH ) )
+	r.NI = emptynil( cleanpipe( p.field.NI ) )
+	r.MO = emptynil( cleanpipe( p.field.MO ) )
+	r.HI = emptynil( cleanpipe( p.field.HI ) )
+	r.HH = emptynil( cleanpipe( p.field.HH ) )
+	r.HB = emptynil( cleanpipe( p.field.HB ) )
+
+	-- Additional not character relevant informations
+	r.VA = emptynil( cleanpipe( p.field.VA ) )
+ end
 
 function GnomTEC_Badge:SetMSP(init)
 	local playername = UnitName("player")
@@ -372,15 +538,6 @@ function GnomTEC_Badge:SetMSP(init)
 
 end
 
-function GnomTEC_Badge:FlagRSP_DPULL(realm, player)
-	local id = GetChannelName("xtensionxtooltip2");
-
-	if not (id >= 1) then 
-		JoinPermanentChannel("xtensionxtooltip2", "", DEFAULT_CHAT_FRAME:GetID(), 1);
-		id = GetChannelName("xtensionxtooltip2");
-	end
-	SendChatMessage("<DPULL>" .. player, "CHANNEL", nil, id);
-end
 
 function GnomTEC_Badge:DisplayBadge(realm, player)
 
@@ -448,25 +605,145 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 		else
 			GNOMTEC_BADGE_FRAME_FR_FC:SetText(msp)
 		end
-		if (displayedPlayerNote) then
-			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].NOTE or "")
+
+		-- cleanup UI Escape Sequences which ar not yet filtered
+		-- remove when cleanup implemented
+		GnomTEC_Badge_Flags[realm][player].DE = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].DE))
+
+		local text = ""
+		
+		if (1 ==	displayedTAB) then
+			-- Description
+			if (GnomTEC_Badge_Flags[realm][player].CU) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_CU"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].CU.."|n|n"
+			end
+
+			local first = true;
+			if (GnomTEC_Badge_Flags[realm][player].AG) then
+				if (not first) then
+					text = text.." / "
+				else
+					text = text.."|cFFFFFF80--- "
+					first = false	
+				end
+				text = text..L["L_FIELD_AG"]	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AE) then
+				if (not first) then
+					text = text.." / "
+				else
+					text = text.."|cFFFFFF80--- "
+					first = false	
+				end
+				text = text..L["L_FIELD_AE"]	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AH) then
+				if (not first) then
+					text = text.." / "
+				else
+					text = text.."|cFFFFFF80--- "
+					first = false	
+				end
+				text = text..L["L_FIELD_AH"]	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AW) then
+				if (not first) then
+					text = text.." / "
+				else
+					text = text.."|cFFFFFF80--- "
+					first = false	
+				end
+				text = text..L["L_FIELD_AW"]	
+			end
+			if (not first) then
+				text = text.." ---|r|n"
+			end
+
+			first = true;
+			if (GnomTEC_Badge_Flags[realm][player].AG) then
+				if (not first) then
+					text = text.." / "
+				else
+					first = false	
+				end
+				text = text..GnomTEC_Badge_Flags[realm][player].AG	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AE) then
+				if (not first) then
+					text = text.." / "
+				else
+					first = false	
+				end
+				text = text..GnomTEC_Badge_Flags[realm][player].AE	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AH) then
+				if (not first) then
+					text = text.." / "
+				else
+					first = false	
+				end
+				text = text..GnomTEC_Badge_Flags[realm][player].AH	
+			end
+			if (GnomTEC_Badge_Flags[realm][player].AW) then
+				if (not first) then
+					text = text.." / "
+				else
+					first = false	
+				end
+				text = text..GnomTEC_Badge_Flags[realm][player].AW	
+			end
+			if (not first) then
+				text = text.."|n|n"
+			end		
+		
+			if (GnomTEC_Badge_Flags[realm][player].DE) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_DE"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].DE.."|n|n"
+			end
+		
+			text = text.."|cFF800000--- EOF ---|r"
+		elseif  (2 ==	displayedTAB) then
+			-- Meta
+			if (GnomTEC_Badge_Flags[realm][player].NH) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_NH"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].NH.."|n|n"
+			end
+			if (GnomTEC_Badge_Flags[realm][player].NI) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_NI"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].NI.."|n|n"
+			end
+			if (GnomTEC_Badge_Flags[realm][player].MO) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_MO"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].MO.."|n|n"
+			end
+			if (GnomTEC_Badge_Flags[realm][player].HH) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_HH"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].HH.."|n|n"
+			end
+			if (GnomTEC_Badge_Flags[realm][player].HB) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_HB"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].HB.."|n|n"
+			end
+			if (GnomTEC_Badge_Flags[realm][player].HI) then
+				text = text.."|cFFFFFF80--- "..L["L_FIELD_HI"].." ---|r|n"..GnomTEC_Badge_Flags[realm][player].HI.."|n|n"
+			end
+			text = text.."|cFF800000--- EOF ---|r"			
+		elseif  (3 ==	displayedTAB) then
+			-- Notes
+			text = text.."|cFFFFFF80>>> coming soon <<<|r|n"
 		else
-			-- cleanup UI Escape Sequences which ar not yet filtered
-			GnomTEC_Badge_Flags[realm][player].DE = emptynil(cleanpipe(GnomTEC_Badge_Flags[realm][player].DE))
-			GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText(GnomTEC_Badge_Flags[realm][player].DE or "")
+			-- Log
+			text = text.."|cFFFFFF80>>> coming soon <<<|r|n"
 		end
+		GNOMTEC_BADGE_FRAME_SCROLL_TEXT:SetText(text)
+
+-- GnomTEC_Badge:DebugPrintFlag(realm, player)
+
 	else
 		GNOMTEC_BADGE_FRAME_NA:SetText("|cffC0C0C0"..player.."|r")
 		GNOMTEC_BADGE_FRAME_NT:SetText("")
 		GNOMTEC_BADGE_FRAME_GUILD:SetText("")
 		GNOMTEC_BADGE_FRAME_ENGINEDATA:SetText("")
 		GNOMTEC_BADGE_FRAME_FR_FC:SetText( L["L_NORPFLAG"])
-		GNOMTEC_BADGE_FRAME_SCROLL_DE:SetText("")
+		GNOMTEC_BADGE_FRAME_SCROLL_TEXT:SetText("")
 	end
 	GNOMTEC_BADGE_FRAME_SCROLL:UpdateScrollChildRect()
 	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetMinMaxValues(0, GNOMTEC_BADGE_FRAME_SCROLL:GetVerticalScrollRange())
-	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetValue(GNOMTEC_BADGE_FRAME_SCROLL:GetVerticalScroll()) 
-
+	GNOMTEC_BADGE_FRAME_SCROLL_SLIDER:SetValue(0) 
 end
 
 function GnomTEC_Badge:UpdateTooltip(realm, player)
@@ -556,6 +833,41 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		GameTooltip:Show()
 	end
 end
+
+function GnomTEC_Badge:ClickedTAB(id)
+
+	if (1 == id) then
+		-- Description
+		GNOMTEC_BADGE_FRAME_TAB_1:LockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		displayedTAB = 1
+	elseif (2 == id) then
+		-- Meta
+		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_2:LockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		displayedTAB = 2
+	elseif (3 == id) then
+		-- Notes
+		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_3:LockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_4:UnlockHighlight();
+		displayedTAB = 3
+	else
+		-- Log
+		GNOMTEC_BADGE_FRAME_TAB_1:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_2:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_3:UnlockHighlight();
+		GNOMTEC_BADGE_FRAME_TAB_4:LockHighlight();
+		displayedTAB = 4
+	end	
+	GnomTEC_Badge:DisplayBadge(displayedPlayerRealm, displayedPlayerName)
+end
+
 
 function GnomTEC_Badge:ClickedPlayerList(id)
 	if (playerListPosition + id <= #playerList) then
@@ -648,27 +960,6 @@ function GnomTEC_Badge:UpdatePlayerList()
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
 	GnomTEC_Badge:RedrawPlayerList();
 	GNOMTEC_BADGE_PLAYERLIST_FOOTER_TEXT:SetText("Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Gesamt: "..acount);
-end
-
-function GnomTEC_Badge:DisplayNote(display)
-	local realm = displayedPlayerRealm;
-	local player = displayedPlayerName;
-
-	if (GnomTEC_Badge_Flags[realm][player]) then
-		displayedPlayerNote = display
-		GnomTEC_Badge:DisplayBadge(realm, player)
-	end
-end
-
-function GnomTEC_Badge:UpdateNote()
-	local realm = displayedPlayerRealm;
-	local player = displayedPlayerName;
-
-	if (GnomTEC_Badge_Flags[realm][player]) then
-		if (displayedPlayerNote) then
-			GnomTEC_Badge_Flags[realm][player].NOTE = emptynil(GNOMTEC_BADGE_FRAME_SCROLL_DE:GetText() or "")
-		end
-	end
 end
 
 local function GnomTEC_Badge_MSPcallback(char)
@@ -822,7 +1113,7 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 		if (not playerisInCombat) then
 
 	    	if not UnitIsUnit("mouseover", "player") then
-				msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE" } )
+				msp:Request( table.concat( { UnitName("mouseover") }, "-" ), { "TT", "DE", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
 			end
 			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
@@ -882,6 +1173,13 @@ function GnomTEC_Badge:OnEnable()
 	if (nil == GnomTEC_Badge_Options["Tooltip"]) then
 		GnomTEC_Badge_Options["Tooltip"] = true
 	end
+	
+	-- Initialize localized strings in GUI
+	GNOMTEC_BADGE_FRAME_TAB_1_TEXT:SetText(L["L_TAB_DESCR"])
+	GNOMTEC_BADGE_FRAME_TAB_2_TEXT:SetText(L["L_TAB_META"])
+	GNOMTEC_BADGE_FRAME_TAB_3_TEXT:SetText(L["L_TAB_NOTE"])
+	GNOMTEC_BADGE_FRAME_TAB_4_TEXT:SetText(L["L_TAB_LOG"])
+	GnomTEC_Badge:ClickedTAB(1)
 	
 	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
 	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
