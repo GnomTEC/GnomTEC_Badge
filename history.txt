@@ -1,6 +1,10 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.12 (2012-10-21)
+============
+- Even Better filtering of UI escape sequences (correct filtering of textures and item links)
+- Fix possible issue with not valid player information for tooltip in combat
 
 V0.11 (2012-10-21)
 ============

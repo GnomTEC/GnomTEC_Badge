@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 0.11
+-- Version: 0.12
 -- Author: Lugus Sprengfix
 -- Copyright 2011-2012 by GnomTEC
 -- http://www.gnomtec.de/
@@ -274,14 +274,14 @@ local function cleanpipe( x )
 	x = string.gsub( x, "|r", "" )
 	
 	-- Filter links
-	x = string.gsub( x, "|H%.-|h", "" )
+	x = string.gsub( x, "|H.-|h", "" )
 	x = string.gsub( x, "|h", "" )
 	
 	-- Filter textures
-	x = string.gsub( x, "|T%.-|t", "" )
+	x = string.gsub( x, "|T.-|t", "" )
 
 	-- Filter battle.net friend's name
-	x = string.gsub( x, "|K%.-|k", "" )
+	x = string.gsub( x, "|K.-|k", "" )
 	x = string.gsub( x, "|k", "" )
 
 	-- Filter newline
@@ -808,6 +808,8 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 
 	-- tooltip handling
 	if UnitIsPlayer("mouseover") and player and realm then
+		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
+		if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 		GnomTEC_Badge:UpdateTooltip(realm, player)
 	end
 
