@@ -25,7 +25,7 @@ GnomTEC_Badge_Player = {
 }
 
 GnomTEC_Badge_Flags = {
-	[GetRealmName()] = {
+	[string.gsub(GetRealmName(), "%s+", "")] = {
 		[UnitName("player")] = {};
 	},
 }
@@ -613,7 +613,7 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	r.FlagMSP = true
 	r.timeStamp = time()
 	local p
-	if (realm and (realm ~= GetRealmName())) then
+	if (realm and (realm ~= string.gsub(GetRealmName(), "%s+", ""))) then
 		p = msp.char[ player.."-"..realm ]
 	else
 		p = msp.char[ player ]	
@@ -704,7 +704,7 @@ function GnomTEC_Badge:SetMSP(init)
 
 	msp.char[ playername ].supported = true
 	
-	GnomTEC_Badge:SaveFlag(GetRealmName(), playername)
+	GnomTEC_Badge:SaveFlag(string.gsub(GetRealmName(), "%s+", ""), playername)
 	
 	if ( 1 == GnomTEC_Badge_Player["Fields"]["FC"] ) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
@@ -1175,7 +1175,7 @@ end
 function GnomTEC_Badge:ClickedPlayerList(id)
 	if (playerListPosition + id <= #playerList) then
 		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:ClearModel();
-		GnomTEC_Badge:DisplayBadge(GetRealmName(),playerList[playerListPosition+id]);
+		GnomTEC_Badge:DisplayBadge(string.gsub(GetRealmName(), "%s+", ""),playerList[playerListPosition+id]);
 	end
 end
 
@@ -1192,7 +1192,7 @@ function GnomTEC_Badge:RedrawPlayerList()
 		if (playerListPosition + i > #playerList) then
 			button:Hide();
 		else
-			local player = GnomTEC_Badge_Flags[GetRealmName()][playerList[playerListPosition+i]];
+			local player = GnomTEC_Badge_Flags[string.gsub(GetRealmName(), "%s+", "")][playerList[playerListPosition+i]];
 			local playername = UnitName("player");
 			if (player.FRIEND_C == nil) then
 				textNA:SetText("|cffC0C0C0"..(player.NA or playerList[playerListPosition+i]).."|r")		
@@ -1244,7 +1244,7 @@ function GnomTEC_Badge:UpdatePlayerList()
 	fcount_mrp = 0;
 	fcount_rsp = 0;
 	fcount_other = 0;
-	for key,value in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
+	for key,value in pairs(GnomTEC_Badge_Flags[string.gsub(GetRealmName(), "%s+", "")]) do
 		rcount = rcount+1;
 		if (value.VA) then
 			fcount = fcount + 1
@@ -1264,7 +1264,7 @@ function GnomTEC_Badge:UpdatePlayerList()
 
 	count = 0;
 	playerList = {}
-	for key,value in pairs(GnomTEC_Badge_Flags[GetRealmName()]) do
+	for key,value in pairs(GnomTEC_Badge_Flags[string.gsub(GetRealmName(), "%s+", "")]) do
 	 	if (filter == "") or (string.match(string.lower(key),filter) ~= nil) or (string.match(string.lower(value.NA or ""),filter) ~= nil ) then
 			if (value.FRIEND == nil) then
 				if showUnknown then
@@ -1289,9 +1289,9 @@ function GnomTEC_Badge:UpdatePlayerList()
 	GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(playerListPosition);
 	GnomTEC_Badge:RedrawPlayerList();
 	local text = ""
-	text = "Filter: "..count.." / "..GetRealmName()..": "..rcount.." / Total: "..acount
+	text = "Filter: "..count.." / "..string.gsub(GetRealmName(), "%s+", "")..": "..rcount.." / Total: "..acount
 	if (rcount) then
-		text = text.."\n|cFF808000Flag addons used on "..GetRealmName().." ("..string.format("%0.1f",fcount/rcount * 100).."% of seen chars have flags):"
+		text = text.."\n|cFF808000Flag addons used on "..string.gsub(GetRealmName(), "%s+", "").." ("..string.format("%0.1f",fcount/rcount * 100).."% of seen chars have flags):"
 	
 		if (fcount > 0) then
 			text = text.."\nBadge: "..string.format("%0.1f",fcount_badge/fcount * 100).."%"
@@ -1307,7 +1307,7 @@ end
 local function GnomTEC_Badge_MSPcallback(char)
 	-- process new flag from char 
 	local player, realm = strsplit( "-", char, 2 )
-	realm = realm or GetRealmName()
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")
 	GnomTEC_Badge:SaveFlag(realm, player)
 	GnomTEC_Badge:UpdatePlayerList()
 	
@@ -1664,7 +1664,7 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
     -- process the event
 	if (not disabledFlagDisplay) then
 		local player, realm = UnitName("target")
-		realm = realm or GetRealmName()
+		realm = string.gsub(realm or GetRealmName(), "%s+", "")
 
 		if Fixed_UnitIsPlayer("target") and player and realm then
 			GnomTEC_Badge:DisplayBadge(realm, player)
@@ -1699,7 +1699,8 @@ end
 
 function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	local player, realm = UnitName("mouseover")
-	realm = realm or GetRealmName()
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")
+
 
  	if Fixed_UnitIsPlayer("mouseover") and player and realm then
 		if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
@@ -1720,14 +1721,14 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 		else
 			GnomTEC_Badge_Flags[realm][player].FactionData = factionL or "???"		
 		end
-		if (realm ~= GetRealmName()) then
+		if (realm ~= string.gsub(GetRealmName(), "%s+", "")) then
 			GnomTEC_Badge_Flags[realm][player].FactionData = GnomTEC_Badge_Flags[realm][player].FactionData.." - "..realm
 		end			
 	
 		-- msp request and badge display only out of combat and instances when options enabled
 		if (not disabledFlagDisplay) then
 
-	    	if not UnitIsUnit("mouseover", "player") then
+	    	if ((not UnitIsUnit("mouseover", "player")) and UnitIsFriend("mouseover", "player")) then
 				GnomTEC_Badge:RequestMSP(table.concat( { UnitName("mouseover") }, "-" ))
 			end
 			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
@@ -1835,19 +1836,18 @@ end
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	local player, realm = strsplit( "-", arg2, 2 )
-	local playerName = arg2
-	realm = realm or GetRealmName()
-
+	local playerName = player
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")
 	if GnomTEC_Badge_Flags[realm] then 
 		if GnomTEC_Badge_Flags[realm][player] then
-			playerName = GnomTEC_Badge_Flags[realm][player].NA or arg2
+			playerName = GnomTEC_Badge_Flags[realm][player].NA or player
 		end
 	end
 
 	-- let the original function or who ever colorize the name
 	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	if (GnomTEC_Badge_Options["ChatFrame"]) then
-		return string.gsub(colordName,arg2,playerName)
+		return string.gsub(colordName,string.gsub(arg2, "%-", "%%%-"),playerName)
 	else
 		return colordName
 	end
@@ -1889,6 +1889,20 @@ function GnomTEC_Badge:OnEnable()
 		GnomTEC_Badge_Options["DisabledFlagDisplay"] = false
 	end
 
+	-- remove spaces from realm names to avoid duplicates when playing on multiple realms
+	-- Blizzard API uses spaces in realm names only on actual realm when using GetRealmName().
+	-- Players from other realms will come with realm name without spaces
+	local realmsToRename ={}
+	for key,value in pairs(GnomTEC_Badge_Flags) do
+		local newkey = string.gsub(key, "%s+", "")
+		if (key ~= newkey) then
+			realmsToRename[key] = newkey
+		end
+	end
+	for key,value in pairs(realmsToRename) do
+		GnomTEC_Badge_Flags[value] = GnomTEC_Badge_Flags[key]
+		GnomTEC_Badge_Flags[key] = nil
+	end
 	
 	-- Initialize localized strings in GUI
 	GNOMTEC_BADGE_FRAME_TAB_1_TEXT:SetText(L["L_TAB_DESCR"])
@@ -1945,9 +1959,9 @@ function GnomTEC_Badge:OnEnable()
 	end
 	
 	local player, realm = UnitName("player")
-    realm = realm or GetRealmName()
+	realm = string.gsub(emptynil(realm) or GetRealmName(), "%s+", "")
 	if not GnomTEC_Badge_Flags[realm] then GnomTEC_Badge_Flags[realm] = {} end
-    if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
+   if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
 	GnomTEC_Badge_Flags[realm][player].EngineData = L["L_ENGINEDATA_LEVEL"].." "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
 	GnomTEC_Badge:SetPlayerModelToUnit("player")

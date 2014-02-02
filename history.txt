@@ -1,5 +1,14 @@
 GnomTEC Badge Addon - Change History 
 ==========================
+
+5.4.2.31 (2013-12-18)
+============
+- Changed internal used realm names to use variant without spaces (as used mainly by Blizzard)
+- Changed several code for player name/realm handling to better support of cross realm and connected realm feature
+- Open issues: Prat-3.0 seems to not handle realm names (other then yours) with spaces correctly. In this case in chat it is not possible to replace name with flag information
+- Open issue: libMSP could yet not communicate with players of cross realm or connected realms (Blizzard issue). This means that flag information will only be updated for actual played realm.
+- Changed mouseover and target functions to query only friendly players
+
 5.4.1.30 (2013-12-02)
 ============
 - Added support for MSP attribute RA (race)
