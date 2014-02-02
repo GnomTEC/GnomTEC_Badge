@@ -1,6 +1,11 @@
 ﻿GnomTEC Badge Addon - Change History 
 ==========================
 
+V0.7 (2011-12-26)
+============
+- Gespeicherte Version des Flags wird nicht mehr bei jedem Start automatisch erhöht
+- Support für GnomTEC Gnomcorder Integration
+
 V0.6 (2011-12-17)
 ============
 - Überarbeitung / Neustrukturierung Flagliste

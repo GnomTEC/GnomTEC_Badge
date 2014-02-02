@@ -2,7 +2,8 @@
 ## Title: GnomTEC_Badge
 ## Notes: Badge für Mitarbeiter von GnomTEC (Flag Addon).
 ## Author: Lugus Sprengfix
-## Version: 0.6
+## Version: 0.7
+## OptionalDeps: GnomTEC_Gnomcorder 
 ## SavedVariables: GnomTEC_Badge_Flags
 ## SavedVariablesPerCharacter: GnomTEC_Badge_Player, GnomTEC_Badge_Options
 

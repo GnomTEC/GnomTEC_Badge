@@ -20,6 +20,7 @@ GnomTEC_Badge_Options = {
 	["LockOnTarget"] = true,
 	["AutoHide"] = true,	
 	["DisableInCombat"] = true,
+	["GnomcorderIntegration"] = false,
 }
  
 
@@ -177,6 +178,16 @@ local optionsView = {
 			width = 'full',
 			order = 4
 		},
+		badgeOptionGnomcorderIntegration = {
+			type = "toggle",
+			name = "Integration in GnomTEC Gnomcorder (benötigt /reload oder Neustart)",
+			desc = "",
+			disabled = function(info) return not GnomTEC_Gnomcorder end,
+			set = function(info,val) GnomTEC_Badge_Options["GnomcorderIntegration"] = val end,
+	   		get = function(info) return GnomTEC_Badge_Options["GnomcorderIntegration"] end,
+			width = 'full',
+			order = 4
+		},
 	},
 }
 
@@ -256,7 +267,7 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 
 end
 
-function GnomTEC_Badge:SetMSP()
+function GnomTEC_Badge:SetMSP(init)
 	local playername = UnitName("player")
 
 	wipe( msp.my )
@@ -283,7 +294,9 @@ function GnomTEC_Badge:SetMSP()
 	msp:Update()
 
 	for field, ver in pairs( msp.myver ) do
-		GnomTEC_Badge_Player.Versions[ field ] = ver
+		if (not init) then
+			GnomTEC_Badge_Player.Versions[ field ] = ver
+		end
 		msp.char[ playername ].ver[ field ] = ver
 		msp.char[ playername ].field[ field ] = msp.my[ field ]
 		msp.char[ playername ].time[ field ] = 999999999
@@ -309,6 +322,11 @@ end
 function GnomTEC_Badge:OnEnable()
     -- Called when the addon is enabled
 
+	-- Initialize options which are propably not valid because they are new added in new versions of addon
+	if (nil == GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+	end
+	
 	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
 	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
@@ -323,7 +341,20 @@ function GnomTEC_Badge:OnEnable()
 	for field, ver in pairs( GnomTEC_Badge_Player.Versions ) do
 		msp.myver[ field ] = ver
 	end
-	GnomTEC_Badge:SetMSP()
+	GnomTEC_Badge:SetMSP(true)
+	
+	-- GnomTEC Gnomcorder support
+	if (GnomTEC_Gnomcorder) and GnomTEC_Badge_Options["GnomcorderIntegration"] then
+		GNOMTEC_BADGE_FRAME:SetWidth(400);
+		GNOMTEC_BADGE_FRAME:SetHeight(300);
+		GNOMTEC_BADGE_FRAME:SetMovable(false);
+		GNOMTEC_BADGE_FRAME:SetResizable(false);
+		GNOMTEC_BADGE_FRAME:SetBackdrop(nil);
+		GNOMTEC_BADGE_FRAME_CloseButton:Hide();
+		GnomTEC_Gnomcorder:AddButton("GnomTEC_Badge", "Badge", "Badge anzeigen", GNOMTEC_BADGE_FRAME, "Interface\\ICONS\\INV_Misc_GroupLooking", "Interface\\ICONS\\INV_Misc_GroupLooking", false, nil)
+	else
+		GnomTEC_Badge_Options["GnomcorderIntegration"] = false
+	end
 	
 	local player, realm = UnitName("player")
     realm = realm or GetRealmName()
@@ -346,7 +377,9 @@ end
 
 function GnomTEC_Badge:PLAYER_REGEN_DISABLED(event)
 	playerisInCombat = true;
-	GNOMTEC_BADGE_FRAME:Hide();
+	if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+		GNOMTEC_BADGE_FRAME:Hide();
+	end
 end
 
 function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
@@ -597,12 +630,16 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 
 		if UnitIsPlayer("target") and player and realm then
 			GnomTEC_Badge:DisplayBadge(realm, player)
-			GNOMTEC_BADGE_FRAME:Show();
+			if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+				GNOMTEC_BADGE_FRAME:Show();
+			end
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("target")
 			GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 		else
 			if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
-				GNOMTEC_BADGE_FRAME:Hide();
+				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+					GNOMTEC_BADGE_FRAME:Hide();
+				end
 			end	
 		end
 	end
@@ -611,7 +648,9 @@ end
 function GnomTEC_Badge:CURSOR_UPDATE(eventName)
     -- process the event
 	if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) and GnomTEC_Badge_Options["AutoHide"]  and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
-		GNOMTEC_BADGE_FRAME:Hide();
+		if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+			GNOMTEC_BADGE_FRAME:Hide();
+		end
 	end	
 end
     
@@ -632,7 +671,9 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 			end
 			if (GnomTEC_Badge_Options["MouseOver"] and (not (GnomTEC_Badge_Options["LockOnTarget"] and UnitExists("target")))) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
-				GNOMTEC_BADGE_FRAME:Show();
+				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
+					GNOMTEC_BADGE_FRAME:Show();
+				end
 				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetUnit("mouseover")
 				GNOMTEC_BADGE_FRAME_PLAYERMODEL:SetCamera(0)
 			end
