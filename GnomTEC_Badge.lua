@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.3.0.24
+-- Version: 5.3.0.25
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -1250,6 +1250,16 @@ function GnomTEC_Badge:DisableFlagDisplay(bool)
 	GNOMTEC_BADGE_TOOLBAR_DISABLEFLAGDISPLAY:SetChecked(disabledFlagDisplay)
 end
 
+function GnomTEC_Badge:SetPlayerModelToUnit(unit)
+	if (UnitIsVisible(unit)) then
+		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:ClearModel()
+		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit(unit)
+		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetPortraitZoom(1)
+	else
+		GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:ClearModel()	
+	end
+end
+
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
@@ -1321,8 +1331,7 @@ function GnomTEC_Badge:PLAYER_TARGET_CHANGED(eventName)
 			if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 				GNOMTEC_BADGE_FRAME:Show();
 			end
-			GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("target")
-			GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
+			GnomTEC_Badge:SetPlayerModelToUnit("target")
 		else
 			if GnomTEC_Badge_Options["AutoHide"] and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
 				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
@@ -1384,8 +1393,7 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 				if (not GnomTEC_Badge_Options["GnomcorderIntegration"]) then
 					GNOMTEC_BADGE_FRAME:Show();
 				end
-				GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("mouseover")
-				GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
+				GnomTEC_Badge:SetPlayerModelToUnit("mouseover")
 			end
 		end
 
@@ -1593,8 +1601,7 @@ function GnomTEC_Badge:OnEnable()
     if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	GnomTEC_Badge_Flags[realm][player].Guild = emptynil(GetGuildInfo("player"))	
 	GnomTEC_Badge_Flags[realm][player].EngineData = L["L_ENGINEDATA_LEVEL"].." "..UnitLevel("player").." "..UnitRace("player").." "..UnitClass("player")	
-	GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetUnit("player")
-	GNOMTEC_BADGE_FRAME_PLAYER_PLAYERMODEL:SetCamera(0)
+	GnomTEC_Badge:SetPlayerModelToUnit("player")
 	GnomTEC_Badge:DisplayBadge(realm, player)
 	
 	if (UnitIsAFK("player")) then 
