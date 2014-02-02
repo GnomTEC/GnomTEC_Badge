@@ -1,0 +1,80 @@
+﻿-- French localization file for frFR.
+local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
+local L = AceLocale:NewLocale("GnomTEC_Badge", "frFR")
+if not L then return end
+
+L["L_STR_FR0"] = "Rôliste normale"
+L["L_STR_FR1"] = "Rôliste occasionnel"
+L["L_STR_FR2"] = "Rôliste à temps plein"
+L["L_STR_FR3"] = "Rôliste débutant"
+L["L_STR_FR4"] = "Rôliste d'âge mûr"
+
+L["L_STR_FC0"] = "Rupture de caractère (OOC)"
+L["L_STR_FC1"] = "En caractères (IC)"
+L["L_STR_FC2"] = "Recherchant contacter (LFC)"
+L["L_STR_FC3"] = "Conteur (SL)"
+
+
+L["L_OPTIONS_TITLE"] = "Addon pour l'affichage et managment de descriptions de personnages roleplay avec le soutien de «Marry Protocole Sue 'drapeaux de roleplay base.\n\n"
+
+L["L_OPTIONS_PROFILE"] = "Description du personnage"
+L["L_OPTIONS_PROFILE_NA"] = "Nom"
+L["L_OPTIONS_PROFILE_NT"] = "Titre"
+L["L_OPTIONS_PROFILE_DE"] = "Description physique"
+L["L_OPTIONS_PROFILE_FR"] = "Style de jeu de rôle"
+L["L_OPTIONS_PROFILE_FC"] = "Statut de jeu de rôle"
+L["L_OPTIONS_PROFILE_CU"] = "Actuellement"
+L["L_OPTIONS_PROFILE_AG"] = "Âge"
+L["L_OPTIONS_PROFILE_AE"] = "Couleur des yeux"
+L["L_OPTIONS_PROFILE_AH"] = "Hauteur"
+L["L_OPTIONS_PROFILE_AW"] = "Poids"
+
+L["L_OPTIONS_META"] = "Les méta-données"
+L["L_OPTIONS_META_MO"] = "Devise"
+L["L_OPTIONS_META_HI"] = "Histoire"
+L["L_OPTIONS_META_HH"] = "Maison"
+L["L_OPTIONS_META_HB"] = "Lieu de naissance"
+L["L_OPTIONS_META_NH"] = "Nom maison"
+L["L_OPTIONS_META_NI"] = "Surnom"
+
+L["L_OPTIONS_VIEW"] = "Options d'affichage"
+L["L_OPTIONS_VIEW_MOUSEOVER"] = "Afficher roleplay drapeau aussi sur mouseover."
+L["L_OPTIONS_VIEW_LOCKONTARGET"] = "Préférez cible sur mouseover pour l'affichage."
+L["L_OPTIONS_VIEW_AUTOHIDE"] = "Masquer automatiquement roleplay drapeau."
+L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "Ne plus afficher ou mettre à jour le jeu de rôle drapeau en combat."
+L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "DNe plus afficher ou mettre à jour le jeu de rôle drapeau tandis que dans le groupe, raid, champ de bataille ou les instances de l'aréna."
+L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "Intégration dans GnomTEC Gnomcorder (nécessite /recharge ou redémarrage)."
+L["L_OPTIONS_VIEW_TOOLTIP"] = "Afficher roleplay drapeau aussi dans l'info-bulle."
+L["L_OPTIONS_VIEW_CHATFRAME"] = "Remplacez les noms des joueurs dans blizzard fenêtre de discussion avec les noms donnés par leurs drapeaux."
+L["L_OPTIONS_VIEW_TOOLBAR"] = "Afficher la barre d'outils pour un changement rapide des différentes variables d'état."
+
+L["L_NORPFLAG"] = "<pas de drapeau de roleplay>"
+L["L_HIDDENRPFLAG"] = "<pas de roleplay état ​​ensemble>"
+ 
+L["L_ENGINEDATA_UNKNOWN"] = "Niveau -- Inconnu Inconnu"
+L["L_ENGINEDATA_LEVEL"] = "Niveau"
+
+L["L_TAB_DESCR"] = "Descr."
+L["L_TAB_META"] = "Méta"
+L["L_TAB_NOTE_A"] = "Note (A)"
+L["L_TAB_NOTE_C"] = "Note (C)"
+L["L_TAB_LOG"] = "Log"
+
+L["L_FIELD_VA"] = "Version addon"	
+L["L_FIELD_NA"] = "Nom"
+L["L_FIELD_NT"] = "Titre"
+L["L_FIELD_RA"] = "Race"
+L["L_FIELD_CU"] = "Actuellement"
+L["L_FIELD_DE"] = "Description physique"
+L["L_FIELD_FR"] = "Style de jeu de rôle"
+L["L_FIELD_FC"] = "Statut de jeu de rôle"
+L["L_FIELD_AG"] = "Âge"
+L["L_FIELD_AE"] = "Couleur des yeux"
+L["L_FIELD_AH"] = "Hauteur"
+L["L_FIELD_AW"] = "Poids"
+L["L_FIELD_MO"] = "Devise"
+L["L_FIELD_HI"] = "Histoire"
+L["L_FIELD_HH"] = "Maison"
+L["L_FIELD_HB"] = "Lieu de naissance"
+L["L_FIELD_NH"] = "Nom maison"
+L["L_FIELD_NI"] = "Surnom"

@@ -283,7 +283,7 @@
 								self:GetParent():SetVerticalScroll(value);
 							</OnValueChanged>
 							<OnMouseWheel>
-								self:SetValue(self:GetValue() - delta);
+								self:SetValue(self:GetValue() - delta*14);
 							</OnMouseWheel>
 							<OnEnter>
 								local parent = self:GetParent();
@@ -317,8 +317,11 @@
 							<OnMouseWheel>
 								local parent = self:GetParent();
 								local slider = parent.slider;
-								slider:SetValue(slider:GetValue() - delta);
+								slider:SetValue(slider:GetValue() - delta*14);
 							</OnMouseWheel>
+							<OnEscapePressed>
+								self:ClearFocus();
+							</OnEscapePressed>
 						</Scripts>
 					</EditBox>
 				</ScrollChild>

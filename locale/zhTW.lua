@@ -1,0 +1,80 @@
+﻿-- Traditional Chinese localization file for zhTW.
+local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
+local L = AceLocale:NewLocale("GnomTEC_Badge", "zhTW")
+if not L then return end
+
+L["L_STR_FR0"] = "正常的角色扮演者"
+L["L_STR_FR1"] = "休闲角色扮演者"
+L["L_STR_FR2"] = "全职角色扮演者"
+L["L_STR_FR3"] = "初学者角色扮演者"
+L["L_STR_FR4"] = "成熟的角色扮演者"
+
+L["L_STR_FC0"] = "的性格 (OOC)"
+L["L_STR_FC1"] = "性格 (IC)"
+L["L_STR_FC2"] = "寻找接触 (LFC)"
+L["L_STR_FC3"] = "说书人 (SL)"
+
+
+L["L_OPTIONS_TITLE"] = "插件而提供支持的“娶苏议定书”为基础的角色扮演角色扮演标志字符的描述显示和管理。\n\n"
+
+L["L_OPTIONS_PROFILE"] = "人物介绍"
+L["L_OPTIONS_PROFILE_NA"] = "名称"
+L["L_OPTIONS_PROFILE_NT"] = "标题"
+L["L_OPTIONS_PROFILE_DE"] = "物理描述"
+L["L_OPTIONS_PROFILE_FR"] = "角色扮演风格"
+L["L_OPTIONS_PROFILE_FC"] = "角色扮演状态"
+L["L_OPTIONS_PROFILE_CU"] = "目前"
+L["L_OPTIONS_PROFILE_AG"] = "年龄"
+L["L_OPTIONS_PROFILE_AE"] = "眼睛的颜色"
+L["L_OPTIONS_PROFILE_AH"] = "高度"
+L["L_OPTIONS_PROFILE_AW"] = "重量"
+
+L["L_OPTIONS_META"] = "信息荟萃"
+L["L_OPTIONS_META_MO"] = "座右铭"
+L["L_OPTIONS_META_HI"] = "历史"
+L["L_OPTIONS_META_HH"] = "家"
+L["L_OPTIONS_META_HB"] = "出生地"
+L["L_OPTIONS_META_NH"] = "住宅名"
+L["L_OPTIONS_META_NI"] = "昵称"
+
+L["L_OPTIONS_VIEW"] = "显示选项"
+L["L_OPTIONS_VIEW_MOUSEOVER"] = "显示角色扮演标志也鼠标悬停。"
+L["L_OPTIONS_VIEW_LOCKONTARGET"] = "喜欢的目标在鼠标悬停显示。"
+L["L_OPTIONS_VIEW_AUTOHIDE"] = "自动隐藏角色扮演标志。"
+L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "不显示或更新角色扮演标志，而在战斗。"
+L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "不显示或更新角色扮演标志，而在组RAID，战场或竞技场实例。"
+L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "在GnomTEC Gnomcorder集成（需要/重载或重新启动）。"
+L["L_OPTIONS_VIEW_TOOLTIP"] = "显示角色扮演标志也在提示。"
+L["L_OPTIONS_VIEW_CHATFRAME"] = "在暴风雪聊天框替换球员的名字与他们的标志给出的名字。"
+L["L_OPTIONS_VIEW_TOOLBAR"] = "工具栏显示为不同的状态变量的变化速度更快。"
+
+L["L_NORPFLAG"] = "<没有角色扮演标志>"
+L["L_HIDDENRPFLAG"] = "<没有角色扮演状态集>"
+ 
+L["L_ENGINEDATA_UNKNOWN"] = "级别 -- 未知 未知"
+L["L_ENGINEDATA_LEVEL"] = "级别"
+
+L["L_TAB_DESCR"] = "描述"
+L["L_TAB_META"] = "元"
+L["L_TAB_NOTE_A"] = "笔记 (A)"
+L["L_TAB_NOTE_C"] = "笔记 (C)"
+L["L_TAB_LOG"] = "登录"
+
+L["L_FIELD_VA"] = "插件版本"	
+L["L_FIELD_NA"] = "名称"
+L["L_FIELD_NT"] = "标题"
+L["L_FIELD_RA"] = "种族"
+L["L_FIELD_CU"] = "目前"
+L["L_FIELD_DE"] = "物理描述"
+L["L_FIELD_FR"] = "角色扮演风格"
+L["L_FIELD_FC"] = "角色扮演状态"
+L["L_FIELD_AG"] = "年龄"
+L["L_FIELD_AE"] = "眼睛的颜色"
+L["L_FIELD_AH"] = "高度"
+L["L_FIELD_AW"] = "重量"
+L["L_FIELD_MO"] = "座右铭"
+L["L_FIELD_HI"] = "历史"
+L["L_FIELD_HH"] = "家"
+L["L_FIELD_HB"] = "出生地"
+L["L_FIELD_NH"] = "住宅名"
+L["L_FIELD_NI"] = "昵称"

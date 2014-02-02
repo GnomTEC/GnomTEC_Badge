@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.0.28
+-- Version: 5.4.1.29
 -- Author: GnomTEC
 -- Copyright 2011-2013 by GnomTEC
 -- http://www.gnomtec.de/
@@ -1639,8 +1639,10 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 		local factionE, factionL = UnitFactionGroup("mouseover")
 		if (factionE == "Alliance") then		
 			GnomTEC_Badge_Flags[realm][player].FactionData = "|TInterface\\PvPRankBadges\\PvPRankAlliance:0|t"..factionL
-		else
+		elseif (factionE == "Horde") then
 			GnomTEC_Badge_Flags[realm][player].FactionData = "|TInterface\\PvPRankBadges\\PvPRankHorde:0|t"..factionL
+		else
+			GnomTEC_Badge_Flags[realm][player].FactionData = factionL or "???"		
 		end
 		if (realm ~= GetRealmName()) then
 			GnomTEC_Badge_Flags[realm][player].FactionData = GnomTEC_Badge_Flags[realm][player].FactionData.." - "..realm

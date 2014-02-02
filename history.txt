@@ -1,6 +1,18 @@
 GnomTEC Badge Addon - Change History 
 ==========================
 
+5.4.1.29 (2013-11-30)
+============
+- Updated Ace3 libraries to version r1104
+- Updated ChatThrottleLib to version v23
+- Added additional locale files for translations to implement all supported languages of WoW
+- Supported languages by author: enUS, deDE
+- With google translated languages: esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
+- Support translations: http://wow.curseforge.com/addons/gnomtec_badge/localization/
+- Solved issue with players which have no sometimes no faction.
+- Scrolling with mousewheel in notes is now faster.
+- Pressing ESC in notes fields will clear focus from this field.
+
 5.4.0.28 (2013-11-01)
 ============
 - Added notes which are only visible for actual played character additional to account wide notes.

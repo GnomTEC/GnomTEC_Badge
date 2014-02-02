@@ -1,0 +1,80 @@
+﻿-- Korean localization file for koKR.
+local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
+local L = AceLocale:NewLocale("GnomTEC_Badge", "koKR")
+if not L then return end
+
+L["L_STR_FR0"] = "정상적인 역할 플레이어"
+L["L_STR_FR1"] = "캐주얼 역할 플레이어"
+L["L_STR_FR2"] = "풀 타임 역할 플레이어"
+L["L_STR_FR3"] = "초보자 역할 플레이어"
+L["L_STR_FR4"] = "성숙한 역할 플레이어"
+
+L["L_STR_FC0"] = "문자 중 (OOC)"
+L["L_STR_FC1"] = "캐릭터 (IC)"
+L["L_STR_FC2"] = "연락처를 찾고 (LFC)"
+L["L_STR_FC3"] = "소설가 (SL)"
+
+
+L["L_OPTIONS_TITLE"] = "'결혼 고소 프로토콜'을 기준으로 역할극 플래그를 지원하는 역할극 캐릭터 설명의 표시 및 관리를위한 애드온.\n\n"
+
+L["L_OPTIONS_PROFILE"] = "문자 설명"
+L["L_OPTIONS_PROFILE_NA"] = "이름"
+L["L_OPTIONS_PROFILE_NT"] = "표제"
+L["L_OPTIONS_PROFILE_DE"] = "물리적 설명"
+L["L_OPTIONS_PROFILE_FR"] = "역할 놀이 스타일"
+L["L_OPTIONS_PROFILE_FC"] = "역할 놀이 상태"
+L["L_OPTIONS_PROFILE_CU"] = "현재"
+L["L_OPTIONS_PROFILE_AG"] = "나이"
+L["L_OPTIONS_PROFILE_AE"] = "눈 색깔"
+L["L_OPTIONS_PROFILE_AH"] = "신장"
+L["L_OPTIONS_PROFILE_AW"] = "무게"
+
+L["L_OPTIONS_META"] = "메타 정보"
+L["L_OPTIONS_META_MO"] = "모토"
+L["L_OPTIONS_META_HI"] = "역사"
+L["L_OPTIONS_META_HH"] = "홈"
+L["L_OPTIONS_META_HB"] = "출생지"
+L["L_OPTIONS_META_NH"] = "집 이름"
+L["L_OPTIONS_META_NI"] = "별명"
+
+L["L_OPTIONS_VIEW"] = "디스플레이 옵션"
+L["L_OPTIONS_VIEW_MOUSEOVER"] = "또한 마우스 오버에 역할극 플래그를 보여줍니다."
+L["L_OPTIONS_VIEW_LOCKONTARGET"] = "표시에 마우스 오버를 통해 대상을 선호합니다."
+L["L_OPTIONS_VIEW_AUTOHIDE"] = "자동 역할극 플래그를 숨 깁니다."
+L["L_OPTIONS_VIEW_DISABLEINCOMBAT"] = "표시하거나 전투에있는 동안 역할극 플래그를 업데이트하지 마십시오."
+L["L_OPTIONS_VIEW_DISABLEININSTANCE"] = "표시하거나 역할극 플래그를 업데이트하지 않는 그룹, RAID, 전장이나 투기장 인스턴스에있는 동안."
+L["L_OPTIONS_VIEW_GNOMCORDERINTEGRATION"] = "GnomTEC Gnomcorder의 통합 (/ 다시로드하거나 다시 시작해야 함)."
+L["L_OPTIONS_VIEW_TOOLTIP"] = "툴팁도 역할극 플래그를 표시합니다."
+L["L_OPTIONS_VIEW_CHATFRAME"] = "그들의 깃발에 의해 주어진 이름을 가진 블리자드 채팅 프레임에 선수 이름을 바꿉니다."
+L["L_OPTIONS_VIEW_TOOLBAR"] = "다른 상태 변수의 빠른 변화를위한 도구 모음을 표시합니다."
+
+L["L_NORPFLAG"] = "<더 역할극 플래그 없습니다>"
+L["L_HIDDENRPFLAG"] = "<더 역할극 상태 설정하지>"
+ 
+L["L_ENGINEDATA_UNKNOWN"] = "수평 -- 알 수없는 알 수없는"
+L["L_ENGINEDATA_LEVEL"] = "수평"
+
+L["L_TAB_DESCR"] = "기술"
+L["L_TAB_META"] = "메타"
+L["L_TAB_NOTE_A"] = "메모 (A)"
+L["L_TAB_NOTE_C"] = "메모 (C)"
+L["L_TAB_LOG"] = "로그"
+
+L["L_FIELD_VA"] = "애드온 버전"	
+L["L_FIELD_NA"] = "이름"
+L["L_FIELD_NT"] = "표제"
+L["L_FIELD_RA"] = "레이스"
+L["L_FIELD_CU"] = "현재"
+L["L_FIELD_DE"] = "물리적 설명"
+L["L_FIELD_FR"] = "역할 놀이 스타일"
+L["L_FIELD_FC"] = "역할 놀이 상태"
+L["L_FIELD_AG"] = "나이"
+L["L_FIELD_AE"] = "눈 색깔"
+L["L_FIELD_AH"] = "신장"
+L["L_FIELD_AW"] = "무게"
+L["L_FIELD_MO"] = "모토"
+L["L_FIELD_HI"] = "역사"
+L["L_FIELD_HH"] = "홈"
+L["L_FIELD_HB"] = "출생지"
+L["L_FIELD_NH"] = "집 이름"
+L["L_FIELD_NI"] = "별명"
