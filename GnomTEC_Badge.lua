@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.2.36
+-- Version: 5.4.7.36
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/

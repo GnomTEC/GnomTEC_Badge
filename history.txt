@@ -1,6 +1,6 @@
 == GnomTEC Badge Addon - Change History 
 
-=== 5.4.2.36 (2014-02-19)
+=== 5.4.7.36 (2014-02-19)
 * Hotfix for issue with changed realm handling in addon chats and libMSP.
 
 === 5.4.2.35 (2014-02-02)
