@@ -2348,7 +2348,7 @@ function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6,
 	-- let the original function or who ever colorize the name
 	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"]) then
-		return string.gsub(colordName,string.gsub(arg2, "%-", "%%%-"),playerName)
+		return string.gsub(colordName,player,playerName)
 	else
 		return colordName
 	end
