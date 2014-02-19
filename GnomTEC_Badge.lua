@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.2.35
+-- Version: 5.4.2.36
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -985,10 +985,12 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 	r.FlagMSP = true
 	r.timeStamp = time()
 	local p
-	if (realm and (realm ~= string.gsub(GetRealmName(), "%s+", ""))) then
+-- pre 5.4.7 WoW
+--	if (realm and (realm ~= string.gsub(GetRealmName(), "%s+", ""))) then
+	if (realm) then
 		p = msp.char[ player.."-"..realm ]
 	else
-		p = msp.char[ player ]	
+		p = msp.char[ player ]	or msp.char[ player.."-"..realm ]
 	end
 
 	r.NA = emptynil( cleanpipe( p.field.NA ) )

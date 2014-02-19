@@ -1,5 +1,8 @@
 == GnomTEC Badge Addon - Change History 
 
+=== 5.4.2.36 (2014-02-19)
+* Hotfix for issue with changed realm handling in addon chats and libMSP.
+
 === 5.4.2.35 (2014-02-02)
 * Added options per char for configuration where to use char/global/profile data (yet not configurable by user).
 * Moved character flag data from legacy global variable to char part of database.
