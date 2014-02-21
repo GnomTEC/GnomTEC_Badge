@@ -1,5 +1,11 @@
 == GnomTEC Badge Addon - Change History 
 
+=== 5.4.7.37 (2014-02-21)
+* Added support of GnomTEC_Assistant.
+* Fixed some issues in replacement of name with flag name
+* Fixed some issues with not used realm name in some places
+* Fixed issue with libMSP callbacks for players requesting our flag before we have theirs
+
 === 5.4.7.36 (2014-02-19)
 * Hotfix for issue with changed realm handling in addon chats and libMSP.
 

@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.7.36
+-- Version: 5.4.7.37
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,8 +23,18 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.2.35"
+local addonVersion = "5.4.7.37"
 
+local addonInfo = {
+	["Name"] = "GnomTEC_Badge",
+	["Version"] = addonVersion,
+	["Author"] = "GnomTEC",
+	["Email"] = "info@gnomtec.de",
+	["Website"] = "http://www.gnomtec.de/",
+	["Copyright"] = "(c)2011-2014 by GnomTEC",
+}
+	
+	
 -- default data for database
 local defaultsDb = {
 	profile = {
@@ -295,27 +305,27 @@ local optionsMain = {
 				descriptionVersion = {
 				order = 1,
 				type = "description",			
-				name = "|cffffd700".."Version"..": ".._G["GREEN_FONT_COLOR_CODE"]..addonVersion,
+				name = "|cffffd700".."Version"..": ".._G["GREEN_FONT_COLOR_CODE"]..addonInfo["Version"],
 				},
 				descriptionAuthor = {
 					order = 2,
 					type = "description",
-					name = "|cffffd700".."Autor"..": ".."|cffff8c00".."GnomTEC",
+					name = "|cffffd700".."Author"..": ".."|cffff8c00"..addonInfo["Author"],
 				},
 				descriptionEmail = {
 					order = 3,
 					type = "description",
-					name = "|cffffd700".."Email"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."info@gnomtec.de",
+					name = "|cffffd700".."Email"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Email"],
 				},
 				descriptionWebsite = {
 					order = 4,
 					type = "description",
-					name = "|cffffd700".."Website"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."http://www.gnomtec.de/",
+					name = "|cffffd700".."Website"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Website"],
 				},
 				descriptionLicense = {
 					order = 5,
 					type = "description",
-					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"].."(c)2011-2014 by GnomTEC",
+					name = "|cffffd700".."Copyright"..": ".._G["HIGHLIGHT_FONT_COLOR_CODE"]..addonInfo["Copyright"],
 				},
 			}
 		},
@@ -984,70 +994,69 @@ function GnomTEC_Badge:SaveFlag(realm, player)
 
 	r.FlagMSP = true
 	r.timeStamp = time()
-	local p
--- pre 5.4.7 WoW
---	if (realm and (realm ~= string.gsub(GetRealmName(), "%s+", ""))) then
-	if (realm) then
-		p = msp.char[ player.."-"..realm ]
-	else
-		p = msp.char[ player ]	or msp.char[ player.."-"..realm ]
-	end
+	local p = msp.char[ player.."-"..realm ]
+	
+	if (p) then
+	
+		r.NA = emptynil( cleanpipe( p.field.NA ) )
 
-	r.NA = emptynil( cleanpipe( p.field.NA ) )
-	if ( tonumber( p.field.FC ) or -1 ) > 0 then
-		r.FC = tonumber( p.field.FC )
-	elseif p.field.FC == "0" then
-		r.FC = nil
-	else
-		r.FC = emptynil( cleanpipe( p.field.FC ) )
-	end
-	if ( tonumber( p.field.FR ) or -1 ) > 0 then
-		r.FR = tonumber( p.field.FR )
-	elseif p.field.FR == "Mature" then
-		r.FR = 5
-	elseif p.field.FR == "0" then
-		r.FR = nil
-	else
-		r.FR = emptynil( cleanpipe( p.field.FR ) )
-	end
-	r.NT = emptynil( cleanpipe( p.field.NT ) )
-	r.DE = emptynil( cleanpipe( p.field.DE ) )	
+		if ( tonumber( p.field.FC ) or -1 ) > 0 then
+			r.FC = tonumber( p.field.FC )
+		elseif p.field.FC == "0" then
+			r.FC = nil
+		else
+			r.FC = emptynil( cleanpipe( p.field.FC ) )
+		end
+		if ( tonumber( p.field.FR ) or -1 ) > 0 then
+			r.FR = tonumber( p.field.FR )
+		elseif p.field.FR == "Mature" then
+			r.FR = 5
+		elseif p.field.FR == "0" then
+			r.FR = nil
+		else
+			r.FR = emptynil( cleanpipe( p.field.FR ) )
+		end
+		r.NT = emptynil( cleanpipe( p.field.NT ) )
+		r.DE = emptynil( cleanpipe( p.field.DE ) )	
+		
+		-- Additional visible character infos 
+		r.CU = emptynil( cleanpipe( p.field.CU ) )
+		r.RA = emptynil( cleanpipe( p.field.RA ) )
+		r.AG = emptynil( cleanpipe( p.field.AG ) )
+		r.AE = emptynil( cleanpipe( p.field.AE ) )
+		if ( tonumber( p.field.AH ) or -1 ) > 0 then
+			r.AH = tonumber( p.field.AH ).." cm"
+		else
+			r.AH = emptynil( cleanpipe( p.field.AH ) )
+		end
+		if ( tonumber( p.field.AW ) or -1 ) > 0 then
+			r.AW = tonumber( p.field.AW ).." kg"
+		else
+			r.AW = emptynil( cleanpipe( p.field.AW ) )
+		end
 	
-	-- Additional visible character infos 
-	r.CU = emptynil( cleanpipe( p.field.CU ) )
-	r.RA = emptynil( cleanpipe( p.field.RA ) )
-	r.AG = emptynil( cleanpipe( p.field.AG ) )
-	r.AE = emptynil( cleanpipe( p.field.AE ) )
-	if ( tonumber( p.field.AH ) or -1 ) > 0 then
-		r.AH = tonumber( p.field.AH ).." cm"
-	else
-		r.AH = emptynil( cleanpipe( p.field.AH ) )
-	end
-	if ( tonumber( p.field.AW ) or -1 ) > 0 then
-		r.AW = tonumber( p.field.AW ).." kg"
-	else
-		r.AW = emptynil( cleanpipe( p.field.AW ) )
-	end
-	
-	-- Additional meta information
-	r.NH = emptynil( cleanpipe( p.field.NH ) )
-	r.NI = emptynil( cleanpipe( p.field.NI ) )
-	r.MO = emptynil( cleanpipe( p.field.MO ) )
-	r.HI = emptynil( cleanpipe( p.field.HI ) )
-	r.HH = emptynil( cleanpipe( p.field.HH ) )
-	r.HB = emptynil( cleanpipe( p.field.HB ) )
+		-- Additional meta information
+		r.NH = emptynil( cleanpipe( p.field.NH ) )
+		r.NI = emptynil( cleanpipe( p.field.NI ) )
+		r.MO = emptynil( cleanpipe( p.field.MO ) )
+		r.HI = emptynil( cleanpipe( p.field.HI ) )
+		r.HH = emptynil( cleanpipe( p.field.HH ) )
+		r.HB = emptynil( cleanpipe( p.field.HB ) )
 
-	-- Additional not character relevant informations
-	r.VA = emptynil( cleanpipe( p.field.VA ) )
-	
+		-- Additional not character relevant informations
+		r.VA = emptynil( cleanpipe( p.field.VA ) )
+	end
  end
 
 function GnomTEC_Badge:SetMSP(init)
-	local playername = UnitName("player")
 	local field, value
+	local player, realm = UnitName("player")
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")
+
+	local p = msp.char[ player.."-"..realm ]
 
 	wipe( msp.my )
-	wipe( msp.char[ playername ].field )
+	wipe( p.field )
 
 	for field, value in pairs( GnomTEC_Badge.db.char["Flag"]["Fields"] ) do
 		-- we also don't want to send ui escape sequences to others
@@ -1071,14 +1080,14 @@ function GnomTEC_Badge:SetMSP(init)
 		if (not init) then
 			GnomTEC_Badge.db.char["Flag"]["Versions"][ field ] = ver
 		end
-		msp.char[ playername ].ver[ field ] = ver
-		msp.char[ playername ].field[ field ] = msp.my[ field ]
-		msp.char[ playername ].time[ field ] = 999999999
+		p.ver[ field ] = ver
+		p.field[ field ] = msp.my[ field ]
+		p.time[ field ] = 999999999
 	end
 
-	msp.char[ playername ].supported = true
+	p.supported = true
 	
-	GnomTEC_Badge:SaveFlag(string.gsub(GetRealmName(), "%s+", ""), playername)
+	GnomTEC_Badge:SaveFlag(realm, player)
 	
 	if ( 1 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
@@ -1684,14 +1693,35 @@ end
 local function GnomTEC_Badge_MSPcallback(char)
 	-- process new flag from char 
 	local player, realm = strsplit( "-", char, 2 )
-	realm = string.gsub(realm or GetRealmName(), "%s+", "")
-	GnomTEC_Badge:SaveFlag(realm, player)
-	GnomTEC_Badge:UpdatePlayerList()
 	
-	if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
-		GnomTEC_Badge:DisplayBadge(realm, player)
+	if (realm) then
+		-- MSP sends also callbacks if someone want's our flag
+		-- in this case we should check if flag information is yet available
+		-- so we check for addon version information from other side
+		if (emptynil(msp.char[ player.."-"..realm ].field.VA)) then
+			GnomTEC_Badge:SaveFlag(realm, player)
+			GnomTEC_Badge:UpdatePlayerList()
+	
+			if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
+				GnomTEC_Badge:DisplayBadge(realm, player)
+			end
+		end
+	end	
+end
+
+
+function GnomTEC_Badge:UnitFlagName(unitName)
+	local player, realm = strsplit( "-", unitName, 2 )
+	local name = nil
+
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")
+	if GnomTEC_Badge_Flags[realm] then 
+		if GnomTEC_Badge_Flags[realm][player] then
+			name = GnomTEC_Badge_Flags[realm][player].NA
+		end
 	end
 	
+	return name
 end
 -- ----------------------------------------------------------------------
 -- Frame event handler and functions
@@ -1970,6 +2000,7 @@ function GnomTEC_Badge:SetPlayerModelToUnit(unit)
 	end
 end
 
+
 -- ----------------------------------------------------------------------
 -- Hook functions
 -- ----------------------------------------------------------------------
@@ -2078,7 +2109,10 @@ end
 
 function GnomTEC_Badge:RequestMSP(unitName)
 	if (nil ~= emptynil(unitName)) then
-		msp:Request(unitName, { "TT", "DE", "RA", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+		local player, realm = strsplit( "-", unitName, 2 )
+		realm = string.gsub(realm or GetRealmName(), "%s+", "")
+
+		msp:Request(player.."-"..realm, { "TT", "DE", "RA", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
 	end
 end
 
@@ -2335,23 +2369,32 @@ end
 -- ----------------------------------------------------------------------
 -- RawHook for GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 -- ----------------------------------------------------------------------
-function GnomTEC_Badge:GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	local player, realm = strsplit( "-", arg2, 2 )
-	local playerName = player
-	realm = string.gsub(realm or GetRealmName(), "%s+", "")
-	if GnomTEC_Badge_Flags[realm] then 
-		if GnomTEC_Badge_Flags[realm][player] then
-			playerName = GnomTEC_Badge_Flags[realm][player].NA or player
-		end
-	end
+function GnomTEC_Badge:GetColoredName(event, ...)
 
 	-- let the original function or who ever colorize the name
-	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
+	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, ...)
+	
 	if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"]) then
-		return string.gsub(colordName,player,playerName)
-	else
-		return colordName
+		-- we have only to do something when there are more then one arg
+		if (select("#",...) > 1) then
+			local arg2 = select(2,...)
+			local name = GnomTEC_Badge:UnitFlagName(arg2)
+
+			-- only if we have a flag exchange the name
+			if (name) then
+				local player, realm = strsplit( "-", arg2, 2 )
+				realm = string.gsub(realm or GetRealmName(), "%s+", "")
+
+				-- remove realm when it is not yet removed
+				colordName = string.gsub(colordName,"%-"..realm,"")
+				
+				-- exchange player name with flag name
+				colordName = string.gsub(colordName,player,name)			
+			end
+		end
 	end
+	
+	return colordName
 end
 
 -- ----------------------------------------------------------------------
@@ -2385,6 +2428,10 @@ function GnomTEC_Badge:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles Select", L["L_OPTIONS_PROFILES_SELECT"], "GnomTEC Badge");
 
   	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
+  	
+--  	if (GnomTEC) then
+-- 		GnomTEC:RegisterAddon(self, addonInfo)
+--  	end
 end
 
 function GnomTEC_Badge:OnEnable()
