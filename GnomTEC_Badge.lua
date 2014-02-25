@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.7.37
+-- Version: 5.4.7.38
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,17 +23,28 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.7.37"
+local addonVersion = "5.4.7.38"
 
+-- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
-	["Name"] = "GnomTEC_Badge",
+	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
+	["Date"] = "2014-02-25",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
 	["Copyright"] = "(c)2011-2014 by GnomTEC",
 }
-	
+
+-- GnomTEC API revision
+local GNOMTEC_REVISION = 0
+
+-- Log levels
+local LOG_FATAL 	= 0
+local LOG_ERROR	= 1
+local LOG_WARN		= 2
+local LOG_INFO 	= 3
+local LOG_DEBUG 	= 4
 	
 -- default data for database
 local defaultsDb = {
@@ -898,6 +909,25 @@ if _G.msp_RPAddOn or _G.mrp then
 end 
 _G.msp_RPAddOn = "GnomTEC_Badge"
 
+-- ----------------------------------------------------------------------
+-- Local stubs for the GnomTEC API
+-- ----------------------------------------------------------------------
+
+local function GnomTEC_LogMessage(level, message)
+	if (GnomTEC) then
+		GnomTEC:LogMessage(GnomTEC_Badge, level, message)
+	else
+		if (level < LOG_DEBUG) then
+			GnomTEC_Badge:Print(message)
+		end
+	end
+end
+
+local function GnomTEC_RegisterAddon()
+	if (GnomTEC) then
+		GnomTEC:RegisterAddon(GnomTEC_Badge, addonInfo, GNOMTEC_REVISION)
+	end 
+end
 
 -- ----------------------------------------------------------------------
 -- Local functions
@@ -963,27 +993,26 @@ function GnomTEC_Badge:DebugPrintFlag(realm, player)
 	if not GnomTEC_Badge_Flags[realm][player] then GnomTEC_Badge_Flags[realm][player] = {} end
 	local r = GnomTEC_Badge_Flags[realm][player]
 	
-	 GnomTEC_Badge:Print("============================")
-	 GnomTEC_Badge:Print("Player: "..player.."-"..realm)
-	 
-	 GnomTEC_Badge:Print("VA Addon versions: "..(r.VA or ""))
-	 GnomTEC_Badge:Print("NA Name: "..(r.NA or ""))
-	 GnomTEC_Badge:Print("NH House Name: "..(r.NH or ""))
-	 GnomTEC_Badge:Print("NI Nickname: "..(r.NI or ""))
-	 GnomTEC_Badge:Print("NT Title: "..(r.NT or ""))
-	 GnomTEC_Badge:Print("RA Race: "..(r.RA or ""))
-	 GnomTEC_Badge:Print("FR RP Style: "..(r.FR or ""))
-	 GnomTEC_Badge:Print("FC Character Status: "..(r.FC or ""))
-	 GnomTEC_Badge:Print("CU Currently: "..(r.CU or ""))
-	 GnomTEC_Badge:Print("DE Physical Description: "..(r.DE or ""))
-	 GnomTEC_Badge:Print("AG Age: "..(r.AG or ""))
-	 GnomTEC_Badge:Print("AE Eye Colour: "..(r.AE or ""))
-	 GnomTEC_Badge:Print("AH Height: "..(r.AH or ""))
-	 GnomTEC_Badge:Print("AW Weight: "..(r.AW or ""))
-	 GnomTEC_Badge:Print("MO Motto: "..(r.MO or ""))
-	 GnomTEC_Badge:Print("HI History: "..(r.HI or ""))
-	 GnomTEC_Badge:Print("HH Home: "..(r.HH or ""))
-	 GnomTEC_Badge:Print("HB Birthplace: "..(r.HB or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "============================")
+	 GnomTEC_LogMessage(LOG_DEBUG, "Player: "..player.."-"..realm)
+	 GnomTEC_LogMessage(LOG_DEBUG, "VA Addon versions: "..(r.VA or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "NA Name: "..(r.NA or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "NH House Name: "..(r.NH or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "NI Nickname: "..(r.NI or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "NT Title: "..(r.NT or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "RA Race: "..(r.RA or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "FR RP Style: "..(r.FR or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "FC Character Status: "..(r.FC or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "CU Currently: "..(r.CU or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "DE Physical Description: "..(r.DE or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "AG Age: "..(r.AG or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "AE Eye Colour: "..(r.AE or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "AH Height: "..(r.AH or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "AW Weight: "..(r.AW or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "MO Motto: "..(r.MO or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "HI History: "..(r.HI or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "HH Home: "..(r.HH or ""))
+	 GnomTEC_LogMessage(LOG_DEBUG, "HB Birthplace: "..(r.HB or ""))
 	 
 end
 
@@ -2352,7 +2381,7 @@ function GnomTEC_Badge:LNR_ON_RECYCLE_PLATE(eventname, plateFrame, plateData)
 end
 
 function GnomTEC_Badge:LNR_ON_GUID_FOUND(eventname, frame, GUID, findmethod)
- --   GnomTEC_Badge:Print("GUID found using", findmethod, "for", self:GetPlateName(frame), "'s nameplate:", GUID);
+ --   GnomTEC_LogMessage(LOG_DEBUG, "GUID found using"..findmethod.."for"..self:GetPlateName(frame).."'s nameplate:"..GUID);
 end
 
 
@@ -2427,11 +2456,9 @@ function GnomTEC_Badge:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles Configuration", L["L_OPTIONS_PROFILES_CONFIGURATION"], "GnomTEC Badge");
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles Select", L["L_OPTIONS_PROFILES_SELECT"], "GnomTEC Badge");
 
-  	GnomTEC_Badge:Print("Willkommen bei GnomTEC_Badge")
-  	
---  	if (GnomTEC) then
--- 		GnomTEC:RegisterAddon(self, addonInfo)
---  	end
+  	GnomTEC_RegisterAddon()
+  	GnomTEC_LogMessage(LOG_INFO, "Willkommen bei GnomTEC_Badge")
+
 end
 
 function GnomTEC_Badge:OnEnable()
@@ -2638,7 +2665,7 @@ function GnomTEC_Badge:OnEnable()
 		GNOMTEC_BADGE_TOOLBAR:Show()
 	end
 	
-	GnomTEC_Badge:Print("GnomTEC_Badge Enabled")
+	GnomTEC_LogMessage(LOG_INFO, "GnomTEC_Badge Enabled")
 end
 
 function GnomTEC_Badge:OnDisable()
