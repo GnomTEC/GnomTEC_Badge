@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.7.38
+-- Version: 5.4.7.39
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.7.38"
+local addonVersion = "5.4.7.39"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2014-02-25",
+	["Date"] = "2014-03-15",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -914,19 +914,12 @@ _G.msp_RPAddOn = "GnomTEC_Badge"
 -- ----------------------------------------------------------------------
 
 local function GnomTEC_LogMessage(level, message)
-	if (GnomTEC) then
-		GnomTEC:LogMessage(GnomTEC_Badge, level, message)
-	else
-		if (level < LOG_DEBUG) then
-			GnomTEC_Badge:Print(message)
-		end
+	if (level < LOG_DEBUG) then
+		GnomTEC_Badge:Print(message)
 	end
 end
 
 local function GnomTEC_RegisterAddon()
-	if (GnomTEC) then
-		GnomTEC:RegisterAddon(GnomTEC_Badge, addonInfo, GNOMTEC_REVISION)
-	end 
 end
 
 -- ----------------------------------------------------------------------
