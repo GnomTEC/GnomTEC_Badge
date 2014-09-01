@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.7.39
+-- Version: 5.4.8.40
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.7.39"
+local addonVersion = "5.4.8.40"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2014-03-15",
+	["Date"] = "2014-09-01",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -932,6 +932,9 @@ local function emptynil( x ) return x ~= "" and x or nil end
 -- function to cleanup control sequences
 local function cleanpipe( x )
 	x = x or ""
+	
+	-- Filter TRP2 {} color codes
+	x = string.gsub( x, "{%x%x%x%x%x%x}", "" )
 	
 	-- Filter coloring
 	x = string.gsub( x, "|c%x%x%x%x%x%x%x%x", "" )

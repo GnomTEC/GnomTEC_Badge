@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 5.4.8.40 (2014-09-01)
+* Added additional filter for TRP2 {RRGGBB} color codes
+
 === 5.4.7.39 (2014-03-15)
 * Maintenance update
 

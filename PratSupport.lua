@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge - PratSupport
--- Version: 5.4.7.39
+-- Version: 5.4.8.40
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -22,7 +22,10 @@ Prat:AddModuleToLoad(function()
   -- function to cleanup control sequences
   local function cleanpipe( x )
 	x = x or ""
-	
+
+	-- Filter TRP2 {} color codes
+	x = string.gsub( x, "{%x%x%x%x%x%x}", "" )
+		
 	-- Filter coloring
 	x = string.gsub( x, "|c%x%x%x%x%x%x%x%x", "" )
 	x = string.gsub( x, "|r", "" )
