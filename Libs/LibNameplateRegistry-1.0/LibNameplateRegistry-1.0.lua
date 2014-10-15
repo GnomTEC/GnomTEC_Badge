@@ -4,7 +4,7 @@
         An embeddable library providing an abstraction layer for tracking and
         querying Blizzard's Nameplate frames with ease and efficiency.
 
-        Copyright (c) 2013 by John Wellesz (Archarodim@teaser.fr)
+        Copyright (c) 2013-2014 by John Wellesz (Archarodim@teaser.fr)
         
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser Public License as published by
@@ -19,7 +19,7 @@
     You should have received a copy of the GNU Lesser Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-This file was last updated on 2014-09-07T13:49:08Z by John Wellesz
+This file was last updated on 2014-10-14T16:41:01Z by John Wellesz
 
 --]]
 
@@ -45,7 +45,7 @@ This file was last updated on 2014-09-07T13:49:08Z by John Wellesz
 --
 
 -- Library framework {{{
-local MAJOR, MINOR = "LibNameplateRegistry-1.0", 8
+local MAJOR, MINOR = "LibNameplateRegistry-1.0", 9
 
 if not LibStub then
     error(MAJOR .. " requires LibStub");
@@ -54,6 +54,11 @@ end
 
 if not LibStub("CallbackHandler-1.0") then
     error(MAJOR .. " requires CallbackHandler-1.0");
+    return;
+end
+
+if not C_Timer then
+    error(MAJOR .. "." .. MINOR .. " requires WoW 6.0 (C_Timer missing)");
     return;
 end
 
@@ -119,6 +124,7 @@ local UnitName              = _G.UnitName;
 local InCombatLockdown      = _G.InCombatLockdown;
 
 local WorldFrame            = _G.WorldFrame;
+local C_Timer               = _G.C_Timer;
 
 --[===[@debug@
 local tostring              = _G.tostring;
@@ -447,7 +453,7 @@ function LNR_Private:CheckHookSanity()
 
         count = count + 1;
 
-        if frame:IsShown()then
+        if frame:IsVisible() then
             if not ActivePlates_per_frame[frame] then
                 hookInconsistency = 'OnShow';
                 Debug(ERROR, "CheckHookSanity(): OnShow hook failed");
@@ -534,7 +540,7 @@ do
     --@end-debug@]===]
 
     function PlateOnShow (LNR_ShowHideHookFrame)
-        --Debug(INFO, "PlateOnShow", healthBar.LNR_ParentPlate:GetName());
+        -- Debug(INFO, "PlateOnShow", LNR_ShowHideHookFrame.LNR_ParentPlate:GetName());
 
         if not LNR_ENABLED then
             return;
@@ -587,7 +593,7 @@ do
     end
 
     function PlateOnHide (LNR_ShowHideHookFrame)
-        --Debug(INFO2, "PlateOnHide", healthBar.LNR_ParentPlate:GetName());
+        -- Debug(INFO2, "PlateOnHide", LNR_ShowHideHookFrame.LNR_ParentPlate:GetName());
 
         if not LNR_ENABLED then
             return;
@@ -1080,7 +1086,7 @@ end
 LNR_Private.GetPlateByGUID = LNR_Public.GetPlateByGUID;
 
 
---- (WIP current alpha only) Gets a platename's frame specific region using a normalized name.
+--- Gets a platename's frame specific region using a normalized name.
 --
 -- Use this API to get an easy and direct access to a specific sub-frame of any
 -- nameplate. This is useful if you want to access data for which
@@ -1199,22 +1205,18 @@ LNR_Private.EventFrame:SetScript("OnEvent", LNR_Private.OnEvent);
 
 
 -- Internal timers management -- {{{
-if not LNR_Private.Anim  then
-  LNR_Private.Anim = LNR_Private.EventFrame:CreateAnimationGroup();
-end
-if not LNR_Private.Timer then
-  LNR_Private.Timer = LNR_Private.Anim:CreateAnimation();
-end
-
-LNR_Private.Anim:SetLooping("REPEAT");
-LNR_Private.Timer:SetDuration(0.1);
 
 local TimerDivisor = 0
-LNR_Private.Timer:SetScript('OnFinished', function()
+function LNR_Private.Ticker()
 
     -- if a major incompatibility has been found
     if LNR_Private.FatalIncompatibilityDelayedFire then
         LNR_Private.FatalIncompatibilityDelayedFire();
+        return;
+    end
+
+    if not LNR_ENABLED then
+        -- return and thus don't reschedule ourselves
         return;
     end
 
@@ -1229,20 +1231,21 @@ LNR_Private.Timer:SetScript('OnFinished', function()
         LNR_Private:CheckPlatesForTarget()
     end
 
-    if TimerDivisor == 100 then
-        LNR_Private:CheckHookSanity()
-    end
-
     --[===[@debug@
     if TimerDivisor % 10 == 0 then
         LNR_Private:DebugTests()
     end
     --@end-debug@]===]
+    
+    if TimerDivisor == 100 then
+        LNR_Private:CheckHookSanity()
+    end
 
-end); -- }}}
+    C_Timer.After(0.1, LNR_Private.Ticker);
 
+end -- }}}
 
-LNR_Private.UsedCallBacks = 0;
+LNR_Private.UsedCallBacks = LNR_Private.UsedCallBacks or 0;
 -- Enable or Disable depending on our main callback usage
 function LNR_Private.callbacks:OnUsed(target, eventname)
 
@@ -1294,9 +1297,9 @@ function LNR_Private:Enable() -- {{{
     self.EventFrame:RegisterEvent("PLAYER_TARGET_CHANGED");
     self.EventFrame:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 
-    -- Enable timer execution
     LNR_Private.EventFrame:Show();
-    LNR_Private.Anim:Play();
+    -- Enable timer execution
+    C_Timer.After(0.1, self.Ticker);
 
     -- if we were just temporarily disabled then our status is wrong (plate
     -- might have been shown and hidden and thus recycled), we must set things right.
@@ -1358,8 +1361,7 @@ end -- }}}
 function LNR_Private:Disable() -- {{{
     Debug(INFO2, "Disable", debugstack(1,2,0));
 
-    -- disable timers
-    LNR_Private.Anim:Stop();
+    -- disable events
     LNR_Private.EventFrame:Hide();
 
     --[===[@debug@
@@ -1404,8 +1406,6 @@ function LNR_Public:Quit()
 
     -- clear Blizzard Event handler
     LNR_Private.EventFrame:SetScript("OnEvent", nil);
-    -- clear timer execution script
-    LNR_Private.Timer:SetScript('OnFinished', nil);
 
     -- destroy local caches
     twipe(Frame_Children_Cache);  Frame_Children_Cache = nil;

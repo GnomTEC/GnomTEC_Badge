@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 5.4.8.41
+-- Version: 6.0.2.42
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "5.4.8.41"
+local addonVersion = "6.0.2.42"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2014-10-10",
+	["Date"] = "2014-10-15",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2059,7 +2059,7 @@ function GnomTEC_Badge:PLAYER_REGEN_ENABLED(event)
 end
 
 function GnomTEC_Badge:PLAYER_ENTERING_WORLD(event)
-	playerIsInInstance = (nil ~= IsInInstance())
+	playerIsInInstance = IsInInstance()
 	if (GnomTEC_Badge.db.profile["ViewFlag"]["DisableAutomatic"]) then
 		if (playerIsInInstance and GnomTEC_Badge.db.profile["ViewFlag"]["DisableInInstance"]) then
 			GnomTEC_Badge:DisableFlagDisplay(true)
