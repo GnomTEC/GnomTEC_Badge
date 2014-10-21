@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 6.0.2.42
+-- Version: 6.0.2.43
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "6.0.2.42"
+local addonVersion = "6.0.2.43"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2014-10-15",
+	["Date"] = "2014-10-21",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2423,6 +2423,20 @@ function GnomTEC_Badge:GetColoredName(event, ...)
 end
 
 -- ----------------------------------------------------------------------
+-- chat commands
+-- ----------------------------------------------------------------------
+function GnomTEC_Badge:ChatCommand_badge(input)
+	GNOMTEC_BADGE_FRAME:Show();
+	GNOMTEC_BADGE_PLAYERLIST:Show();
+
+	if (nil ~= emptynil(input)) then
+		GNOMTEC_BADGE_PLAYERLIST_FILTER:SetText(input)
+		GnomTEC_Badge:UpdatePlayerList()
+	end
+	
+	GnomTEC_Badge:ClickedPlayerList(1)
+end
+-- ----------------------------------------------------------------------
 -- Addon OnInitialize, OnEnable and OnDisable
 -- ----------------------------------------------------------------------
 function GnomTEC_Badge:OnInitialize()
@@ -2588,6 +2602,9 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_YELL");
 
 	GnomTEC_Badge:RawHook("GetColoredName", true)
+	
+	GnomTEC_Badge:RegisterChatCommand("badge", "ChatCommand_badge")
+
 		
 	table.insert( msp.callback.received, GnomTEC_Badge_MSPcallback )
 	
