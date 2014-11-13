@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 6.0.2.43
+-- Version: 6.0.2.44
 -- Author: GnomTEC
 -- Copyright 2011-2014 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "6.0.2.43"
+local addonVersion = "6.0.2.44"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2014-10-21",
+	["Date"] = "2014-11-13",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -1725,8 +1725,9 @@ local function GnomTEC_Badge_MSPcallback(char)
 		-- so we check for addon version information from other side
 		if (emptynil(msp.char[ player.."-"..realm ].field.VA)) then
 			GnomTEC_Badge:SaveFlag(realm, player)
-			GnomTEC_Badge:UpdatePlayerList()
-	
+			if GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+				GnomTEC_Badge:UpdatePlayerList()
+			end	
 			if ((player == displayedPlayerName) and (realm == displayedPlayerRealm)) then
 				GnomTEC_Badge:DisplayBadge(realm, player)
 			end

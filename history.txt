@@ -1,5 +1,10 @@
 == GnomTEC Badge - Change History 
 
+=== 6.0.2.44 (2014-11-13)
+* The player list is now only updated when it is also visible to reduce possible performance issues while in highly crowded areas.
+
+GNOMTEC_BADGE_PLAYERLIST_LIST:IsVisible() then
+				GnomTEC_Badge:UpdatePlayerList()
 === 6.0.2.43 (2014-10-21)
 * Added "/badge <filter>" slash command to open the player list and search for rp flags (eg. "/badge Effie")
 

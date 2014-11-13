@@ -162,6 +162,7 @@
 						if GNOMTEC_BADGE_PLAYERLIST:IsVisible() then
 							GNOMTEC_BADGE_PLAYERLIST:Hide();
 						else
+							GnomTEC_Badge:UpdatePlayerList();
 							GNOMTEC_BADGE_PLAYERLIST:Show();
 						end						
 					</OnClick>
