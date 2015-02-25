@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 6.1.0.45 (2015-02-25)
+* Updated TOC for WoW Patch 6.1.0
+
 === 6.0.2.44 (2014-11-13)
 * The player list is now only updated when it is also visible to reduce possible performance issues while in highly crowded areas.
 
