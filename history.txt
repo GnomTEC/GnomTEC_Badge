@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 6.1.2.46 (2015-04-11)
+* Added the possibility to reset roleplaying style and status to empty values.
+
 === 6.1.0.45 (2015-02-25)
 * Updated TOC for WoW Patch 6.1.0
 

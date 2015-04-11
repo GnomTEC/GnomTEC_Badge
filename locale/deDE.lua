@@ -3,16 +3,18 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("GnomTEC_Badge", "deDE")
 if not L then return end
 	
-L["L_STR_FR0"] = "Rollenspieler"
-L["L_STR_FR1"] = "Gelegenheits-Rollenspieler"
-L["L_STR_FR2"] = "Vollzeit-Rollenspieler"
-L["L_STR_FR3"] = "Rollenspielneuling"
-L["L_STR_FR4"] = "Erwachsener Rollenspieler"
+L["L_STR_FR0"] = ""
+L["L_STR_FR1"] = "Rollenspieler"
+L["L_STR_FR2"] = "Gelegenheits-Rollenspieler"
+L["L_STR_FR3"] = "Vollzeit-Rollenspieler"
+L["L_STR_FR4"] = "Rollenspielneuling"
+L["L_STR_FR5"] = "Erwachsener Rollenspieler"
 
-L["L_STR_FC0"] = "Außerhalb des Rollenspiels (OOC)"
-L["L_STR_FC1"] = "Im Rollenspiel (IC)"
-L["L_STR_FC2"] = "Suche Kontakt (LFC)"
-L["L_STR_FC3"] = "Erzähler (SL)"
+L["L_STR_FC0"] = ""
+L["L_STR_FC1"] = "Außerhalb des Rollenspiels (OOC)"
+L["L_STR_FC2"] = "Im Rollenspiel (IC)"
+L["L_STR_FC3"] = "Suche Kontakt (LFC)"
+L["L_STR_FC4"] = "Erzähler (SL)"
 
 
 L["L_OPTIONS_TITLE"] = "Addon zur Anzeige und Verwaltung von Rollenspiel-Charakterbeschreibungen mit Support von'Marry Sue Protocol'-basierten Flags.\n\n"

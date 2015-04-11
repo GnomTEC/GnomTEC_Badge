@@ -3,16 +3,18 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("GnomTEC_Badge", "enUS", true)
 if not L then return end
 
-L["L_STR_FR0"] = "Normal roleplayer"
-L["L_STR_FR1"] = "Casual roleplayer"
-L["L_STR_FR2"] = "Full–time roleplayer"
-L["L_STR_FR3"] = "Beginner roleplayer"
-L["L_STR_FR4"] = "Mature roleplayer"
+L["L_STR_FR0"] = ""
+L["L_STR_FR1"] = "Normal roleplayer"
+L["L_STR_FR2"] = "Casual roleplayer"
+L["L_STR_FR3"] = "Full–time roleplayer"
+L["L_STR_FR4"] = "Beginner roleplayer"
+L["L_STR_FR5"] = "Mature roleplayer"
 
-L["L_STR_FC0"] = "Out Of Character (OOC)"
-L["L_STR_FC1"] = "In Character (IC)"
-L["L_STR_FC2"] = "Looking For Contact (LFC)"
-L["L_STR_FC3"] = "Storyteller (SL)"
+L["L_STR_FC0"] = ""
+L["L_STR_FC1"] = "Out Of Character (OOC)"
+L["L_STR_FC2"] = "In Character (IC)"
+L["L_STR_FC3"] = "Looking For Contact (LFC)"
+L["L_STR_FC4"] = "Storyteller (SL)"
 
 
 L["L_OPTIONS_TITLE"] = "Addon for display and management of roleplay character descriptions with support of 'Marry Sue Protocol' based roleplay flags.\n\n"

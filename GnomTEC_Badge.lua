@@ -171,8 +171,8 @@ local defaultsDb = {
 	},
 }
 
-local str_fr = {L["L_STR_FR0"], L["L_STR_FR1"], L["L_STR_FR2"], L["L_STR_FR3"], L["L_STR_FR4"],}
-local str_fc = {L["L_STR_FC0"], L["L_STR_FC1"], L["L_STR_FC2"], L["L_STR_FC3"],}
+local str_fr = {[0]=L["L_STR_FR0"], L["L_STR_FR1"], L["L_STR_FR2"], L["L_STR_FR3"], L["L_STR_FR4"], L["L_STR_FR5"]}
+local str_fc = {[0]=L["L_STR_FC0"], L["L_STR_FC1"], L["L_STR_FC2"], L["L_STR_FC3"], L["L_STR_FC4"]}
 
 -- player states
 local playerStatesAFK = {
@@ -194,6 +194,11 @@ local playerStatesAFK = {
 }
 
 local playerStatesOOC = {
+	["NIL"] = {
+		text = "|TInterface\\FriendsFrame\\StatusIcon-Away:0|tNIL",
+		notCheckable = 1,
+		func = function () GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("|TInterface\\FriendsFrame\\StatusIcon-Away:0|tNIL"); GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] = 0; GnomTEC_Badge:SetMSP(); end,	
+	},
 	["OOC"] = {
 		text = "|TInterface\\FriendsFrame\\StatusIcon-DND:0|tOOC",
 		notCheckable = 1,
@@ -1123,7 +1128,7 @@ function GnomTEC_Badge:SetMSP(init)
 	elseif  ( 4 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
 	else
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("???") 	
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
 	end	
 
 end
@@ -1936,6 +1941,7 @@ end
 
 -- initialize drop down menu ooc state
 local function GnomTEC_Badge_SelectOOC_InitializeDropDown(level)
+	UIDropDownMenu_AddButton(playerStatesOOC["NIL"])
 	UIDropDownMenu_AddButton(playerStatesOOC["OOC"])
 	UIDropDownMenu_AddButton(playerStatesOOC["IC"])
 	UIDropDownMenu_AddButton(playerStatesOOC["LFC"])
@@ -2668,7 +2674,7 @@ function GnomTEC_Badge:OnEnable()
 	elseif  ( 4 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
 	else
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText("???") 	
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
 	end	
 	
 	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())

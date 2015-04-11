@@ -3,16 +3,18 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("GnomTEC_Badge", "koKR")
 if not L then return end
 
-L["L_STR_FR0"] = "정상적인 역할 플레이어"
-L["L_STR_FR1"] = "캐주얼 역할 플레이어"
-L["L_STR_FR2"] = "풀 타임 역할 플레이어"
-L["L_STR_FR3"] = "초보자 역할 플레이어"
-L["L_STR_FR4"] = "성숙한 역할 플레이어"
+L["L_STR_FR0"] = ""
+L["L_STR_FR1"] = "정상적인 역할 플레이어"
+L["L_STR_FR2"] = "캐주얼 역할 플레이어"
+L["L_STR_FR3"] = "풀 타임 역할 플레이어"
+L["L_STR_FR4"] = "초보자 역할 플레이어"
+L["L_STR_FR5"] = "성숙한 역할 플레이어"
 
-L["L_STR_FC0"] = "문자 중 (OOC)"
-L["L_STR_FC1"] = "캐릭터 (IC)"
-L["L_STR_FC2"] = "연락처를 찾고 (LFC)"
-L["L_STR_FC3"] = "소설가 (SL)"
+L["L_STR_FC0"] = ""
+L["L_STR_FC1"] = "문자 중 (OOC)"
+L["L_STR_FC2"] = "캐릭터 (IC)"
+L["L_STR_FC3"] = "연락처를 찾고 (LFC)"
+L["L_STR_FC4"] = "소설가 (SL)"
 
 
 L["L_OPTIONS_TITLE"] = "'결혼 고소 프로토콜'을 기준으로 역할극 플래그를 지원하는 역할극 캐릭터 설명의 표시 및 관리를위한 애드온.\n\n"

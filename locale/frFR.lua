@@ -3,16 +3,18 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("GnomTEC_Badge", "frFR")
 if not L then return end
 
-L["L_STR_FR0"] = "Rôliste normale"
-L["L_STR_FR1"] = "Rôliste occasionnel"
-L["L_STR_FR2"] = "Rôliste à temps plein"
-L["L_STR_FR3"] = "Rôliste débutant"
-L["L_STR_FR4"] = "Rôliste d'âge mûr"
+L["L_STR_FR0"] = ""
+L["L_STR_FR1"] = "Rôliste normale"
+L["L_STR_FR2"] = "Rôliste occasionnel"
+L["L_STR_FR3"] = "Rôliste à temps plein"
+L["L_STR_FR4"] = "Rôliste débutant"
+L["L_STR_FR5"] = "Rôliste d'âge mûr"
 
-L["L_STR_FC0"] = "Rupture de caractère (OOC)"
-L["L_STR_FC1"] = "En caractères (IC)"
-L["L_STR_FC2"] = "Recherchant contacter (LFC)"
-L["L_STR_FC3"] = "Conteur (SL)"
+L["L_STR_FC0"] = ""
+L["L_STR_FC1"] = "Rupture de caractère (OOC)"
+L["L_STR_FC2"] = "En caractères (IC)"
+L["L_STR_FC3"] = "Recherchant contacter (LFC)"
+L["L_STR_FC4"] = "Conteur (SL)"
 
 
 L["L_OPTIONS_TITLE"] = "Addon pour l'affichage et managment de descriptions de personnages roleplay avec le soutien de «Marry Protocole Sue 'drapeaux de roleplay base.\n\n"

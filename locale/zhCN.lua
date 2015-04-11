@@ -3,16 +3,18 @@ local AceLocale = LibStub:GetLibrary("AceLocale-3.0")
 local L = AceLocale:NewLocale("GnomTEC_Badge", "zhCN")
 if not L then return end
 
-L["L_STR_FR0"] = "正常的角色扮演者"
-L["L_STR_FR1"] = "休闲角色扮演者"
-L["L_STR_FR2"] = "全职角色扮演者"
-L["L_STR_FR3"] = "初学者角色扮演者"
-L["L_STR_FR4"] = "成熟的角色扮演者"
+L["L_STR_FR0"] = ""
+L["L_STR_FR1"] = "正常的角色扮演者"
+L["L_STR_FR2"] = "休闲角色扮演者"
+L["L_STR_FR3"] = "全职角色扮演者"
+L["L_STR_FR4"] = "初学者角色扮演者"
+L["L_STR_FR5"] = "成熟的角色扮演者"
 
-L["L_STR_FC0"] = "的性格 (OOC)"
-L["L_STR_FC1"] = "性格 (IC)"
-L["L_STR_FC2"] = "寻找接触 (LFC)"
-L["L_STR_FC3"] = "说书人 (SL)"
+L["L_STR_FC0"] = ""
+L["L_STR_FC1"] = "的性格 (OOC)"
+L["L_STR_FC2"] = "性格 (IC)"
+L["L_STR_FC3"] = "寻找接触 (LFC)"
+L["L_STR_FC4"] = "说书人 (SL)"
 
 
 L["L_OPTIONS_TITLE"] = "插件而提供支持的“娶苏议定书”为基础的角色扮演角色扮演标志字符的描述显示和管理。\n\n"
