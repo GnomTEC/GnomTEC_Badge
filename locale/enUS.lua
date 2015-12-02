@@ -76,6 +76,7 @@ L["L_OPTIONS_PROFILES_CONFIGURATION"] = "Profiles - Configuration"
 
 L["L_OPTIONS_PROFILES_SELECT"] = "Profiles - Select"
 
+L["L_OPTIONS_EXPORT"] = "Export flag user list (last 7 days)"
 
 L["L_NORPFLAG"] = "<no roleplay flag>"
 L["L_HIDDENRPFLAG"] = "<no roleplay state set>"

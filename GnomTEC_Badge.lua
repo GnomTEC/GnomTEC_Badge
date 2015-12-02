@@ -895,6 +895,23 @@ local optionsProfilesConfiguration = {
 	},
 }
 
+local optionsExport = {
+	name = L["L_OPTIONS_EXPORT"],
+	type = 'group',
+	args = {
+		badgeOptionExport = {
+			type = "input",
+			name = GetRealmName(),
+			desc = "",
+			set = function(info,val) end,
+    		get = function(info) return GnomTEC_Badge:Export(GetRealmName()) end,
+			multiline = 25,
+			width = 'full',
+			order = 1
+		},
+	},
+}
+
 -- ----------------------------------------------------------------------
 -- Startup initialization
 -- ----------------------------------------------------------------------
@@ -1754,6 +1771,41 @@ function GnomTEC_Badge:UnitFlagName(unitName)
 	
 	return name
 end
+
+local exportRealm = ""
+
+local function sortExportTimeStampFunction(a, b)
+	local aTimeStamp = GnomTEC_Badge_Flags[exportRealm][a].timeStamp
+	local bTimeStamp = GnomTEC_Badge_Flags[exportRealm][b].timeStamp
+	
+	return (aTimeStamp > bTimeStamp)
+end
+
+function GnomTEC_Badge:Export(realm)
+	local exportData = "Character;Fullname;Addon;Timestamp|n"
+	local exportList = {}
+	local now = time()
+	local timerange = 60*60*24*7 -- letzten 7 tage
+	 
+	realm = string.gsub(realm or GetRealmName(), "%s+", "")	
+	exportRealm = realm
+	if (GnomTEC_Badge_Flags[realm]) then
+		for key,value in pairs(GnomTEC_Badge_Flags[realm]) do
+			if (value.VA) and (difftime(now, value.timeStamp) < timerange) then
+				table.insert(exportList,key)
+			end
+		end
+	end
+
+	table.sort(exportList, sortExportTimeStampFunction)
+	for key,value in pairs(exportList) do
+		local flag = GnomTEC_Badge_Flags[exportRealm][value]
+		exportData = exportData..value..";"..(flag.NA or "")..";"..(strsplit( ";", flag.VA, 2 ) or "")..";"..date("%d.%m.%y %H:%M:%S",flag.timeStamp).."|n"
+	end
+
+	return exportData
+end
+
 -- ----------------------------------------------------------------------
 -- Frame event handler and functions
 -- ----------------------------------------------------------------------
@@ -2461,6 +2513,7 @@ function GnomTEC_Badge:OnInitialize()
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profiles Configuration", optionsProfilesConfiguration)
 	self.profileOptions = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db);
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Profiles Select", self.profileOptions);
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("GnomTEC Badge Export", optionsExport)
 
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Main", "GnomTEC Badge");
 	panelConfiguration = LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profile", L["L_OPTIONS_PROFILE"], "GnomTEC Badge");
@@ -2472,6 +2525,7 @@ function GnomTEC_Badge:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge View Chatframe", L["L_OPTIONS_VIEW_CHATFRAME"], "GnomTEC Badge");
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles Configuration", L["L_OPTIONS_PROFILES_CONFIGURATION"], "GnomTEC Badge");
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Profiles Select", L["L_OPTIONS_PROFILES_SELECT"], "GnomTEC Badge");
+	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("GnomTEC Badge Export", L["L_OPTIONS_EXPORT"], "GnomTEC Badge");
 
   	GnomTEC_RegisterAddon()
   	GnomTEC_LogMessage(LOG_INFO, "Willkommen bei GnomTEC_Badge")
