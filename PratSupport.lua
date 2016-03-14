@@ -1,8 +1,8 @@
 -- **********************************************************************
 -- GnomTEC Badge - PratSupport
--- Version: 6.2.2.47
+-- Version: 6.2.3.48
 -- Author: GnomTEC
--- Copyright 2011-2015 by GnomTEC
+-- Copyright 2011-2016 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 

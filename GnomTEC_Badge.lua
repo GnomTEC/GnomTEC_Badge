@@ -1,8 +1,8 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 6.2.0.47
+-- Version: 6.2.3.48
 -- Author: GnomTEC
--- Copyright 2011-2015 by GnomTEC
+-- Copyright 2011-2016 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -23,17 +23,17 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "6.2.0.47"
+local addonVersion = "6.2.3.48"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2015-06-25",
+	["Date"] = "2016-03-14",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
-	["Copyright"] = "(c)2011-2015 by GnomTEC",
+	["Copyright"] = "(c)2011-2016 by GnomTEC",
 }
 
 -- GnomTEC API revision
@@ -1502,6 +1502,8 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 		_G["GameTooltipTextLeft"..n]:SetText((GnomTEC_Badge_Flags[realm][player].EngineData or "").." ("..player..")")
 		_G["GameTooltipTextLeft"..n]:SetTextColor(1.0,1.0,1.0)
 		_G["GameTooltipTextRight"..n]:SetText("")
+		-- Fix for ELVUI which hide this, so show it for sure
+		_G["GameTooltipTextLeft"..n]:Show()
 
 		local fr, fc, msp
 					
