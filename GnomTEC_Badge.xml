@@ -883,7 +883,7 @@
 				<HighlightTexture file="Interface\ICONS\INV_HELMET_28" alphaMode="ADD"/>
 				<Scripts>
 					<OnClick>
-						ShowHelm(self:GetChecked());
+--						ShowHelm(self:GetChecked());
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -899,7 +899,7 @@
 				<HighlightTexture file="Interface\ICONS\INV_Misc_Cape_18" alphaMode="ADD"/>
 				<Scripts>
 					<OnClick>
-						ShowCloak(self:GetChecked());
+--						ShowCloak(self:GetChecked());
 					</OnClick>
 				</Scripts>
 			</CheckButton>

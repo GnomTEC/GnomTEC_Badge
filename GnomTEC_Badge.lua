@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 6.2.3.48
+-- Version: 7.0.3.49
 -- Author: GnomTEC
 -- Copyright 2011-2016 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "6.2.3.48"
+local addonVersion = "7.0.3.49"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2016-03-14",
+	["Date"] = "2016-07-20",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2149,8 +2149,8 @@ function GnomTEC_Badge:PLAYER_FLAGS_CHANGED(event)
 end
 
 function GnomTEC_Badge:PLAYER_EQUIPMENT_CHANGED(slot, hasItem)
-	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
-	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
+--	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
+--	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
 end
 
 
@@ -2733,8 +2733,8 @@ function GnomTEC_Badge:OnEnable()
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
 	end	
 	
-	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
-	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
+--	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
+--	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
 	
 	GnomTEC_Badge:DisableFlagDisplay(disabledFlagDisplay)
 	if (GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"]) then
