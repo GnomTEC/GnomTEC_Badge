@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 7.0.3.49
+-- Version: 7.0.3.50
 -- Author: GnomTEC
 -- Copyright 2011-2016 by GnomTEC
 -- http://www.gnomtec.de/
@@ -23,13 +23,13 @@ GnomTEC_Badge_Flags = {
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "7.0.3.49"
+local addonVersion = "7.0.3.50"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2016-07-20",
+	["Date"] = "2016-09-06",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2352,15 +2352,17 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 	end
 
 	local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
+
 				
 	if (nameFrame) then
 		if (nameFrame:GetObjectType() == "FontString") then
+			local nameFrameIsShown nameFrame:IsShown()
+			
  			-- add our frame
 			if (not plateFrame.gnomtec_badge) then
  				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
  				plateFrame.gnomtec_badge:SetFontObject(GameFontWhite)
 			end 			
-
 
 			if (GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"]) then
  				-- Hide all sub-frames 
@@ -2377,7 +2379,6 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
  				-- Hide only name-frame
  				nameFrame.gnomtec_badge_hide = true
  				nameFrame:Hide()
- 				
  			end
 
   			plateFrame.gnomtec_badge:Show()
@@ -2408,7 +2409,12 @@ function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
 					plateFrame.gnomtec_badge:SetText("|cff8080ff"..playerName.."|r")
 				end
 			else
-				plateFrame.gnomtec_badge:SetText(nameFrame:GetText())
+				-- it seems that blizzard not show names for every NPC
+				if (nameFrameIsShown) then
+					plateFrame.gnomtec_badge:SetText(nameFrame:GetText() or "")
+				else
+					plateFrame.gnomtec_badge:Hide()
+				end			
 			end
 			plateFrame.gnomtec_badge:SetWidth(plateFrame.gnomtec_badge:GetStringWidth())
 		end

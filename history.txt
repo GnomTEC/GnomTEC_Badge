@@ -1,8 +1,12 @@
 == GnomTEC Badge - Change History 
 
+=== 7.0.3.50 (2016-09-06)
+* Updated included LibNameplateRegistry to version 1.0-0.18
+* Fixed issue with nameplates when Blizzard UI did not show name of a NPC, in this case badge now also don't show a name.
+
 === 7.0.3.49 (2016-07-20)
 * Updated TOC for WoW Patch 7.0.3
-* removed show/hide helm/cloak toolbar function (as not working anymore by blizzard)
+* Removed show/hide helm/cloak toolbar function (as not working anymore by blizzard)
 
 === 6.2.3.48 (2016-03-17)
 * Fixed an issue with ELVUI which prevented display of player level and class in tooltip
