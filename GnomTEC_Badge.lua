@@ -2629,10 +2629,12 @@ function GnomTEC_Badge:OnEnable()
 		end
 	end
 	if (version_build <= 50) then
-		-- other players flag data is now cached in seperate addon to avoid "save issue"
-		-- (wow has sometimes problems with large amount of saved data and delete all configs)
-		GnomTEC_Badge_FlagCache = GnomTEC_Badge_Flags
-		GnomTEC_Badge_Flags = nil
+		if (GnomTEC_Badge_Flags) then
+			-- other players flag data is now cached in seperate addon to avoid "save issue"
+			-- (wow has sometimes problems with large amount of saved data and delete all configs)
+			GnomTEC_Badge_FlagCache = GnomTEC_Badge_Flags
+			GnomTEC_Badge_Flags = nil
+		end
 	end
 	
 	-- set actual version in char db
