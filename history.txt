@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 7.0.3.51 (2016-09-23)
+* moved flag data from other players to additional "addon" to avoid deletion of configuration data in case of too much data.
+
 === 7.0.3.50 (2016-09-06)
 * Updated included LibNameplateRegistry to version 1.0-0.18
 * Fixed issue with nameplates when Blizzard UI did not show name of a NPC, in this case badge now also don't show a name.

@@ -1,0 +1,5 @@
+== GnomTEC Badge Flag Cache - Change History 
+
+=== 7.0.3.51 (2016-09-23)
+* Initial version. This is only a place to cache the huge amount of other players flag data, so there will be no much code here.
+

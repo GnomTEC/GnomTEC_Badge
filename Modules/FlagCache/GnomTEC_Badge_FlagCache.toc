@@ -1,0 +1,9 @@
+## Interface: 70000
+## Title: GnomTEC_Badge_FlagCache
+## Notes: Addon storing the cached flag data of other players (part of GnomTEC Badge).
+## Notes-deDE: Addon zur Speicherung der zwischengespeicherten Flagdaten anderer Spieler (Teil von GnomTEC Badge).
+## Author: GnomTEC
+## Version: 7.0.3.51
+## SavedVariables: GnomTEC_Badge_FlagCache
+
+GnomTEC_Badge_FlagCache.lua

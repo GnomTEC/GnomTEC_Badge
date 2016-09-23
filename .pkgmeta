@@ -1,5 +1,8 @@
 package-as: GnomTEC_Badge
 
+move-folders:
+    GnomTEC_Badge/Modules/FlagCache: GnomTEC_Badge_FlagCache
+
 manual-changelog:
     filename: history.txt
     markup-type: creole
