@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge Flag Cache
--- Version: 7.0.3.51
+-- Version: 7.1.0.52
 -- Author: GnomTEC
 -- Copyright 2016 by GnomTEC
 -- http://www.gnomtec.de/
