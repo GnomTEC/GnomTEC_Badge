@@ -2,6 +2,8 @@ package-as: GnomTEC_Badge
 
 move-folders:
     GnomTEC_Badge/Modules/FlagCache: GnomTEC_Badge_FlagCache
+    GnomTEC_Badge/Modules/FriendStates: GnomTEC_Badge_FriendStates
+    GnomTEC_Badge/Modules/Notes: GnomTEC_Badge_Notes
 
 manual-changelog:
     filename: history.txt

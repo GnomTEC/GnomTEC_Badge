@@ -1,16 +1,16 @@
 -- **********************************************************************
--- GnomTEC Badge Flag Cache
+-- GnomTEC Badge Notes
 -- Version: 7.1.5.53
 -- Author: GnomTEC
--- Copyright 2016-2017 by GnomTEC
+-- Copyright 2017 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 
 -- ----------------------------------------------------------------------
--- global flag cache for other players flag data
+-- global notes to other players 
 -- ----------------------------------------------------------------------
 
-GnomTEC_Badge_FlagCache = {
+GnomTEC_Badge_Notes = {
 	[string.gsub(GetRealmName(), "%s+", "")] = {
 		[UnitName("player")] = {};
 	},

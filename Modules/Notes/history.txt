@@ -1,0 +1,6 @@
+== GnomTEC Badge Notes - Change History 
+
+=== 7.1.5.53 (2017-02-10)
+* Initial version. This is only a place to store the notes away from the huge amount of other players flag data, so there will be no much code here.
+
+
