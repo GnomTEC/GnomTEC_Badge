@@ -1,5 +1,8 @@
 == GnomTEC Badge Friend State - Change History 
 
+=== 7.2.0.54 (2017-04-01)
+* Updated TOC for WoW patch 7.2.0
+
 === 7.1.5.53 (2017-02-10)
 * Initial version. This is only a place to store the friend states away from the huge amount of other players flag data, so there will be no much code here.
 
