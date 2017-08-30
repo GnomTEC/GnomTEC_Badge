@@ -1,5 +1,9 @@
 == GnomTEC Badge - Change History 
 
+=== 7.3.0.56 (2017-08-30)
+* Updated TOC for WoW patch 7.3.0
+* Updated included libraries: Ace3
+
 === 7.2.5.55 (2017-06-25)
 * Fixed prat support to show names again after moved flag data in 7.0.3.51 (2016-09-23)
 
