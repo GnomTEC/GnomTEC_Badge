@@ -248,7 +248,7 @@
 									<OnClick>
 										local parent = self:GetParent();
 										parent:SetValue(parent:GetValue() - (parent:GetHeight() / 2));
-										PlaySound("UChatScrollButton");
+										PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON);
 									</OnClick>
 									<OnEnter>
 										local parent = self:GetParent();
@@ -267,7 +267,7 @@
 									<OnClick>
 										local parent = self:GetParent();
 										parent:SetValue(parent:GetValue() + (parent:GetHeight() / 2));
-										PlaySound("UChatScrollButton");
+										PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON);
 									</OnClick>
 									<OnEnter>
 										local parent = self:GetParent();
@@ -644,7 +644,7 @@
 										local parent = self:GetParent();
 										local pos = parent:GetValue();
 										parent:SetValue(pos-8);
-										PlaySound("UChatScrollButton");
+										PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON);
 									</OnClick>
 								</Scripts>
 							</Button>
@@ -658,7 +658,7 @@
 										local pos = parent:GetValue();
 										local max = select(2,parent:GetMinMaxValues());
 										parent:SetValue(pos+8);
-										PlaySound("UChatScrollButton");
+										PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON);
 									</OnClick>
 								</Scripts>
 							</Button>
