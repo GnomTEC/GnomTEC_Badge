@@ -1,8 +1,8 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 7.3.0.57
+-- Version: 8.3.0.58
 -- Author: GnomTEC
--- Copyright 2011-2017 by GnomTEC
+-- Copyright 2011-2018 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -19,17 +19,17 @@ GnomTEC_Badge_Flags = nil
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "7.3.0.57"
+local addonVersion = "8.3.0.58"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2017-09-02",
+	["Date"] = "2018-07-14",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
-	["Copyright"] = "(c)2011-2017 by GnomTEC",
+	["Copyright"] = "(c)2011-2018 by GnomTEC",
 }
 
 -- GnomTEC API revision
@@ -2267,13 +2267,6 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 
 end
 
-function GnomTEC_Badge:CHAT_MSG_BATTLEGROUND(eventName, message, sender)	
-	if (not disabledFlagDisplay) then
-		-- Trigger the flag request for sender
-		GnomTEC_Badge:RequestMSP(sender)
-	end
-end
-
 function GnomTEC_Badge:CHAT_MSG_CHANNEL(eventName, message, sender)	
 	if (not disabledFlagDisplay) then
 		-- Trigger the flag request for sender
@@ -2700,7 +2693,6 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:RegisterEvent("PLAYER_FLAGS_CHANGED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_EQUIPMENT_CHANGED");
 
-	GnomTEC_Badge:RegisterEvent("CHAT_MSG_BATTLEGROUND");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_CHANNEL_JOIN");
 	GnomTEC_Badge:RegisterEvent("CHAT_MSG_EMOTE");

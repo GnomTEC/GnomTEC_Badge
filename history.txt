@@ -1,5 +1,11 @@
 == GnomTEC Badge - Change History 
 
+=== 8.3.0.58 (2018-07-14)
+* Updated TOC for WoW patch 8.0.0 (BfA)
+* New LibMSP (breaks compatibility to pre8.0.0 flag addons)
+* Updated libraries: Ace3, ChatThrottleLib
+* removed event handler CHAT_MSG_BATTLEGROUND (not available since BfA)
+
 === 7.3.0.57 (2017-09-02)
 * fixed PlaySound() issues
 

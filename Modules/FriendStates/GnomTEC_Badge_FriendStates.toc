@@ -1,9 +1,9 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: GnomTEC_Badge_FriendStates
 ## Notes: Addon storing the friend state data of other players (part of GnomTEC Badge).
 ## Notes-deDE: Addon zur Speicherung des Freundestatus anderer Spieler (Teil von GnomTEC Badge).
 ## Author: GnomTEC
-## Version: 7.3.0.56
+## Version: 8.3.0.58
 ## SavedVariables: GnomTEC_Badge_FriendStates
 
 GnomTEC_Badge_FriendStates.lua
