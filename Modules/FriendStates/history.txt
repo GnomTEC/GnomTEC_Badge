@@ -1,6 +1,6 @@
 == GnomTEC Badge Friend State - Change History 
 
-=== 7.3.0.58 (2018-07-14)
+=== 8.0.1.58 (2018-07-14)
 * Updated TOC for WoW patch 8.0.0 (BfA)
 
 === 7.3.0.56 (2017-08-30)

@@ -3,7 +3,7 @@
 ## Notes: Addon storing the notes to other players (part of GnomTEC Badge).
 ## Notes-deDE: Addon zur Speicherung der Notizen zu anderer Spieler (Teil von GnomTEC Badge).
 ## Author: GnomTEC
-## Version: 8.3.0.58
+## Version: 8.0.1.58
 ## SavedVariables: GnomTEC_Badge_Notes
 
 GnomTEC_Badge_Notes.lua

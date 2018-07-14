@@ -15,7 +15,6 @@
 
 	- Put your character's field data in the table msp.my, e.g. msp.my["NA"] = UnitName("player")
 	- When you initialise or update your character's field data, call msp:Update(); no parameters
-	- Don't mess with msp.my['TT'], that's used internally
 
 	- To request one or more fields from someone else, call msp:Request( player, fields )
 	  fields can be nil (gets you TT i.e. tooltip), or a string (one field) or a table (multiple)
@@ -24,15 +23,15 @@
 	  update your display: tinsert( msp.callback.received, YourCallbackFunctionHere )
 	  You get (as sole parameter) the name of the player sending you the data
 
-	- Player names appear EXACTLY as the game sends them (case sensitive!).
+	- Player names appear as the game sends them (case sensitive!), with the realm always merged.
 	- Players on different realms are referenced like this: "Name-Realm" - yes, that does work!
 
-	- All field names are two capital letters. Best if you agree any extensions.
+	- All field names must be two capital letters.
 
 	- For more information, see documentation on the Mary Sue Protocol - http://moonshyne.org/msp/
 ]]
 
-local VERSION = 10
+local VERSION = 11
 local PROTOCOL_VERSION = 3
 local CHOMP_VERSION = 1
 
@@ -60,8 +59,7 @@ local TT_ALL = {
 }
 local UNIT_FIELD = { GC = true, GF = true, GR = true, GS = true, GU = true, }
 local INTERNAL_FIELDS = {
-	VP = true, TT = true, GC = true, GF = true, GR = true, GS = true,
-	GU = true,
+	VP = true, GC = true, GF = true, GR = true, GS = true, GU = true,
 }
 
 local PLAYER_NAME = AddOn_Chomp.NameMergedRealm(UnitFullName("player"))
@@ -348,6 +346,8 @@ msp.myver = setmetatable({}, {
 	__index = function(self, field)
 		if msp.ttAll[field] then
 			return nil
+		elseif field == "TT" then
+			return tonumber(CRC32CCache[msp.ttContents], 16)
 		end
 		return tonumber(CRC32CCache[msp.my[field]], 16)
 	end,
@@ -408,17 +408,31 @@ function Process(name, command, isSafe)
 			return
 		end
 		msp.char[name].req[field] = now + 5
-		if crc ~= CRC32CCache[msp.my[field]] then
+		if field == "TT" then
+			-- This all has to be duplicated for TT since the original header
+			-- documentation lied.
+			if not msp.ttCache or not msp.ttContents then
+				msp:Update()
+			end
+			if crc ~= CRC32CCache[msp.ttContents] then
+				if not msp.char[name].safeReply then
+					msp.char[name].safeReply = {}
+				end
+				local reply = msp.char[name].safeReply
+				reply[#reply + 1] = msp.ttCache
+			else
+				if not msp.char[name].unsafeReply then
+					msp.char[name].unsafeReply = {}
+				end
+				local reply = msp.char[name].unsafeReply
+				reply[#reply + 1] = ("!%s%s"):format(field, CRC32CCache[msp.ttContents] or "")
+			end
+		elseif crc ~= CRC32CCache[msp.my[field]] then
 			if not msp.char[name].safeReply then
 				msp.char[name].safeReply = {}
 			end
 			local reply = msp.char[name].safeReply
-			if field == "TT" then
-				if not msp.ttCache then
-					msp:Update()
-				end
-				reply[#reply + 1] = msp.ttCache
-			elseif not msp.my[field] or msp.my[field] == "" then
+			if not msp.my[field] or msp.my[field] == "" then
 				reply[#reply + 1] = field
 			else
 				reply[#reply + 1] = ("%s%s=%s"):format(field, CRC32CCache[msp.my[field]], msp.my[field])
@@ -613,10 +627,8 @@ function msp:Update()
 				tt[#tt + 1] = ("%s=%s"):format(field, self.my[field])
 			end
 		end
-		local ttContents = table.concat(tt, SEPARATOR) or ""
-		self.ttCache = ("%s%sTT%s"):format(ttContents, SEPARATOR, CRC32CCache[ttContents])
-		-- Set this here for CRC checking elsewhere.
-		msp.my.TT = ttContents
+		msp.ttContents = table.concat(tt, SEPARATOR) or ""
+		self.ttCache = ("%s%sTT%s"):format(msp.ttContents, SEPARATOR, CRC32CCache[msp.ttContents])
 		local version = msp.myver.TT
 		charTable.ver.TT = version
 		RunCallback("updated", PLAYER_NAME, "TT", nil, version)
