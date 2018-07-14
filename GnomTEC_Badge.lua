@@ -1104,14 +1104,21 @@ function GnomTEC_Badge:SetMSP(init)
 	realm = string.gsub(realm or GetRealmName(), "%s+", "")
 
 	local p = msp.char[ player.."-"..realm ]
+	
+	-- Don't mess with msp.my['TT'], that's used internally
+	local tt = msp.my['TT']
 
 	wipe( msp.my )
+	msp.my['TT'] = tt
+	
 	wipe( p.field )
-
+	p.supported = true
+	
 	for field, value in pairs( GnomTEC_Badge.db.char["Flag"]["Fields"] ) do
 		-- we also don't want to send ui escape sequences to others
 		value = cleanpipe(value)
 		msp.my[ field ] = value
+		p.field[ field ] = value
 	end
 
 	-- Fields not set by the user
@@ -1126,17 +1133,6 @@ function GnomTEC_Badge:SetMSP(init)
 
 	msp:Update()
 
-	for field, ver in pairs( msp.myver ) do
-		if (not init) then
-			GnomTEC_Badge.db.char["Flag"]["Versions"][ field ] = ver
-		end
-		p.ver[ field ] = ver
-		p.field[ field ] = msp.my[ field ]
-		p.time[ field ] = 999999999
-	end
-
-	p.supported = true
-	
 	GnomTEC_Badge:SaveFlag(realm, player)
 	
 	if ( 1 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
@@ -2667,6 +2663,10 @@ function GnomTEC_Badge:OnEnable()
 		end
 	end
 	
+	if (version_build <= 57) then
+		-- myver is unused in new LibMSP, so we can delete old version informations
+		GnomTEC_Badge.db.char["Flag"]["Versions"] = {}
+	end
 	
 	-- set actual version in char db
 	self.db.char.badge_version = addonVersion
@@ -2717,10 +2717,6 @@ function GnomTEC_Badge:OnEnable()
 	GnomTEC_Badge:LNR_RegisterCallback("LNR_ON_GUID_FOUND");
 	GnomTEC_Badge:LNR_RegisterCallback("LNR_ERROR_FATAL_INCOMPATIBILITY");
 
-	-- Restore saved versions
-	for field, ver in pairs( GnomTEC_Badge.db.char["Flag"]["Versions"] ) do
-		msp.myver[ field ] = ver
-	end
 	GnomTEC_Badge:SetMSP(true)
 	
 	-- GnomTEC Gnomcorder support
