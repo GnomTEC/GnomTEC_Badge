@@ -14,7 +14,7 @@
 	CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 ]]
 
-local VERSION = 1
+local VERSION = 2
 
 if IsLoggedIn() then
 	error(("Chomp Message Library (embedded: %s) cannot be loaded after login."):format((...)))
@@ -24,6 +24,10 @@ end
 
 if not __chomp_internal then
 	__chomp_internal = CreateFrame("Frame")
+end
+
+if not AddOn_Chomp then
+	AddOn_Chomp = {}
 end
 
 __chomp_internal.LOADING = true
@@ -40,7 +44,7 @@ local BURST, BPS = 8192, 2048
 -- love to automatically use them if 8.0 is live, but it's not 100% clear if
 -- this is a 8.0 thing or a test realm thing.
 --local BURST, BPS = 16384, 4096
-local OVERHEAD = 24
+local OVERHEAD = 27
 
 local POOL_TICK = 0.2
 
@@ -109,7 +113,7 @@ local function HandleMessageIn(prefix, text, channel, sender, target, zoneChanne
 
 	local method = channel:match("%:(%u+)$")
 	if method == "BATTLENET" or method == "LOGGED" then
-		text = AddOn_Chomp.DecodeQuotedPrintable(text)
+		text = Internal.DecodeQuotedPrintable(text, method == "LOGGED")
 	end
 
 	local bitField, sessionID, msgID, msgTotal, userText = text:match("^(%x%x%x)(%x%x%x)(%x%x%x)(%x%x%x)(.*)$")
@@ -368,7 +372,9 @@ local function HookSendAddonMessage(prefix, text, kind, target)
 		Internal.Filter[target] = GetTime() + (select(3, GetNetStats()) * 0.001) + 5.000
 	end
 	if Internal.isSending then return end
-	Internal.bytes = Internal.bytes - (#tostring(text) + #tostring(prefix) + OVERHEAD)
+	local prefixLength = math.min(#tostring(prefix), 16)
+	local length = math.min(#tostring(text), 255)
+	Internal.bytes = Internal.bytes - (length + prefixLength + OVERHEAD)
 end
 
 local function HookSendAddonMessageLogged(prefix, text, kind, target)
@@ -376,7 +382,9 @@ local function HookSendAddonMessageLogged(prefix, text, kind, target)
 		Internal.Filter[target] = GetTime() + (select(3, GetNetStats()) * 0.001) + 5.000
 	end
 	if Internal.isSending then return end
-	Internal.bytes = Internal.bytes - (#tostring(text) + #tostring(prefix) + OVERHEAD)
+	local prefixLength = math.min(#tostring(prefix), 16)
+	local length = math.min(#tostring(text), 255)
+	Internal.bytes = Internal.bytes - (length + prefixLength + OVERHEAD)
 end
 
 local function HookSendChatMessage(text, kind, language, target)
@@ -386,12 +394,15 @@ end
 
 local function HookBNSendGameData(bnetIDGameAccount, prefix, text)
 	if Internal.isSending then return end
-	Internal.bytes = Internal.bytes - (#tostring(text) + #tostring(prefix) + OVERHEAD)
+	local prefixLength = math.min(#tostring(prefix), 16)
+	local length = math.min(#tostring(text), 4093 - prefixLength)
+	Internal.bytes = Internal.bytes - (length + prefixLength + OVERHEAD)
 end
 
 local function HookBNSendWhisper(bnetIDAccount, text)
 	if Internal.isSending then return end
-	Internal.bytes = Internal.bytes - (#tostring(text) + OVERHEAD)
+	local length = math.min(#tostring(text), 997)
+	Internal.bytes = Internal.bytes - (length + OVERHEAD)
 end
 
 --[[

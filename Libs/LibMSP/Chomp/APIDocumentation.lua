@@ -158,18 +158,32 @@ local ChompAPI =
 			},
 		},
 		{
+			Name = "CheckLoggedContents",
+			Type = "Function",
+
+			Arguments =
+			{
+				{ Name = "text", Type = "string", Nilable = false },
+			},
+
+			Returns = 
+			{
+				{ Name = "permitted", Type = "boolean", Nilable = false },
+				{ Name = "reason", Type = "string", Nilable = true },
+			},
+		},
+		{
 			Name = "EncodeQuotedPrintable",
 			Type = "Function",
 
 			Arguments =
 			{
 				{ Name = "text", Type = "string", Nilable = false },
-				{ Name = "skipAsciiControl", Type = "boolean", Nilable = true },
 			},
 
 			Returns = 
 			{
-				{ Name = "encodedText", Type = "string", Nilable = false },
+				{ Name = "encodedText", Type = "string", Nilable = false, Documentation = { "WARNING: This function encodes EVERYTHING known to be potentially problematic in any chat type. It should let you send arbitrary binary over logged messages, but it explicitly circumvents some Blizzard protections on glyphs considered abusive. Use at your own risk." } },
 			},
 		},
 		{
@@ -183,7 +197,7 @@ local ChompAPI =
 
 			Returns = 
 			{
-				{ Name = "decodedText", Type = "string", Nilable = false },
+				{ Name = "decodedText", Type = "string", Nilable = false, Documentation = { "WARNING: This function encodes EVERYTHING known to be potentially problematic in any chat type. It should let you send arbitrary binary over logged messages, but it explicitly circumvents some Blizzard protections on glyphs considered abusive. Use at your own risk." } },
 			},
 		},
 		{
