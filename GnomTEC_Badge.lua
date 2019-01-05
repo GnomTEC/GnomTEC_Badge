@@ -1,8 +1,8 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 8.0.1.58
+-- Version: 8.1.0.59
 -- Author: GnomTEC
--- Copyright 2011-2018 by GnomTEC
+-- Copyright 2011-2019 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 -- load localization first.
@@ -19,17 +19,17 @@ GnomTEC_Badge_Flags = nil
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "8.0.1.58"
+local addonVersion = "8.1.0.59"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2018-07-14",
+	["Date"] = "2019-01-05",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
-	["Copyright"] = "(c)2011-2018 by GnomTEC",
+	["Copyright"] = "(c)2011-2019 by GnomTEC",
 }
 
 -- GnomTEC API revision

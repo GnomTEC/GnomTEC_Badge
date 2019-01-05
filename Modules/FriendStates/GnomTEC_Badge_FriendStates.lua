@@ -1,8 +1,8 @@
 -- **********************************************************************
 -- GnomTEC Badge Friend States
--- Version: 8.0.1.58
+-- Version: 8.1.0.59
 -- Author: GnomTEC
--- Copyright 2017-2018 by GnomTEC
+-- Copyright 2017-2019 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 
