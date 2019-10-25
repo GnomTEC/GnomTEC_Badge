@@ -883,7 +883,9 @@
 				<HighlightTexture file="Interface\ICONS\INV_HELMET_28" alphaMode="ADD"/>
 				<Scripts>
 					<OnClick>
---						ShowHelm(self:GetChecked());
+						if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+							ShowHelm(self:GetChecked());
+						end;
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -899,7 +901,9 @@
 				<HighlightTexture file="Interface\ICONS\INV_Misc_Cape_18" alphaMode="ADD"/>
 				<Scripts>
 					<OnClick>
---						ShowCloak(self:GetChecked());
+						if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+							ShowCloak(self:GetChecked());
+						end;
 					</OnClick>
 				</Scripts>
 			</CheckButton>

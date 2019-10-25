@@ -2152,8 +2152,10 @@ function GnomTEC_Badge:PLAYER_FLAGS_CHANGED(event)
 end
 
 function GnomTEC_Badge:PLAYER_EQUIPMENT_CHANGED(slot, hasItem)
---	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
---	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
+	if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+		GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(1 == ShowingHelm())
+		GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(1 == ShowingCloak())
+	end
 end
 
 
@@ -2768,10 +2770,12 @@ function GnomTEC_Badge:OnEnable()
 	else
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
 	end	
-	
---	GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(nil ~= ShowingHelm())
---	GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(nil ~= ShowingCloak())
-	
+
+	if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+		GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(1 == ShowingHelm())
+		GNOMTEC_BADGE_TOOLBAR_SHOWCLOAK:SetChecked(1 == ShowingCloak())
+	end
+		
 	GnomTEC_Badge:DisableFlagDisplay(disabledFlagDisplay)
 	if (GnomTEC_Badge.db.profile["ViewToolbar"]["Enabled"]) then
 		GNOMTEC_BADGE_TOOLBAR:Show()
