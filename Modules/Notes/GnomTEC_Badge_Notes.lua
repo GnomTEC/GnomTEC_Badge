@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge Notes
--- Version: 8.2.0.59
+-- Version: 8.2.5.60
 -- Author: GnomTEC
 -- Copyright 2017-2019 by GnomTEC
 -- http://www.gnomtec.de/
