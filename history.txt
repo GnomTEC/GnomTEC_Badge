@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 8.2.5.61-classic (2019-10-27)
+* Fixed auto hide issue with flag display when moving mouse from char to empty space.
+
 === 8.2.5.60 (2019-10-26)
 * Updated TOC for WoW patch 8.2.5 (BfA)
 

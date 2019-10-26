@@ -1,4 +1,4 @@
-## Interface: 80205
+## Interface: 11302
 # retail: 80205 classic: 11302
 ## Title: GnomTEC_Badge_Notes
 ## Notes: Addon storing the notes to other players (part of GnomTEC Badge).

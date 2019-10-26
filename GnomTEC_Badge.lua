@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 8.2.5.60
+-- Version: 8.2.5.61
 -- Author: GnomTEC
 -- Copyright 2011-2019 by GnomTEC
 -- http://www.gnomtec.de/
@@ -19,13 +19,13 @@ GnomTEC_Badge_Flags = nil
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "8.2.5.60"
+local addonVersion = "8.2.5.61"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2019-10-25",
+	["Date"] = "2019-10-27",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2256,7 +2256,7 @@ function GnomTEC_Badge:UPDATE_MOUSEOVER_UNIT(eventName)
 	
 	if (GnomTEC_Badge.db.profile["ViewFlag"]["MouseOver"] and (not (GnomTEC_Badge.db.profile["ViewFlag"]["LockOnTarget"] and UnitExists("target")))) and GnomTEC_Badge.db.profile["ViewFlag"]["AutoHide"]  and (not GNOMTEC_BADGE_PLAYERLIST:IsVisible()) then
 		if (displayedPlayerRealm ~= realm) or (displayedPlayerName ~= player) then
-			if (not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"]) then
+			if UnitExists("mouseover") and ((not GnomTEC_Badge.db.profile["ViewFlag"]["GnomcorderIntegration"])) then
 				GNOMTEC_BADGE_FRAME:Hide();
 			end
 		end
