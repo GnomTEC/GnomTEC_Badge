@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 8.2.5.60 (2019-10-26)
+* Updated TOC for WoW patch 8.2.5 (BfA)
+
 === 8.2.5.60-classic (2019-10-25)
 * Updated TOC for WoW patch 1.13.2 (Classic)
 * Enabled show/hide helm/cloak toolbar function for Classic

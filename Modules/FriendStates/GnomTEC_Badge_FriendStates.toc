@@ -1,4 +1,4 @@
-## Interface: 11302
+## Interface: 80205
 # retail: 80205 classic: 11302
 ## Title: GnomTEC_Badge_FriendStates
 ## Notes: Addon storing the friend state data of other players (part of GnomTEC Badge).
