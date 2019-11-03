@@ -25,7 +25,7 @@ local addonVersion = "8.2.5.61"
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2019-10-27",
+	["Date"] = "2019-11-03",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -1454,19 +1454,62 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 	if ((not disabledFlagDisplay) and GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] and GnomTEC_Badge_FlagCache[realm][player]) then
 		local i, n
 
-		-- we need two line more then standard tooltip for role play status and titel
-		a = 2
-		for i=1, a , 1 do
-			GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+
+		if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+		-- Classic: shows only name and engine data, so wee need 3 or 4 more lines
+			if (GnomTEC_Badge_FlagCache[realm][player].Guild) then
+				a=4
+			else
+				a=3
+			end
+
+			local p, r = UnitName("player")
+			r = string.gsub(r or GetRealmName(), "%s+", "")
+			if (r == realm) and (p == player) then
+			-- we have some issues with tooltip of the player himself (0 lines sometimes, sometimes enlarged tooltip of previous mouseover)
+			-- so we will only show tooltip data from badge and not add more line as needed for this only)
+			-- sometimes there is no tooltip (NumLines==0), in this case tooltip for player himself did not work yet.
+			
+				n = GameTooltip:NumLines()
+
+				if (n > a+2) then
+					for i=a+3, n , 1 do
+						_G["GameTooltipTextLeft"..(n)]:SetText("")
+						_G["GameTooltipTextLeft"..(n)]:Hide()
+						_G["GameTooltipTextRight"..(n)]:Hide()
+						_G["GameTooltipTextRight"..(n)]:SetText("")
+					end
+				elseif (n < a+2) then
+					for i=1, a , 1 do
+						GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+					end
+				end
+				for i=1, a+2 , 1 do
+					_G["GameTooltipTextLeft"..(i)]:Show()
+					_G["GameTooltipTextRight"..(i)]:Show()
+				end
+
+			else
+				for i=1, a , 1 do
+					GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+				end
+			end
+		else
+		-- Retail: we need two line more then standard tooltip for role play status and titel
+			a = 2
+			for i=1, a , 1 do
+				GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+			end
+			
+			n = GameTooltip:NumLines()
+			for i=0, n-a-1 , 1 do
+				_G["GameTooltipTextLeft"..(n-i)]:SetText(_G["GameTooltipTextLeft"..(n-a-i)]:GetText())
+				_G["GameTooltipTextLeft"..(n-i)]:SetTextColor(_G["GameTooltipTextLeft"..(n-a-i)]:GetTextColor())
+				_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
+				_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
+			end
 		end
 
-		n = GameTooltip:NumLines()
-		for i=0, n-a-1 , 1 do
-			_G["GameTooltipTextLeft"..(n-i)]:SetText(_G["GameTooltipTextLeft"..(n-a-i)]:GetText())
-			_G["GameTooltipTextLeft"..(n-i)]:SetTextColor(_G["GameTooltipTextLeft"..(n-a-i)]:GetTextColor())
-			_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
-			_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
-		end
 	
 		local f
 

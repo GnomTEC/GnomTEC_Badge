@@ -1,7 +1,9 @@
 == GnomTEC Badge - Change History 
 
-=== 8.2.5.61-classic (2019-10-27)
+=== 8.2.5.61-classic (2019-11-03)
 * Fixed auto hide issue with flag display when moving mouse from char to empty space.
+* Fixed tooltip issues in classic showing to few informations
+* Tooltip for player himself has yet some issues (can only show badge information and ignore other addons / shows only if other players tooltip shown before)
 
 === 8.2.5.60 (2019-10-26)
 * Updated TOC for WoW patch 8.2.5 (BfA)
