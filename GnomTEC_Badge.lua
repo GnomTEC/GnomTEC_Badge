@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 8.2.5.61
+-- Version: 8.2.5.62
 -- Author: GnomTEC
 -- Copyright 2011-2019 by GnomTEC
 -- http://www.gnomtec.de/
@@ -19,13 +19,13 @@ GnomTEC_Badge_Flags = nil
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "8.2.5.61"
+local addonVersion = "8.2.5.62"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2019-11-03",
+	["Date"] = "2019-11-08",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -1474,10 +1474,10 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 
 				if (n > a+2) then
 					for i=a+3, n , 1 do
-						_G["GameTooltipTextLeft"..(n)]:SetText("")
-						_G["GameTooltipTextLeft"..(n)]:Hide()
-						_G["GameTooltipTextRight"..(n)]:Hide()
-						_G["GameTooltipTextRight"..(n)]:SetText("")
+						_G["GameTooltipTextLeft"..(i)]:SetText("")
+						_G["GameTooltipTextLeft"..(i)]:Hide()
+						_G["GameTooltipTextRight"..(i)]:Hide()
+						_G["GameTooltipTextRight"..(i)]:SetText("")
 					end
 				elseif (n < a+2) then
 					for i=1, a , 1 do
@@ -1702,7 +1702,7 @@ end
 function GnomTEC_Badge:UpdatePlayerList()
 
 	local key,value,rkey,rvalue,id,count,rcount, acount
-	local fcount, fcount_badge, fcount_trp2, fcount_mrp, fcount_rsp, fcount_other
+	local fcount, fcount_badge,fcount_trp3, fcount_mrp, fcount_xrp, fcount_other
 	local filter = string.lower(GNOMTEC_BADGE_PLAYERLIST_FILTER:GetText());
 	local showFriend = GNOMTEC_BADGE_PLAYERLIST_SHOWFRIEND:GetChecked();
 	local showNeutral = GNOMTEC_BADGE_PLAYERLIST_SHOWNEUTRAL:GetChecked();
@@ -1719,9 +1719,9 @@ function GnomTEC_Badge:UpdatePlayerList()
 	rcount = 0;
 	fcount = 0;
 	fcount_badge = 0;
-	fcount_trp2 = 0;
+	fcount_trp3 = 0;
 	fcount_mrp = 0;
-	fcount_rsp = 0;
+	fcount_xrp = 0;
 	fcount_other = 0;
 	for key,value in pairs(GnomTEC_Badge_FlagCache[string.gsub(GetRealmName(), "%s+", "")]) do
 		rcount = rcount+1;
@@ -1729,12 +1729,12 @@ function GnomTEC_Badge:UpdatePlayerList()
 			fcount = fcount + 1
 			if (string.find(value.VA or "", "^GnomTEC")) then
 				fcount_badge = fcount_badge + 1;
-			elseif (string.find(value.VA or "", "^TotalRP2")) then
-				fcount_trp2 = fcount_trp2 + 1;
+			elseif (string.find(value.VA or "", "^TotalRP3")) then
+				fcount_trp3 = fcount_trp3 + 1;
 			elseif (string.find(value.VA or "", "^MyRolePlay")) then
 				fcount_mrp = fcount_mrp + 1;
-			elseif (string.find(value.VA or "", "flagRSP")) then
-				fcount_rsp = fcount_rsp + 1;
+			elseif (string.find(value.VA or "", "^XRP")) then
+				fcount_xrp = fcount_xrp + 1;
 			else
 				fcount_other = fcount_other + 1
 			end
@@ -1776,9 +1776,9 @@ function GnomTEC_Badge:UpdatePlayerList()
 	
 		if (fcount > 0) then
 			text = text.."\nBadge: "..string.format("%0.1f",fcount_badge/fcount * 100).."%"
-			text = text.." / TRP2: "..string.format("%0.1f",fcount_trp2/fcount * 100).."%"
+			text = text.." / TRP3: "..string.format("%0.1f",fcount_trp3/fcount * 100).."%"
 			text = text.." / MRP: "..string.format("%0.1f",fcount_mrp/fcount * 100).."%"
-			text = text.." / RSP: "..string.format("%0.1f",fcount_rsp/fcount * 100).."%"
+			text = text.." / XRP: "..string.format("%0.1f",fcount_xrp/fcount * 100).."%"
 			text = text.." / Other: "..string.format("%0.1f",fcount_other/fcount * 100).."%"
 		end
 	end

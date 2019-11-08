@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 8.2.5.62-classic (2019-11-08)
+* added TotalRP3 and XRP to flag addon statistics and removed TRP2 and RSP (now added to Other)
+
 === 8.2.5.61-classic (2019-11-03)
 * Fixed auto hide issue with flag display when moving mouse from char to empty space.
 * Fixed tooltip issues in classic showing to few informations
