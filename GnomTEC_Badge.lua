@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 8.2.5.62
+-- Version: 8.2.5.63
 -- Author: GnomTEC
 -- Copyright 2011-2019 by GnomTEC
 -- http://www.gnomtec.de/
@@ -19,13 +19,13 @@ GnomTEC_Badge_Flags = nil
 -- ----------------------------------------------------------------------
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "8.2.5.62"
+local addonVersion = "8.2.5.63"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2019-11-08",
+	["Date"] = "2019-11-09",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -1468,9 +1468,15 @@ function GnomTEC_Badge:UpdateTooltip(realm, player)
 			if (r == realm) and (p == player) then
 			-- we have some issues with tooltip of the player himself (0 lines sometimes, sometimes enlarged tooltip of previous mouseover)
 			-- so we will only show tooltip data from badge and not add more line as needed for this only)
-			-- sometimes there is no tooltip (NumLines==0), in this case tooltip for player himself did not work yet.
+			
 			
 				n = GameTooltip:NumLines()
+				
+				if (0==n) then
+				-- sometimes there is no tooltip (NumLines==0), in this case tooltip for player himself did not work yet.
+				-- and also afterwards on signs there is garbage from our flag, so we better skip this.
+					return
+				end
 
 				if (n > a+2) then
 					for i=a+3, n , 1 do

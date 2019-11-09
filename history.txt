@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 8.2.5.63-classic (2019-11-09)
+* Fixed that tooltip for player char caused sometimes garbage in signs (for streets, shops, taverns etc.) afterwards.
+
 === 8.2.5.62-classic (2019-11-08)
 * added TotalRP3 and XRP to flag addon statistics and removed TRP2 and RSP (now added to Other)
 
