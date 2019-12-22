@@ -1,10 +1,10 @@
-## Interface: 11302
-# retail: 80205 classic: 11302
+## Interface: 11303
+# retail: 80205 classic: 11303
 ## Title: GnomTEC_Badge_Notes
 ## Notes: Addon storing the notes to other players (part of GnomTEC Badge).
 ## Notes-deDE: Addon zur Speicherung der Notizen zu anderer Spieler (Teil von GnomTEC Badge).
 ## Author: GnomTEC
-## Version: 8.2.5.60
+## Version: 8.2.5.64
 ## SavedVariables: GnomTEC_Badge_Notes
 
 GnomTEC_Badge_Notes.lua

@@ -1,5 +1,8 @@
 == GnomTEC Badge Flag Cache - Change History 
 
+=== 8.2.5.64-classic (2019-12-22)
+* Updated TOC for WoW patch 1.13.3 (Classic)
+
 === 8.2.5.60 (2019-10-26)
 * Updated TOC for WoW patch 8.2.5 (BfA)
 

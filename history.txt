@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 8.2.5.64-classic (2019-12-22)
+* Updated TOC for WoW patch 1.13.3 (Classic)
+
 === 8.2.5.63-classic (2019-11-09)
 * Fixed that tooltip for player char caused sometimes garbage in signs (for streets, shops, taverns etc.) afterwards.
 
