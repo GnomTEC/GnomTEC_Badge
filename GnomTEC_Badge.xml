@@ -30,7 +30,7 @@
 			</OnClick>
 		</Scripts>
 	</Button>
-	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true">
+	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size x="400" y="200" />
 		<ResizeBounds>
             <minResize>
@@ -40,17 +40,18 @@
 		<Anchors>
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-			<EdgeSize val="16"/>
-			<TileSize val="16"/>
-			<Color r="0.25" g="0.25" b="0.25"/>
-			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+		</KeyValues>
 		<Frames>
-			<Frame name = "$parent_PLAYER" frameLevel="1">
-				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" tile="true">
-					<Color r="0.1" g="0.1" b="0.1"/>
-				</Backdrop>
+			<Frame name = "$parent_PLAYER" frameLevel="1"  inherits="BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+				</KeyValues>
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="10" y="-9" />
@@ -492,17 +493,16 @@
 			<OnMouseWheel>GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:SetValue(GNOMTEC_BADGE_PLAYERLIST_LIST_SLIDER:GetValue() - delta);</OnMouseWheel>
 		</Scripts>
 	</Button>
-	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true">
+	<Frame name="GNOMTEC_BADGE_PLAYERLIST" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size x="400" y="460" />
 		<Anchors>
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-			<EdgeSize val="16"/>
-			<TileSize val="16"/>
-			<Color r="0.25" g="0.25" b="0.25"/>
-			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+		</KeyValues>
 		<Frames>
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
 				<Anchors>
@@ -578,19 +578,18 @@
                 	<OnClick>GnomTEC_Badge:UpdatePlayerList();</OnClick>
 	            </Scripts>
 			</CheckButton>
-			<Frame name="$parent_FOOTER">
+			<Frame name="$parent_FOOTER" inherits="BackdropTemplate">
 				<Size x="400" y="60" />
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
 						<Offset x="0" y="0" />
 					</Anchor>
 				</Anchors>
-				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-					<EdgeSize val="16"/>
-					<TileSize val="16"/>
-					<Color r="0.25" g="0.25" b="0.25"/>
-					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-				</Backdrop>
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+				</KeyValues>
 				<Layers>
 					<Layer level="Artwork">
 						<FontString name="$parent_TEXT" inherits="GameFontNormalSmall" resizable="true" setAllPoints="true" justifyH="LEFT">
@@ -607,13 +606,12 @@
 					</Layer>
 				</Layers>
 			</Frame>
-			<Frame name="$parent_LIST" resizable="false">
-				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-					<EdgeSize val="16"/>
-					<TileSize val="16"/>
-					<Color r="0.25" g="0.25" b="0.25"/>
-					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-				</Backdrop>
+			<Frame name="$parent_LIST" resizable="false" inherits="BackdropTemplate">
+				<KeyValues>
+					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+				</KeyValues>
 				<FontString inherits="GameFontNormalLeft"/>
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="$parent_FOOTER">
@@ -793,17 +791,16 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="GNOMTEC_BADGE_TOOLBAR" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true">
+	<Frame name="GNOMTEC_BADGE_TOOLBAR" parent="UIParent" toplevel="true" movable="true" resizable="false" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
 		<Size x="202" y="26" />
 		<Anchors>
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
-		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-			<EdgeSize val="16"/>
-			<TileSize val="16"/>
-			<Color r="0.25" g="0.25" b="0.25"/>
-			<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+		</KeyValues>
 		<Frames>
 			<Button name="$parent_SELECTFLAGDISPLAY_BUTTON">
 				<Size x="16" y="16" />
