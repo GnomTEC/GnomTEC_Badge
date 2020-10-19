@@ -42,15 +42,13 @@
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>
 			<Frame name = "$parent_PLAYER" frameLevel="1"  inherits="BackdropTemplate">
 				<KeyValues>
 					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<Anchors>
 					<Anchor point="TOPLEFT">
@@ -500,8 +498,7 @@
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>
 			<Button name="$parent_CloseButton" inherits="UIPanelCloseButton">
@@ -587,8 +584,7 @@
 				</Anchors>
 				<KeyValues>
 					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<Layers>
 					<Layer level="Artwork">
@@ -609,8 +605,7 @@
 			<Frame name="$parent_LIST" resizable="false" inherits="BackdropTemplate">
 				<KeyValues>
 					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-					<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-					<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<FontString inherits="GameFontNormalLeft"/>
 				<Anchors>
@@ -798,8 +793,7 @@
 		</Anchors>
 		<KeyValues>
 			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
-			<KeyValue key="backdropBorderColor" value="LEGENDARY_ORANGE_COLOR" type="global"/>
-			<KeyValue key="backdropBorderColorAlpha" value="0.25" type="number"/>
+			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>
 			<Button name="$parent_SELECTFLAGDISPLAY_BUTTON">
