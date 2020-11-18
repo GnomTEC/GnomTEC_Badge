@@ -1,5 +1,8 @@
 == GnomTEC Badge Notes - Change History 
 
+=== 9.0.2.65 (2020-11-18)
+* Updated TOC for WoW patch 9.0.2
+
 === 9.0.1.65 (2020-10-18)
 * Updated TOC for WoW patch 9.0.1
 

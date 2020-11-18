@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 9.0.1.66
+-- Version: 9.0.2.66
 -- Author: GnomTEC
 -- Copyright 2011-2020 by GnomTEC
 -- http://www.gnomtec.de/
@@ -25,7 +25,7 @@ local addonVersion = "9.0.1.66"
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2020-10-19",
+	["Date"] = "2020-11-18",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",

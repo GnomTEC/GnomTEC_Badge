@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 9.0.2.66 (2020-11-18)
+* Updated TOC for WoW patch 9.0.2
+
 === 9.0.1.66 (2020-10-19)
 * Fixed wrong backdrop colors in GUI xml
 
