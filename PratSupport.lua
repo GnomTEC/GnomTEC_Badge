@@ -1,12 +1,14 @@
 -- **********************************************************************
 -- GnomTEC Badge - PratSupport
--- Version: 9.1.0.66
+-- Version: 9.1.5.67
 -- Author: GnomTEC
 -- Copyright 2011-2021 by GnomTEC
 -- http://www.gnomtec.de/
 -- **********************************************************************
 
 if not Prat then return end
+if _G.TRP3_API then return end
+
 
 Prat:AddModuleToLoad(function()
 

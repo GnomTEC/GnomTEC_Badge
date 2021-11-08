@@ -41,13 +41,13 @@
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
 		<KeyValues>
-			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>
 			<Frame name = "$parent_PLAYER" frameLevel="1"  inherits="BackdropTemplate">
 				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<Anchors>
@@ -497,7 +497,7 @@
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
 		<KeyValues>
-			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>
@@ -583,7 +583,7 @@
 					</Anchor>
 				</Anchors>
 				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<Layers>
@@ -604,7 +604,7 @@
 			</Frame>
 			<Frame name="$parent_LIST" resizable="false" inherits="BackdropTemplate">
 				<KeyValues>
-					<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+					<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
 				<FontString inherits="GameFontNormalLeft"/>
@@ -792,7 +792,7 @@
 			<Anchor point="CENTER" relativePoint="CENTER"/>
 		</Anchors>
 		<KeyValues>
-			<KeyValue key="backdropInfo" value="BACKDROP_TOOLTIP_16_16_5555" type="global"/>
+			<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 			<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 		</KeyValues>
 		<Frames>

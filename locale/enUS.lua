@@ -20,6 +20,7 @@ L["L_STR_FC4"] = "Storyteller (SL)"
 L["L_OPTIONS_TITLE"] = "Addon for display and management of roleplay character descriptions with support of 'Marry Sue Protocol' based roleplay flags.\n\n"
 
 L["L_OPTIONS_PROFILE"] = "Character description"
+L["L_OPTIONS_PROFILE_TRP3"] = "GnomTEC Badge is running in TRP3 Extension Mode.\n\nYou must setup your flag in the TRP3 user interface"
 L["L_OPTIONS_PROFILE_NA"] = "Name"
 L["L_OPTIONS_PROFILE_NT"] = "Title"
 L["L_OPTIONS_PROFILE_DE"] = "Physical description"
@@ -57,6 +58,7 @@ L["L_OPTIONS_VIEW_FLAG_COLOR_RESET"] = "Reset colors"
 L["L_OPTIONS_VIEW_FLAG_LOCKED"] = "Lock window."
 
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Display - Tooltip"
+L["L_OPTIONS_VIEW_TOOLTIP_TRP3"] = "GnomTEC Badge is running in TRP3 Extension Mode.\n\nYou must setup your tooltip in the TRP3 user interface"
 L["L_OPTIONS_VIEW_TOOLTIP_ENABLED"] = "Show roleplay flag also in tooltip."
 
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Display - Toolbar"
@@ -64,12 +66,14 @@ L["L_OPTIONS_VIEW_TOOLBAR_ENABLED"] = "Show toolbar for faster changing of diffe
 L["L_OPTIONS_VIEW_TOOLBAR_LOCKED"] = "Lock toolbar."
 
 L["L_OPTIONS_VIEW_NAMEPLATES"] = "Display - Nameplates"
+L["L_OPTIONS_VIEW_NAMEPLATES_TRP3"] = "GnomTEC Badge is running in TRP3 Extension Mode.\n\nYou must setup your namplates in the TRP3 user interface"
 L["L_OPTIONS_VIEW_NAMEPLATES_ENABLED"] = "Replaced nameplates by name from the RPG flags."
 L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"] = "Hide all other namplate parts except player name."
 
 
 
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Display - Chatframe"
+L["L_OPTIONS_VIEW_CHATFRAME_TRP3"] = "GnomTEC Badge is running in TRP3 Extension Mode.\n\nYou must setup your chat frame in the TRP3 user interface"
 L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"] = "Replace player names in blizzard chat frame with names given by their flags."
 
 L["L_OPTIONS_PROFILES_CONFIGURATION"] = "Profiles - Configuration"

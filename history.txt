@@ -1,5 +1,10 @@
 == GnomTEC Badge - Change History 
 
+=== 9.1.0.67 (2021-11-08)
+* Updated TOC for WoW patch 9.1.5
+* Added TRP3 Extension mode
+* Changed Backdrop elements in GUI xml 
+
 === 9.1.0.66 (2021-07-01)
 * Updated TOC for WoW patch 9.1.0
 

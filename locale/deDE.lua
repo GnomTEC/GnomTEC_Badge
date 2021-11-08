@@ -20,6 +20,7 @@ L["L_STR_FC4"] = "Erzähler (SL)"
 L["L_OPTIONS_TITLE"] = "Addon zur Anzeige und Verwaltung von Rollenspiel-Charakterbeschreibungen mit Support von'Marry Sue Protocol'-basierten Flags.\n\n"
 
 L["L_OPTIONS_PROFILE"] = "Charakterbeschreibung"
+L["L_OPTIONS_PROFILE_TRP3"] = "GnomTEC Badge ist im TRP3 Extension Modus.\n\nDu musst dein Flag im TRP3 User Interface bearbeiten"
 L["L_OPTIONS_PROFILE_NA"] = "Name"
 L["L_OPTIONS_PROFILE_NT"] = "Titel"
 L["L_OPTIONS_PROFILE_DE"] = "Physische Beschreibung"
@@ -56,6 +57,7 @@ L["L_OPTIONS_VIEW_FLAG_COLOR_RESET"] = "Farben rücksetzen"
 L["L_OPTIONS_VIEW_FLAG_LOCKED"] = "Fenster fixieren."
 
 L["L_OPTIONS_VIEW_TOOLTIP"] = "Anzeige - Tooltip"
+L["L_OPTIONS_VIEW_TOOLTIP_TRP3"] = "GnomTEC Badge ist im TRP3 Extension Modus.\n\nDu musst dein Tooltip im TRP3 User Interface bearbeiten"
 L["L_OPTIONS_VIEW_TOOLTIP_ENABLED"] = "Zeige Rollenspielflag auch im Tooltip an"
 
 L["L_OPTIONS_VIEW_TOOLBAR"] = "Anzeige - Toolbar"
@@ -63,10 +65,12 @@ L["L_OPTIONS_VIEW_TOOLBAR_ENABLED"] = "Zeige Toolbar zum schnelleren Umschalten 
 L["L_OPTIONS_VIEW_TOOLBAR_LOCKED"] = "Toolbar fixieren."
 
 L["L_OPTIONS_VIEW_NAMEPLATES"] = "Anzeige - Namensplaketten"
+L["L_OPTIONS_VIEW_NAMEPLATES_TRP3"] = "GnomTEC Badge ist im TRP3 Extension Modus.\n\nDu musst deine Namensplaketten im TRP3 User Interface bearbeiten"
 L["L_OPTIONS_VIEW_NAMEPLATES_ENABLED"] = "Ersetzte Namensplaketten durch Namen aus den Rollenspielflags."
 L["L_OPTIONS_VIEW_NAMEPLATES_SHOWONLYNAME"] = "Verstecke alle Teile der Namensplaketten außer dem Spielernamen."
 
 L["L_OPTIONS_VIEW_CHATFRAME"] = "Anzeige - Chatframe"
+L["L_OPTIONS_VIEW_CHATFRAME_TRP3"] = "GnomTEC Badge ist im TRP3 Extension Modus.\n\nDu musst dein Chatfenster im TRP3 User Interface bearbeiten"
 L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"] = "Ersetzte Spielernamen im Blizzard Chatfenster mit deren Namen aus den Flags."
 
 L["L_OPTIONS_PROFILES_CONFIGURATION"] = "Profile - Konfiguration"

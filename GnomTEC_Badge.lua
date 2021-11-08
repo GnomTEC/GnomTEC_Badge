@@ -1,6 +1,6 @@
 ﻿-- **********************************************************************
 -- GnomTEC Badge
--- Version: 9.1.0.66
+-- Version: 9.1.5.67
 -- Author: GnomTEC
 -- Copyright 2011-2021 by GnomTEC
 -- http://www.gnomtec.de/
@@ -18,14 +18,17 @@ GnomTEC_Badge_Flags = nil
 -- Addon global Constants (local)
 -- ----------------------------------------------------------------------
 
+-- TRP3 Extension Mode
+local TRP3_API = _G.TRP3_API
+
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "9.1.0.66"
+local addonVersion = "9.1.5.67"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2021-07-01",
+	["Date"] = "2021-11-08",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -357,15 +360,22 @@ local optionsProfile = {
 	name = L["L_OPTIONS_PROFILE"],
 	type = 'group',
 	args = {
+		badgePlayerTRP3 = {
+			order = 1,
+			type = "description",
+			name = L["L_OPTIONS_PROFILE_TRP3"],
+			hidden = (TRP3_API == nil)
+		},
 		badgePlayerNA = {
 			type = "input",
 			name = L["L_OPTIONS_PROFILE_NA"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge.db.char["Flag"]["Fields"]["NA"] = val; GnomTEC_Badge:SetMSP() end,
-	   	get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["NA"] end,
+			get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["NA"] end,
 			multiline = false,
 			width = 'full',
-			order = 1
+			order = 1,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerNT = {
 			type = "input",
@@ -375,7 +385,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["NT"] end,
 			multiline = false,
 			width = 'full',
-			order = 2
+			order = 2,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerFR = {
 			type = "select",
@@ -384,7 +395,8 @@ local optionsProfile = {
 			set = function(info,val) GnomTEC_Badge.db.char["Flag"]["Fields"]["FR"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["FR"] end,
 			values = str_fr,
-			order = 3
+			order = 3,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerFC = {
 			type = "select",
@@ -393,7 +405,8 @@ local optionsProfile = {
 			set = function(info,val) GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] = val; GnomTEC_Badge:SetMSP() end,
 			get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] end,
 			values = str_fc,
-			order = 3
+			order = 3,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerCU = {
 			type = "input",
@@ -403,7 +416,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["CU"] end,
 			multiline = 2,
 			width = 'full',
-			order = 4
+			order = 4,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerRA = {
 			type = "input",
@@ -413,7 +427,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["RA"] end,
 			multiline = false,
 			width = 'half',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerAG = {
 			type = "input",
@@ -423,7 +438,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["AG"] end,
 			multiline = false,
 			width = 'half',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerAE = {
 			type = "input",
@@ -433,7 +449,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["AE"] end,
 			multiline = false,
 			width = 'half',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerAH = {
 			type = "input",
@@ -443,7 +460,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["AH"] end,
 			multiline = false,
 			width = 'half',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerAW = {
 			type = "input",
@@ -453,7 +471,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["AW"] end,
 			multiline = false,
 			width = 'half',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerDE = {
 			type = "input",
@@ -463,7 +482,8 @@ local optionsProfile = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["DE"] end,
 			multiline = 10,
 			width = 'full',
-			order = 6
+			order = 6,
+			hidden = (TRP3_API ~= nil)
 		},
 	},
 }
@@ -472,15 +492,22 @@ local optionsMeta = {
 	name = L["L_OPTIONS_META"],
 	type = 'group',
 	args = {
+		badgePlayerTRP3 = {
+			order = 1,
+			type = "description",
+			name = L["L_OPTIONS_PROFILE_TRP3"],
+			hidden = (TRP3_API == nil)
+		},
 		badgePlayerNH = {
 			type = "input",
 			name = L["L_OPTIONS_META_NH"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge.db.char["Flag"]["Fields"]["NH"] = val; GnomTEC_Badge:SetMSP() end,
-	   	get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["NH"] end,
+			get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["NH"] end,
 			multiline = false,
 			width = 'full',
-			order = 1
+			order = 1,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerHB = {
 			type = "input",
@@ -490,7 +517,8 @@ local optionsMeta = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["HB"] end,
 			multiline = false,
 			width = 'full',
-			order = 2
+			order = 2,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerHH = {
 			type = "input",
@@ -500,7 +528,8 @@ local optionsMeta = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["HH"] end,
 			multiline = false,
 			width = 'full',
-			order = 3
+			order = 3,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerMO = {
 			type = "input",
@@ -510,7 +539,8 @@ local optionsMeta = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["MO"] end,
 			multiline = 2,
 			width = 'full',
-			order = 4
+			order = 4,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgePlayerHI = {
 			type = "input",
@@ -520,7 +550,8 @@ local optionsMeta = {
     		get = function(info) return GnomTEC_Badge.db.char["Flag"]["Fields"]["HI"] end,
 			multiline = 10,
 			width = 'full',
-			order = 5
+			order = 5,
+			hidden = (TRP3_API ~= nil)
 		},
 	},
 }
@@ -672,6 +703,12 @@ local optionsViewTooltip = {
 	name = L["L_OPTIONS_VIEW_TOOLTIP"],
 	type = 'group',
 	args = {
+		badgeOptionTooltipTRP3 = {
+			order = 1,
+			type = "description",
+			name = L["L_OPTIONS_VIEW_TOOLTIP_TRP3"],
+			hidden = (TRP3_API == nil)
+		},
 		badgeOptionTooltip = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_TOOLTIP_ENABLED"],
@@ -679,7 +716,8 @@ local optionsViewTooltip = {
 			set = function(info,val) GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] = val end,
 	   	get = function(info) return GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] end,
 			width = 'full',
-			order = 1
+			order = 1,
+			hidden = (TRP3_API ~= nil)
 		},
 	},
 }
@@ -714,6 +752,12 @@ local optionsViewNameplates = {
 	name = L["L_OPTIONS_VIEW_NAMEPLATES"],
 	type = 'group',
 	args = {
+		badgeOptionNameplatesTRP3 = {
+			order = 1,
+			type = "description",
+			name = L["L_OPTIONS_VIEW_NAMEPLATES_TRP3"],
+			hidden = (TRP3_API == nil)
+		},
 		badgeOptionNameplates = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_NAMEPLATES_ENABLED"],
@@ -721,7 +765,8 @@ local optionsViewNameplates = {
 			set = function(info,val) GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] = val end,
 	   	get = function(info) return GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] end,
 			width = 'full',
-			order = 1
+			order = 1,
+			hidden = (TRP3_API ~= nil)
 		},
 		badgeOptionNameplatesShowOnlyName = {
 			type = "toggle",
@@ -729,9 +774,10 @@ local optionsViewNameplates = {
 			desc = "",
 			disabled = function(info) return not GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"] end,
 			set = function(info,val) GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"] = val end,
-	   	get = function(info) return GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"] end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"] end,
 			width = 'full',
-			order = 2
+			order = 2,
+			hidden = (TRP3_API ~= nil)
 		},
 	},
 }
@@ -740,14 +786,21 @@ local optionsViewChat = {
 	name = L["L_OPTIONS_VIEW_CHATFRAME"],
 	type = 'group',
 	args = {
+		badgeOptionChatFrameTRP3 = {
+			order = 1,
+			type = "description",
+			name = L["L_OPTIONS_VIEW_CHATFRAME_TRP3"],
+			hidden = (TRP3_API == nil)
+		},
 		badgeOptionChatFrame = {
 			type = "toggle",
 			name = L["L_OPTIONS_VIEW_CHATFRAME_ENABLED"],
 			desc = "",
 			set = function(info,val) GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] = val end,
-	   	get = function(info) return GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] end,
+			get = function(info) return GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"] end,
 			width = 'full',
-			order = 1
+			order = 1,
+			hidden = (TRP3_API ~= nil)
 		},
 	},
 }
@@ -915,17 +968,19 @@ local optionsExport = {
 GnomTEC_Badge = LibStub("AceAddon-3.0"):NewAddon("GnomTEC_Badge", "AceConsole-3.0", "AceEvent-3.0", "AceHook-3.0", "LibNameplateRegistry-1.0")
 
 -- Detect any other MSP AddOn and bail out in case of conflict
-if _G.msp_RPAddOn or _G.mrp then
- 	StaticPopupDialogs[ "GNOMTEC_BADGE_MSP_CONFLICT" ] = {
-		text = format( "ERROR: You can only use one MSP AddOn at once, but you have both GnomTEC_Badge and %s loaded.\n\nAll MSP AddOns can communicate with each other, but please do not try to use more than one at once as conflicts will arise.", tostring(_G.msp_RPAddOn) or "another MSP AddOn" ),
-		button1 = OKAY or "OK",
-		whileDead = true,
-		timeout = 0,
-	}
-	StaticPopup_Show( "GNOMTEC_BADGE_MSP_CONFLICT" )
-	return
-end 
-_G.msp_RPAddOn = "GnomTEC_Badge"
+if not TRP3_API then
+	if _G.msp_RPAddOn or _G.mrp then
+		StaticPopupDialogs[ "GNOMTEC_BADGE_MSP_CONFLICT" ] = {
+			text = format( "ERROR: You can only use one MSP AddOn at once, but you have both GnomTEC_Badge and %s loaded.\n\nAll MSP AddOns can communicate with each other, but please do not try to use more than one at once as conflicts will arise.", tostring(_G.msp_RPAddOn) or "another MSP AddOn" ),
+			button1 = OKAY or "OK",
+			whileDead = true,
+			timeout = 0,
+		}
+		StaticPopup_Show( "GNOMTEC_BADGE_MSP_CONFLICT" )
+		return
+	end 
+	_G.msp_RPAddOn = "GnomTEC_Badge"
+end
 
 -- ----------------------------------------------------------------------
 -- Local stubs for the GnomTEC API
@@ -1004,11 +1059,13 @@ local function Safeguard_FlagEntry(realm, player)
 end
 
 function GnomTEC_Badge:AddToVAString( addon )
-	if not select( 4, GetAddOnInfo( addon ) ) then return end
-	msp.my['VA'] = strtrim( format( "%s;%s/%s%s", (msp.my['VA'] or ""), addon, 
-		( GetAddOnMetadata( addon, "Version" ) or "" ), 
-		(	(GetAddOnMetadata( addon, "X-Test" )=="Alpha" and "a") or 
-			(GetAddOnMetadata( addon, "X-Test" )=="Beta" and "b") or "" ) ), "; " )
+	if not TRP3_API then
+		if not select( 4, GetAddOnInfo( addon ) ) then return end
+		msp.my['VA'] = strtrim( format( "%s;%s/%s%s", (msp.my['VA'] or ""), addon, 
+			( GetAddOnMetadata( addon, "Version" ) or "" ), 
+			(	(GetAddOnMetadata( addon, "X-Test" )=="Alpha" and "a") or 
+				(GetAddOnMetadata( addon, "X-Test" )=="Beta" and "b") or "" ) ), "; " )
+	end
 end
 
 function GnomTEC_Badge:DebugPrintFlag(realm, player)
@@ -1099,54 +1156,56 @@ function GnomTEC_Badge:SaveFlag(realm, player)
  end
 
 function GnomTEC_Badge:SetMSP(init)
-	local field, value
-	local player, realm = UnitName("player")
-	realm = string.gsub(realm or GetRealmName(), "%s+", "")
+	if not TRP3_API then
 
-	local p = msp.char[ player.."-"..realm ]
-	
-	-- Don't mess with msp.my['TT'], that's used internally
-	local tt = msp.my['TT']
+		local field, value
+		local player, realm = UnitName("player")
+		realm = string.gsub(realm or GetRealmName(), "%s+", "")
 
-	wipe( msp.my )
-	msp.my['TT'] = tt
-	
-	wipe( p.field )
-	p.supported = true
-	
-	for field, value in pairs( GnomTEC_Badge.db.char["Flag"]["Fields"] ) do
-		-- we also don't want to send ui escape sequences to others
-		value = cleanpipe(value)
-		msp.my[ field ] = value
-		p.field[ field ] = value
+		local p = msp.char[ player.."-"..realm ]
+		
+		-- Don't mess with msp.my['TT'], that's used internally
+		local tt = msp.my['TT']
+
+		wipe( msp.my )
+		msp.my['TT'] = tt
+		
+		wipe( p.field )
+		p.supported = true
+		
+		for field, value in pairs( GnomTEC_Badge.db.char["Flag"]["Fields"] ) do
+			-- we also don't want to send ui escape sequences to others
+			value = cleanpipe(value)
+			msp.my[ field ] = value
+			p.field[ field ] = value
+		end
+
+		-- Fields not set by the user
+		msp.my['VP'] = tostring( msp.protocolversion )
+		msp.my['VA'] = ""
+		GnomTEC_Badge:AddToVAString( "GnomTEC_Badge" )	
+
+		msp.my['GU'] = UnitGUID("player")
+		msp.my['GS'] = tostring( UnitSex("player") )
+		msp.my['GC'] = select( 2, UnitClass("player") )
+		msp.my['GR'] = select( 2, UnitRace("player") )
+
+		msp:Update()
+
+		GnomTEC_Badge:SaveFlag(realm, player)
+		
+		if ( 1 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
+			GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
+		elseif  ( 2 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
+			GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["IC"].text) 
+		elseif  ( 3 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
+			GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["LFC"].text) 
+		elseif  ( 4 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
+			GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
+		else
+			GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
+		end	
 	end
-
-	-- Fields not set by the user
-	msp.my['VP'] = tostring( msp.protocolversion )
-	msp.my['VA'] = ""
-	GnomTEC_Badge:AddToVAString( "GnomTEC_Badge" )	
-
-	msp.my['GU'] = UnitGUID("player")
-	msp.my['GS'] = tostring( UnitSex("player") )
-	msp.my['GC'] = select( 2, UnitClass("player") )
-	msp.my['GR'] = select( 2, UnitRace("player") )
-
-	msp:Update()
-
-	GnomTEC_Badge:SaveFlag(realm, player)
-	
-	if ( 1 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["OOC"].text) 	
-	elseif  ( 2 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["IC"].text) 
-	elseif  ( 3 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["LFC"].text) 
-	elseif  ( 4 == GnomTEC_Badge.db.char["Flag"]["Fields"]["FC"] ) then
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["SL"].text) 
-	else
-		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
-	end	
-
 end
 
 
@@ -1451,161 +1510,165 @@ function GnomTEC_Badge:DisplayBadge(realm, player)
 end
 
 function GnomTEC_Badge:UpdateTooltip(realm, player)
-	if ((not disabledFlagDisplay) and GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] and GnomTEC_Badge_FlagCache[realm][player]) then
-		local i, n
+	if not TRP3_API then
+		-- we only change tooltip when not in TRP3 Extension Mode.
+		-- It would be too dangerous. ;-)
+		if ((not disabledFlagDisplay) and GnomTEC_Badge.db.profile["ViewTooltip"]["Enabled"] and GnomTEC_Badge_FlagCache[realm][player]) then
+			local i, n
 
 
-		if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
-		-- Classic: shows only name and engine data, so wee need 3 or 4 more lines
-			if (GnomTEC_Badge_FlagCache[realm][player].Guild) then
-				a=4
-			else
-				a=3
-			end
-
-			local p, r = UnitName("player")
-			r = string.gsub(r or GetRealmName(), "%s+", "")
-			if (r == realm) and (p == player) then
-			-- we have some issues with tooltip of the player himself (0 lines sometimes, sometimes enlarged tooltip of previous mouseover)
-			-- so we will only show tooltip data from badge and not add more line as needed for this only)
-			
-			
-				n = GameTooltip:NumLines()
-				
-				if (0==n) then
-				-- sometimes there is no tooltip (NumLines==0), in this case tooltip for player himself did not work yet.
-				-- and also afterwards on signs there is garbage from our flag, so we better skip this.
-					return
+			if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
+			-- Classic: shows only name and engine data, so wee need 3 or 4 more lines
+				if (GnomTEC_Badge_FlagCache[realm][player].Guild) then
+					a=4
+				else
+					a=3
 				end
 
-				if (n > a+2) then
-					for i=a+3, n , 1 do
-						_G["GameTooltipTextLeft"..(i)]:SetText("")
-						_G["GameTooltipTextLeft"..(i)]:Hide()
-						_G["GameTooltipTextRight"..(i)]:Hide()
-						_G["GameTooltipTextRight"..(i)]:SetText("")
+				local p, r = UnitName("player")
+				r = string.gsub(r or GetRealmName(), "%s+", "")
+				if (r == realm) and (p == player) then
+				-- we have some issues with tooltip of the player himself (0 lines sometimes, sometimes enlarged tooltip of previous mouseover)
+				-- so we will only show tooltip data from badge and not add more line as needed for this only)
+				
+				
+					n = GameTooltip:NumLines()
+					
+					if (0==n) then
+					-- sometimes there is no tooltip (NumLines==0), in this case tooltip for player himself did not work yet.
+					-- and also afterwards on signs there is garbage from our flag, so we better skip this.
+						return
 					end
-				elseif (n < a+2) then
+
+					if (n > a+2) then
+						for i=a+3, n , 1 do
+							_G["GameTooltipTextLeft"..(i)]:SetText("")
+							_G["GameTooltipTextLeft"..(i)]:Hide()
+							_G["GameTooltipTextRight"..(i)]:Hide()
+							_G["GameTooltipTextRight"..(i)]:SetText("")
+						end
+					elseif (n < a+2) then
+						for i=1, a , 1 do
+							GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+						end
+					end
+					for i=1, a+2 , 1 do
+						_G["GameTooltipTextLeft"..(i)]:Show()
+						_G["GameTooltipTextRight"..(i)]:Show()
+					end
+
+				else
 					for i=1, a , 1 do
 						GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
 					end
 				end
-				for i=1, a+2 , 1 do
-					_G["GameTooltipTextLeft"..(i)]:Show()
-					_G["GameTooltipTextRight"..(i)]:Show()
-				end
-
 			else
+			-- Retail: we need two line more then standard tooltip for role play status and titel
+				a = 2
 				for i=1, a , 1 do
 					GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
 				end
+				
+				n = GameTooltip:NumLines()
+				for i=0, n-a-1 , 1 do
+					_G["GameTooltipTextLeft"..(n-i)]:SetText(_G["GameTooltipTextLeft"..(n-a-i)]:GetText())
+					_G["GameTooltipTextLeft"..(n-i)]:SetTextColor(_G["GameTooltipTextLeft"..(n-a-i)]:GetTextColor())
+					_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
+					_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
+				end
 			end
-		else
-		-- Retail: we need two line more then standard tooltip for role play status and titel
-			a = 2
-			for i=1, a , 1 do
-				GameTooltip:AddDoubleLine("-", "-", 1.0, 1.0, 1.0, 1.0, 1.0, 1.0);
+
+		
+			local f
+
+			if (GnomTEC_Badge_FriendStates[realm][player].FRIEND_C) then
+				f = GnomTEC_Badge_FriendStates[realm][player].FRIEND_C[UnitName("player")];
+			else
+				f = nil;
+			end
+			if (f == nil) then
+				GameTooltipTextLeft1:SetTextColor(0.75,0.75,0.75)
+			elseif (f < 0) then
+				GameTooltipTextLeft1:SetTextColor(1.0,0.0,0.0)
+			elseif (f > 0) then
+				GameTooltipTextLeft1:SetTextColor(0.0,1.0,0.0)
+			else
+				GameTooltipTextLeft1:SetTextColor(0.5,0.5,1.0)
+			end
+			GameTooltipTextLeft1:SetText(GnomTEC_Badge_FlagCache[realm][player].NA or player)	
+			GameTooltipTextRight1:SetText("")	
+		
+			GameTooltipTextLeft2:SetText(GnomTEC_Badge_FlagCache[realm][player].NT or "")
+			GameTooltipTextLeft2:SetTextColor(1.0,1.0,0.0)
+			GameTooltipTextRight2:SetText("")
+		
+			if (GnomTEC_Badge_FlagCache[realm][player].Guild) then
+				GameTooltipTextLeft3:SetText(GnomTEC_Badge_FlagCache[realm][player].Guild or "")
+				GameTooltipTextLeft3:SetTextColor(1.0,1.0,1.0)
+				GameTooltipTextRight3:SetText("")
+				n = 4
+			else
+				n = 3
+			end
+		
+			_G["GameTooltipTextLeft"..n]:SetText((GnomTEC_Badge_FlagCache[realm][player].EngineData or "").." ("..player..")")
+			_G["GameTooltipTextLeft"..n]:SetTextColor(1.0,1.0,1.0)
+			_G["GameTooltipTextRight"..n]:SetText("")
+			-- Fix for ELVUI which hide this, so show it for sure
+			_G["GameTooltipTextLeft"..n]:Show()
+
+			local fr, fc, msp
+						
+			if type(GnomTEC_Badge_FlagCache[realm][player].FR) == "number" then
+				fr = str_fr[GnomTEC_Badge_FlagCache[realm][player].FR]
+			elseif type(GnomTEC_Badge_FlagCache[realm][player].FR) == "string" then
+				fr = GnomTEC_Badge_FlagCache[realm][player].FR
+			end
+			if type(GnomTEC_Badge_FlagCache[realm][player].FC) == "number" then
+				fc = str_fc[GnomTEC_Badge_FlagCache[realm][player].FC]
+			elseif type(GnomTEC_Badge_FlagCache[realm][player].FC) == "string" then
+				fc = GnomTEC_Badge_FlagCache[realm][player].FC
+			end
+			if GnomTEC_Badge_FlagCache[realm][player].FlagMSP == nil then
+				msp = L["L_NORPFLAG"]
+			elseif GnomTEC_Badge_FlagCache[realm][player].FlagMSP then
+				if (fr or fc) then
+					msp= ""
+				else
+					msp = L["L_HIDDENRPFLAG"]
+				end
+			else
+				msp= "<RSP>"		
 			end
 			
-			n = GameTooltip:NumLines()
-			for i=0, n-a-1 , 1 do
-				_G["GameTooltipTextLeft"..(n-i)]:SetText(_G["GameTooltipTextLeft"..(n-a-i)]:GetText())
-				_G["GameTooltipTextLeft"..(n-i)]:SetTextColor(_G["GameTooltipTextLeft"..(n-a-i)]:GetTextColor())
-				_G["GameTooltipTextRight"..(n-i)]:SetText(_G["GameTooltipTextRight"..(n-a-i)]:GetText())
-				_G["GameTooltipTextRight"..(n-i)]:SetTextColor(_G["GameTooltipTextRight"..(n-a-i)]:GetTextColor())
-			end
-		end
-
-	
-		local f
-
-		if (GnomTEC_Badge_FriendStates[realm][player].FRIEND_C) then
-			f = GnomTEC_Badge_FriendStates[realm][player].FRIEND_C[UnitName("player")];
-		else
-			f = nil;
-		end
-		if (f == nil) then
-			GameTooltipTextLeft1:SetTextColor(0.75,0.75,0.75)
-		elseif (f < 0) then
-			GameTooltipTextLeft1:SetTextColor(1.0,0.0,0.0)
-		elseif (f > 0) then
-			GameTooltipTextLeft1:SetTextColor(0.0,1.0,0.0)
-		else
-			GameTooltipTextLeft1:SetTextColor(0.5,0.5,1.0)
-		end
-		GameTooltipTextLeft1:SetText(GnomTEC_Badge_FlagCache[realm][player].NA or player)	
-		GameTooltipTextRight1:SetText("")	
-	
-		GameTooltipTextLeft2:SetText(GnomTEC_Badge_FlagCache[realm][player].NT or "")
-		GameTooltipTextLeft2:SetTextColor(1.0,1.0,0.0)
-		GameTooltipTextRight2:SetText("")
-	
-		if (GnomTEC_Badge_FlagCache[realm][player].Guild) then
-			GameTooltipTextLeft3:SetText(GnomTEC_Badge_FlagCache[realm][player].Guild or "")
-			GameTooltipTextLeft3:SetTextColor(1.0,1.0,1.0)
-			GameTooltipTextRight3:SetText("")
-			n = 4
-		else
-			n = 3
-		end
-	
-		_G["GameTooltipTextLeft"..n]:SetText((GnomTEC_Badge_FlagCache[realm][player].EngineData or "").." ("..player..")")
-		_G["GameTooltipTextLeft"..n]:SetTextColor(1.0,1.0,1.0)
-		_G["GameTooltipTextRight"..n]:SetText("")
-		-- Fix for ELVUI which hide this, so show it for sure
-		_G["GameTooltipTextLeft"..n]:Show()
-
-		local fr, fc, msp
-					
-		if type(GnomTEC_Badge_FlagCache[realm][player].FR) == "number" then
-			fr = str_fr[GnomTEC_Badge_FlagCache[realm][player].FR]
-		elseif type(GnomTEC_Badge_FlagCache[realm][player].FR) == "string" then
-			fr = GnomTEC_Badge_FlagCache[realm][player].FR
-		end
-		if type(GnomTEC_Badge_FlagCache[realm][player].FC) == "number" then
-			fc = str_fc[GnomTEC_Badge_FlagCache[realm][player].FC]
-		elseif type(GnomTEC_Badge_FlagCache[realm][player].FC) == "string" then
-			fc = GnomTEC_Badge_FlagCache[realm][player].FC
-		end
-		if GnomTEC_Badge_FlagCache[realm][player].FlagMSP == nil then
-			msp = L["L_NORPFLAG"]
-		elseif GnomTEC_Badge_FlagCache[realm][player].FlagMSP then
-			if (fr or fc) then
-				msp= ""
+			if fr and fc then
+				_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr.."><"..fc..">"..msp)
+			elseif fr then
+				_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr..">"..msp)
+			elseif fc then
+				_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fc..">"..msp)
 			else
-				msp = L["L_HIDDENRPFLAG"]
+				_G["GameTooltipTextLeft"..(n+1)]:SetText(msp)
 			end
-		else
-			msp= "<RSP>"		
-		end
-		
-		if fr and fc then
-			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr.."><"..fc..">"..msp)
-		elseif fr then
-			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fr..">"..msp)
-		elseif fc then
-			_G["GameTooltipTextLeft"..(n+1)]:SetText("<"..fc..">"..msp)
-		else
-			_G["GameTooltipTextLeft"..(n+1)]:SetText(msp)
-		end
 
-		f = GnomTEC_Badge_FriendStates[realm][player].FRIEND;
-		if (f == nil) then
-			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.75,0.75,0.75)
-		elseif (f < 0) then
-			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,0.0,0.0)
-		elseif (f > 0) then
-			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.0,1.0,0.0)
-		else
-			_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.5,0.5,1.0)
+			f = GnomTEC_Badge_FriendStates[realm][player].FRIEND;
+			if (f == nil) then
+				_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.75,0.75,0.75)
+			elseif (f < 0) then
+				_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(1.0,0.0,0.0)
+			elseif (f > 0) then
+				_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.0,1.0,0.0)
+			else
+				_G["GameTooltipTextLeft"..(n+1)]:SetTextColor(0.5,0.5,1.0)
+			end
+
+			_G["GameTooltipTextRight"..(n+1)]:SetText("")			
+
+			_G["GameTooltipTextLeft"..(n+2)]:SetText(GnomTEC_Badge_FlagCache[realm][player].FactionData)
+			_G["GameTooltipTextLeft"..(n+2)]:SetTextColor(1.0,1.0,1.0)
+			_G["GameTooltipTextRight"..(n+2)]:SetText("")			
+			GameTooltip:Show()
 		end
-
-		_G["GameTooltipTextRight"..(n+1)]:SetText("")			
-
-		_G["GameTooltipTextLeft"..(n+2)]:SetText(GnomTEC_Badge_FlagCache[realm][player].FactionData)
-		_G["GameTooltipTextLeft"..(n+2)]:SetTextColor(1.0,1.0,1.0)
-		_G["GameTooltipTextRight"..(n+2)]:SetText("")			
-		GameTooltip:Show()
 	end
 end
 
@@ -2251,8 +2314,12 @@ function GnomTEC_Badge:RequestMSP(unitName)
 	if (nil ~= emptynil(unitName)) then
 		local player, realm = strsplit( "-", unitName, 2 )
 		realm = string.gsub(realm or GetRealmName(), "%s+", "")
-
-		msp:Request(player.."-"..realm, { "TT", "DE", "RA", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+		if not TRP3_API then
+			msp:Request(player.."-"..realm, { "TT", "DE", "RA", "AG", "AE", "AH", "AW", "MO", "HI", "HH", "HB" } )
+		else
+			-- get it with TRRP3_API
+			-- <TODO>
+		end
 	end
 end
 
@@ -2392,100 +2459,104 @@ function GnomTEC_Badge:CHAT_MSG_YELL(eventName, message, sender)
 end
 
 function GnomTEC_Badge:LNR_ON_NEW_PLATE(eventname, plateFrame, plateData)
-	if (not GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"]) then
-		return
-	end
+	if not TRP3_API then
+		if (not GnomTEC_Badge.db.profile["ViewNameplates"]["Enabled"]) then
+			return
+		end
 
-	local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
+		local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
 
+					
+		if (nameFrame) then
+			if (nameFrame:GetObjectType() == "FontString") then
+				local nameFrameIsShown nameFrame:IsShown()
 				
-	if (nameFrame) then
-		if (nameFrame:GetObjectType() == "FontString") then
-			local nameFrameIsShown nameFrame:IsShown()
-			
- 			-- add our frame
-			if (not plateFrame.gnomtec_badge) then
- 				plateFrame.gnomtec_badge = plateFrame:CreateFontString()
- 				plateFrame.gnomtec_badge:SetFontObject(GameFontWhite)
-			end 			
+				-- add our frame
+				if (not plateFrame.gnomtec_badge) then
+					plateFrame.gnomtec_badge = plateFrame:CreateFontString()
+					plateFrame.gnomtec_badge:SetFontObject(GameFontWhite)
+				end 			
 
-			if (GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"]) then
- 				-- Hide all sub-frames 
-				local frames = { plateFrame:GetChildren() };
-				for _, frame in ipairs(frames) do
-  					frame.gnomtec_badge_alpha = frame:GetAlpha()
-  					frame:SetAlpha(0)
- 				end
- 				
- 				plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
- 			else
- 				plateFrame.gnomtec_badge:SetPoint("BOTTOM", nameFrame, "BOTTOM",0,0)
-
- 				-- Hide only name-frame
- 				nameFrame.gnomtec_badge_hide = true
- 				nameFrame:Hide()
- 			end
-
-  			plateFrame.gnomtec_badge:Show()
-
-			if ( "PLAYER" == plateData.type ) then
-   	 		local player = nameFrame:GetText() or ""
-   	 		local playerName = player
-			local friend = nil;
-   	 		if (not string.match(player, "%([#%*]%)")) then
-   	 			-- no (*) or (#) in name then player is from our realm
-   				local realm = string.gsub(GetRealmName(), "%s+", "")
-					if GnomTEC_Badge_FlagCache[realm] then 
-						if GnomTEC_Badge_FlagCache[realm][player] then
-							playerName = GnomTEC_Badge_FlagCache[realm][player].NA or player
-							if (GnomTEC_Badge_FriendStates[realm][player].FRIEND_C) then
-								friend = GnomTEC_Badge_FriendStates[realm][player].FRIEND_C[UnitName("player")];
-							end							
-						end
+				if (GnomTEC_Badge.db.profile["ViewNameplates"]["ShowOnlyName"]) then
+					-- Hide all sub-frames 
+					local frames = { plateFrame:GetChildren() };
+					for _, frame in ipairs(frames) do
+						frame.gnomtec_badge_alpha = frame:GetAlpha()
+						frame:SetAlpha(0)
 					end
-   	 		end	
-				if (friend == nil) then
-					plateFrame.gnomtec_badge:SetText("|cffC0C0C0"..playerName.."|r")
-				elseif (friend < 0) then
-					plateFrame.gnomtec_badge:SetText("|cffff0000"..playerName.."|r")
-				elseif (friend > 0) then
-					plateFrame.gnomtec_badge:SetText("|cff00ff00"..playerName.."|r")
+					
+					plateFrame.gnomtec_badge:SetPoint("BOTTOM",plateFrame, "BOTTOM",0,0)
 				else
-					plateFrame.gnomtec_badge:SetText("|cff8080ff"..playerName.."|r")
+					plateFrame.gnomtec_badge:SetPoint("BOTTOM", nameFrame, "BOTTOM",0,0)
+
+					-- Hide only name-frame
+					nameFrame.gnomtec_badge_hide = true
+					nameFrame:Hide()
 				end
-			else
-				-- it seems that blizzard not show names for every NPC
-				if (nameFrameIsShown) then
-					plateFrame.gnomtec_badge:SetText(nameFrame:GetText() or "")
+
+				plateFrame.gnomtec_badge:Show()
+
+				if ( "PLAYER" == plateData.type ) then
+				local player = nameFrame:GetText() or ""
+				local playerName = player
+				local friend = nil;
+				if (not string.match(player, "%([#%*]%)")) then
+					-- no (*) or (#) in name then player is from our realm
+					local realm = string.gsub(GetRealmName(), "%s+", "")
+						if GnomTEC_Badge_FlagCache[realm] then 
+							if GnomTEC_Badge_FlagCache[realm][player] then
+								playerName = GnomTEC_Badge_FlagCache[realm][player].NA or player
+								if (GnomTEC_Badge_FriendStates[realm][player].FRIEND_C) then
+									friend = GnomTEC_Badge_FriendStates[realm][player].FRIEND_C[UnitName("player")];
+								end							
+							end
+						end
+				end	
+					if (friend == nil) then
+						plateFrame.gnomtec_badge:SetText("|cffC0C0C0"..playerName.."|r")
+					elseif (friend < 0) then
+						plateFrame.gnomtec_badge:SetText("|cffff0000"..playerName.."|r")
+					elseif (friend > 0) then
+						plateFrame.gnomtec_badge:SetText("|cff00ff00"..playerName.."|r")
+					else
+						plateFrame.gnomtec_badge:SetText("|cff8080ff"..playerName.."|r")
+					end
 				else
-					plateFrame.gnomtec_badge:Hide()
-				end			
+					-- it seems that blizzard not show names for every NPC
+					if (nameFrameIsShown) then
+						plateFrame.gnomtec_badge:SetText(nameFrame:GetText() or "")
+					else
+						plateFrame.gnomtec_badge:Hide()
+					end			
+				end
+				plateFrame.gnomtec_badge:SetWidth(plateFrame.gnomtec_badge:GetStringWidth())
 			end
-			plateFrame.gnomtec_badge:SetWidth(plateFrame.gnomtec_badge:GetStringWidth())
 		end
 	end
  end
 
 function GnomTEC_Badge:LNR_ON_RECYCLE_PLATE(eventname, plateFrame, plateData)
- 	-- Show all sub-frames 
-	local frames = { plateFrame:GetChildren() };
-	for _, frame in ipairs(frames) do
-  		if (frame.gnomtec_badge_alpha) then
-  			frame:SetAlpha(frame.gnomtec_badge_alpha)
-  			frame.gnomtec_badge_alpha = nil
-  		end
- 	end
+	if not TRP3_API then
+		-- Show all sub-frames 
+		local frames = { plateFrame:GetChildren() };
+		for _, frame in ipairs(frames) do
+			if (frame.gnomtec_badge_alpha) then
+				frame:SetAlpha(frame.gnomtec_badge_alpha)
+				frame.gnomtec_badge_alpha = nil
+			end
+		end
 
-	local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
-	if (nameFrame) then
-	 	if (nameFrame.gnomtec_badge_hide) then
-  			nameFrame:Show()
-  			nameFrame.gnomtec_badge_hide = nil
- 		end
- 	end
- 	if (plateFrame.gnomtec_badge) then
-		plateFrame.gnomtec_badge:Hide()
-	end 			
+		local nameFrame = GnomTEC_Badge:GetPlateRegion(plateFrame, "name")
+		if (nameFrame) then
+			if (nameFrame.gnomtec_badge_hide) then
+				nameFrame:Show()
+				nameFrame.gnomtec_badge_hide = nil
+			end
+		end
+		if (plateFrame.gnomtec_badge) then
+			plateFrame.gnomtec_badge:Hide()
+		end 			
+	end
 end
 
 function GnomTEC_Badge:LNR_ON_GUID_FOUND(eventname, frame, GUID, findmethod)
@@ -2511,26 +2582,27 @@ function GnomTEC_Badge:GetColoredName(event, ...)
 	-- let the original function or who ever colorize the name
 	local colordName = GnomTEC_Badge.hooks.GetColoredName(event, ...)
 	
-	if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"]) then
-		-- we have only to do something when there are more then one arg
-		if (select("#",...) > 1) then
-			local arg2 = select(2,...)
-			local name = GnomTEC_Badge:UnitFlagName(arg2)
+	if not TRP3_API then
+		if (GnomTEC_Badge.db.profile["ViewChatFrame"]["Enabled"]) then
+			-- we have only to do something when there are more then one arg
+			if (select("#",...) > 1) then
+				local arg2 = select(2,...)
+				local name = GnomTEC_Badge:UnitFlagName(arg2)
 
-			-- only if we have a flag exchange the name
-			if (name) then
-				local player, realm = strsplit( "-", arg2, 2 )
-				realm = string.gsub(realm or GetRealmName(), "%s+", "")
+				-- only if we have a flag exchange the name
+				if (name) then
+					local player, realm = strsplit( "-", arg2, 2 )
+					realm = string.gsub(realm or GetRealmName(), "%s+", "")
 
-				-- remove realm when it is not yet removed
-				colordName = string.gsub(colordName,"%-"..realm,"")
-				
-				-- exchange player name with flag name
-				colordName = string.gsub(colordName,player,name)			
+					-- remove realm when it is not yet removed
+					colordName = string.gsub(colordName,"%-"..realm,"")
+					
+					-- exchange player name with flag name
+					colordName = string.gsub(colordName,player,name)			
+				end
 			end
 		end
 	end
-	
 	return colordName
 end
 
@@ -2819,6 +2891,11 @@ function GnomTEC_Badge:OnEnable()
 	else
 		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetText(playerStatesOOC["NIL"].text) 	
 	end	
+	
+	if TRP3_API then
+		-- we do not support rp states with trp3 at the moment
+		GNOMTEC_BADGE_TOOLBAR_SELECTOOC_BUTTON:SetEnabled(false)
+	end
 
 	if (WOW_PROJECT_ID == WOW_PROJECT_CLASSIC) then
 		GNOMTEC_BADGE_TOOLBAR_SHOWHELM:SetChecked(1 == ShowingHelm())
