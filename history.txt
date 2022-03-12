@@ -1,6 +1,10 @@
 == GnomTEC Badge - Change History 
 
-=== 9.1.0.67 (2021-11-08)
+=== 9.2.0.67 (2022-03-12)
+* Updated TOC for WoW patch 9.2.0
+* Open Issue: TRP3 Extension mode is alpha, and should not be used.
+
+=== 9.1.5.67 (2021-11-08)
 * Updated TOC for WoW patch 9.1.5
 * Added TRP3 Extension mode
 * Changed Backdrop elements in GUI xml 
