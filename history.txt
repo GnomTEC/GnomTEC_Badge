@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 9.2.7.68 (2022-10-19)
+* Updated libraries: Ace3, libMSP
+
 === 9.2.7.67 (2022-09-15)
 * Updated TOC for WoW patch 9.2.7
 
