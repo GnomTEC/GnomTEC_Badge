@@ -1,6 +1,6 @@
-﻿-- **********************************************************************
+-- **********************************************************************
 -- GnomTEC Badge
--- Version: 9.2.7.68
+-- Version: 10.0.0.69
 -- Author: GnomTEC
 -- Copyright 2011-2022 by GnomTEC
 -- http://www.gnomtec.de/
@@ -22,13 +22,13 @@ GnomTEC_Badge_Flags = nil
 local TRP3_API = _G.TRP3_API
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "9.2.7.68"
+local addonVersion = "10.0.0.69"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2022-10-19",
+	["Date"] = "2022-10-26",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
@@ -2807,7 +2807,7 @@ function GnomTEC_Badge:OnEnable()
 	GNOMTEC_BADGE_FRAME:SetBackdropBorderColor(unpack(GnomTEC_Badge.db.profile["ViewFlag"]["ColorBorder"])) 
 
 	-- setup events and hooks
-	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
+--	GnomTEC_Badge:RegisterEvent("CURSOR_UPDATE");
 	GnomTEC_Badge:RegisterEvent("UPDATE_MOUSEOVER_UNIT");
 	GnomTEC_Badge:RegisterEvent("PLAYER_TARGET_CHANGED");
 	GnomTEC_Badge:RegisterEvent("PLAYER_REGEN_DISABLED");

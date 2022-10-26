@@ -5,7 +5,7 @@
 		</Size>
 		<Layers>
 			<Layer level="OVERLAY">
-				<FontString name="$parent_TEXT" inherits="GameFontHighlightSmall" justifyH="CENTER" resizable="true" setAllPoints="true">
+				<FontString name="$parent_TEXT" inherits="GameFontHighlightSmall" justifyH="CENTER" setAllPoints="true"> <!-- resizable="true" -->
 					<Color r="0.8" g="0.8" b="0.8"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -30,7 +30,7 @@
 			</OnClick>
 		</Scripts>
 	</Button>
-	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" resizable="true" clampedToScreen="true" hidden="true" inherits="BackdropTemplate">
+	<Frame name="GNOMTEC_BADGE_FRAME" parent="UIParent" toplevel="true" movable="true" clampedToScreen="true" resizable="true" hidden="true" inherits="BackdropTemplate"> <!-- resizable="true" -->
 		<Size x="400" y="200" />
 		<ResizeBounds>
             <minResize>
@@ -216,7 +216,7 @@
 					</Anchor>
 				</Anchors>
 			</Button>	
-			<ScrollFrame name="$parent_SCROLL" resizable="true" setAllPoints="true">
+			<ScrollFrame name="$parent_SCROLL" setAllPoints="true"> <!-- resizable="true" -->
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset x="10" y="-105" />
@@ -226,7 +226,7 @@
 					</Anchor>
 				</Anchors>
 				<Frames>
-					<Slider name="$parent_SLIDER" resizable="true" setAllPoints="true" parentKey="slider">
+					<Slider name="$parent_SLIDER" setAllPoints="true" parentKey="slider"> <!-- resizable="true" -->
 						<Anchors>
 							<Anchor point="TOPRIGHT">
 								<Offset x="0" y="-16" />
@@ -300,7 +300,7 @@
 					</Slider>
 				</Frames>
 				<ScrollChild>
-					<EditBox name="$parent_TEXT" parentKey="child" resizable="true" setAllPoints="true" multiline="true" autofocus="false">
+					<EditBox name="$parent_TEXT" parentKey="child" setAllPoints="true" multiline="true" autofocus="false"> <!-- resizable="true" -->
 						<FontString inherits="ChatFontNormal"/>
 						<Scripts>
 							<OnLoad>
@@ -363,7 +363,7 @@
 		</Frames>			
 		<Layers>
 			<Layer level="Artwork">
-				<FontString name="$parent_NA" inherits="GameFontNormalLargeLeft" resizable="true" setAllPoints="true">
+				<FontString name="$parent_NA" inherits="GameFontNormalLargeLeft" setAllPoints="true"> <!-- resizable="true" --> 
 					<Color r="0.1" g="1.0" b="0.1"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -375,7 +375,7 @@
 					</Anchors>
 					<Size x="280" y="18" />
 				</FontString>
-				<FontString name="$parent_NT" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+				<FontString name="$parent_NT" inherits="GameFontNormalLeft" setAllPoints="true"> <!-- resizable="true" -->
 					<Color r="1.0" g="1.0" b="0.1"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -387,7 +387,7 @@
 					</Anchors>
 					<Size x="300" y="14" />
 				</FontString>
-				<FontString name="$parent_GUILD" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+				<FontString name="$parent_GUILD" inherits="GameFontNormalLeft" setAllPoints="true"> <!-- resizable="true" -->
 					<Color r="1.0" g="1.0" b="1.0"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -399,7 +399,7 @@
 					</Anchors>
 					<Size x="300" y="14" />
 				</FontString>
-				<FontString name="$parent_ENGINEDATA" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+				<FontString name="$parent_ENGINEDATA" inherits="GameFontNormalLeft" setAllPoints="true"> <!-- resizable="true" -->
 					<Color r="1.0" g="1.0" b="1.0"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -411,7 +411,7 @@
 					</Anchors>
 					<Size x="300" y="14" />
 				</FontString>
-				<FontString name="$parent_FR_FC" inherits="GameFontNormalLeft" resizable="true" setAllPoints="true">
+				<FontString name="$parent_FR_FC" inherits="GameFontNormalLeft" setAllPoints="true">  <!-- resizable="true" -->
 					<Color r="1.0" g="1.0" b="0.5"/>
 					<Anchors>
 						<Anchor point="TOPLEFT">
@@ -443,7 +443,7 @@
 			<Frame name="$parent_TEXT" setAllPoints="true">
 				<Layers>
 					<Layer level="BORDER">
-						<FontString name="$parent_NA" inherits="GameFontNormal" justifyH="LEFT" resizable="true" setAllPoints="true">
+						<FontString name="$parent_NA" inherits="GameFontNormal" justifyH="LEFT" setAllPoints="true"> <!-- resizable="true" --> 
 							<Anchors>
 								<Anchor point="TOPLEFT">
 									<Offset>
@@ -455,7 +455,7 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="$parent_NT" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+						<FontString name="$parent_NT" inherits="GameFontHighlightSmall" justifyH="LEFT" setAllPoints="true"> <!-- resizable="true" --> 
 							<Color r="1.0" g="1.0" b="0.1"/>
 							<Anchors>
 								<Anchor point="TOPLEFT" relativeTo="$parent_NA" relativePoint="BOTTOMLEFT">
@@ -468,7 +468,7 @@
 								</Anchor>
 							</Anchors>
 						</FontString>
-						<FontString name="$parent_ENGINEDATA" inherits="GameFontHighlightSmall" justifyH="LEFT" resizable="true" setAllPoints="true">
+						<FontString name="$parent_ENGINEDATA" inherits="GameFontHighlightSmall" justifyH="LEFT" setAllPoints="true"> <!-- resizable="true" -->
 							<Color r="1.0" g="1.0" b="1.0"/>
 							<Anchors>
 								<Anchor point="TOPLEFT" relativeTo="$parent_NT" relativePoint="BOTTOMLEFT">
@@ -588,7 +588,7 @@
 				</KeyValues>
 				<Layers>
 					<Layer level="Artwork">
-						<FontString name="$parent_TEXT" inherits="GameFontNormalSmall" resizable="true" setAllPoints="true" justifyH="LEFT">
+						<FontString name="$parent_TEXT" inherits="GameFontNormalSmall" setAllPoints="true" justifyH="LEFT"> <!-- resizable="true" -->
 							<Color r="1.0" g="1.0" b="0.1"/>
 							<Anchors>
 								<Anchor point="TOPLEFT">
@@ -607,7 +607,7 @@
 					<KeyValue key="backdropInfo" value="BACKDROP_TUTORIAL_16_16" type="global"/>
 					<KeyValue key="backdropColor" value="TOOLTIP_DEFAULT_BACKGROUND_COLOR" type="global"/>
 				</KeyValues>
-				<FontString inherits="GameFontNormalLeft"/>
+<!--				<FontString inherits="GameFontNormalLeft"/> -->
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="$parent_FOOTER">
 						<Offset x="10" y="0" />
@@ -615,7 +615,7 @@
 				</Anchors>
 				<Size x="364" y="320" />
 				<Frames>
-					<Slider name="$parent_SLIDER" parentKey="child" resizable="true" setAllPoints="true">
+					<Slider name="$parent_SLIDER" parentKey="child" setAllPoints="true"> <!-- resizable="true" -->
 						<Anchors>
 							<Anchor point="TOPRIGHT">
 								<Offset x="16" y="-16" />
