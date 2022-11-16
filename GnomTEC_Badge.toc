@@ -1,5 +1,5 @@
-## Interface: 100000
-# retail: 100000 classic: 11303
+## Interface: 100002
+# retail: 100002 classic: 11303
 ## Title: GnomTEC_Badge
 ## Notes: Addon for the display and management of RPG character descriptions.
 ## Notes-deDE: Addon für die Anzeige und das Managment von Rollenspiel Charakterbeschreibungen.
@@ -13,7 +13,7 @@
 ## Notes-zhCN: 对于插件的RPG角色描述的显示和管理。
 ## Notes-zhTW: 對於插件的RPG角色描述的顯示和管理。
 ## Author: GnomTEC
-## Version: 10.0.0.69
+## Version: 10.0.2.69
 ## Dependencies: GnomTEC_Badge_FlagCache, GnomTEC_Badge_FriendStates, GnomTEC_Badge_Notes,
 ## OptionalDeps: GnomTEC_Gnomcorder, Prat-3.0, totalRP3 
 ## SavedVariables: GnomTEC_BadgeDB, GnomTEC_Badge_Flags

@@ -1,5 +1,8 @@
 == GnomTEC Badge - Change History 
 
+=== 10.0.2.69 (2022-11-16)
+* Updated TOC for WoW patch 10.0.2
+
 === 10.0.0.69 (2022-10-26)
 * Updated TOC for WoW patch 10.0.0
 * Updated libraries: Ace3
