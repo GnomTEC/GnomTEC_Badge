@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge Notes
--- Version: 10.0.7.69
+-- Version: 10.1.0.69
 -- Author: GnomTEC
 -- Copyright 2017-2023 by GnomTEC
 -- http://www.gnomtec.de/

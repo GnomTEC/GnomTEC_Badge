@@ -1,6 +1,6 @@
 -- **********************************************************************
 -- GnomTEC Badge
--- Version: 10.0.7.69
+-- Version: 10.1.0.69
 -- Author: GnomTEC
 -- Copyright 2011-2023 by GnomTEC
 -- http://www.gnomtec.de/
@@ -22,13 +22,13 @@ GnomTEC_Badge_Flags = nil
 local TRP3_API = _G.TRP3_API
 
 -- internal used version number since WoW only updates from TOC on game start
-local addonVersion = "10.0.7.69"
+local addonVersion = "10.1.0.69"
 
 -- addonInfo for addon registration to GnomTEC API
 local addonInfo = {
 	["Name"] = "GnomTEC Badge",
 	["Version"] = addonVersion,
-	["Date"] = "2023-03-22",
+	["Date"] = "2023-05-03",
 	["Author"] = "GnomTEC",
 	["Email"] = "info@gnomtec.de",
 	["Website"] = "http://www.gnomtec.de/",
